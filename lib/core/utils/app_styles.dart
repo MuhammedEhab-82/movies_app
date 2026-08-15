@@ -70,7 +70,7 @@ class AppStyles {
   static  TextStyle bold20black = GoogleFonts.inter(
     fontSize:20 ,
     fontWeight: FontWeight.bold ,
-    color:AppColors.black ,
+    color:AppColors.background ,
   );
   static  TextStyle bold20primary = GoogleFonts.inter(
     fontSize:20 ,
