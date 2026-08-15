@@ -80,12 +80,12 @@ class AppStyles {
   static  TextStyle reg20black = GoogleFonts.roboto(
     fontSize:20 ,
     fontWeight: FontWeight.w400 ,
-    color:AppColors.black ,
+    color:AppColors.background ,
   );
   static  TextStyle reg16black = GoogleFonts.roboto(
     fontSize:16 ,
     fontWeight: FontWeight.w400 ,
-    color:AppColors.black ,
+    color:AppColors.background ,
   );
 
 
