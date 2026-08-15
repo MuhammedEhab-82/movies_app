@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
 
+import '../utils/app_responsive.dart';
+
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  final bool isOutlined; /// If it's true, the button will be outlined (with a border only) instead of being full.
+  final bool isOutlined;
+
+  /// If it's true, the button will be outlined (with a border only) instead of being full.
 
   final Color color;
-
 
   final Color textColor;
 
@@ -48,7 +51,7 @@ class CustomButton extends StatelessWidget {
       children: [
         Text(text, style: effectiveStyle),
         if (icon != null) ...[
-          const SizedBox(width: 6),
+          SizedBox(width: AppResponsive.w(context, 6)),
           Icon(
             icon,
             color: isOutlined ? color : textColor,
@@ -63,28 +66,35 @@ class CustomButton extends StatelessWidget {
       height: height,
       child: isOutlined
           ? OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(color: color, width: 1.5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-        ),
-        child: content,
-      )
+              onPressed: onPressed,
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                  color: color,
+                  width: AppResponsive.w(context, 1.5),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+                padding:  EdgeInsets.symmetric(
+                  horizontal: AppResponsive.w(context, 20),
+                ),
+              ),
+              child: content,
+            )
           : ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-        ),
-        child: content,
-      ),
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: color,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+                padding:  EdgeInsets.symmetric(
+                  horizontal: AppResponsive.w(context, 20),
+                ),
+              ),
+              child: content,
+            ),
     );
   }
 }
