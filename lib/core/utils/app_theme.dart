@@ -11,6 +11,7 @@ class AppTheme {
       modalBackgroundColor: AppColors.gray,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
       backgroundColor: AppColors.gray,
       unselectedItemColor: AppColors.white,
       selectedItemColor: AppColors.primary,
