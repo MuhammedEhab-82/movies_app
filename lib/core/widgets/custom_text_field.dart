@@ -8,7 +8,7 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String hintText;
 
-  final IconData prefixIcon;
+  final String prefixIcon;
 
   final bool isPassword;
 
@@ -67,15 +67,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
         filled: true,
         fillColor: widget.fillColor,
         hintText: widget.hintText,
-        hintStyle: widget.hintStyle ?? AppStyles.reg16grey,
-        prefixIcon: Icon(widget.prefixIcon, color: AppColors.lightGrey),
+        hintStyle: widget.hintStyle ?? AppStyles.reg16white,
+        prefixIcon: Image.asset(widget.prefixIcon),
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: Icon(
                   _obscureText
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
-                  color: AppColors.lightGrey,
+                  color: AppColors.white,
                 ),
 
                 onPressed: () {
