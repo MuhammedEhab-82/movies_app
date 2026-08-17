@@ -27,7 +27,10 @@ class MovieCard extends StatelessWidget {
           : AppResponsive.h(context, 270),
       child: Stack(
         children: [
-          Image.asset(path, height: double.infinity, fit: BoxFit.cover),
+          ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.asset(
+                  path, height: double.infinity, fit: BoxFit.cover)),
           RatingWidget(rating: rating, icon: icon),
         ],
       ),
