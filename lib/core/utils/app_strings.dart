@@ -1,1 +1,4 @@
-class AppStrings {}
+class AppStrings {
+  static const String action = 'Action';
+  static const String seeMore = 'see more';
+}
