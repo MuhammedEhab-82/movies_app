@@ -62,7 +62,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/
-     - assets/images/
+    - assets/images/
     - assets/images/MoviePosters/
     - assets/images/OnBoarding/
     - assets/images/ProfileAvatars/
