@@ -4,6 +4,7 @@ import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_routes.dart';
+import 'package:movies_app/core/utils/app_strings.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
 import 'package:movies_app/core/widgets/custom_button.dart';
 import 'package:movies_app/core/widgets/custom_text_field.dart';
@@ -28,25 +29,25 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: AppResponsive.h(context, 15),),
               Image.asset("assets/images/2x/AppLogo.png",),
               SizedBox(height: AppResponsive.h(context, 25),),
-              CustomTextField(hintText: "Email", prefixIcon: AppIcons.Email,),
-              CustomTextField(hintText: "Password", prefixIcon: AppIcons.Password,isPassword: true,),
+              CustomTextField(hintText: AppStrings.Email, prefixIcon: AppIcons.Email,),
+              CustomTextField(hintText: AppStrings.Password, prefixIcon: AppIcons.Password,isPassword: true,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("Forget Password ?",style: AppStyles.reg14primary,),
+                  Text(AppStrings.ForgetPassword,style: AppStyles.reg14primary,),
                 ],
               ),
               SizedBox(height: AppResponsive.h(context, 3 ),),
-              CustomButton(text: "Login", onPressed: Login,width: double.infinity,height: AppResponsive.h(context, 56),borderRadius: 16,),
+              CustomButton(text: AppStrings.Login, onPressed: Login,width: double.infinity,height: AppResponsive.h(context, 56),borderRadius: 16,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Don't Have Account ? ",style: AppStyles.reg14white,),
+                  Text(AppStrings.DontHaveAccount,style: AppStyles.reg14white,),
                   InkWell(
                     onTap: (){
                     Navigator.of(context).pushNamed(AppRoutes.signUp);
                     },
-                      child: Text("Create One",style: AppStyles.reg14primary,))
+                      child: Text(AppStrings.CreateOne,style: AppStyles.reg14primary,))
                 ],
               ),
               Row(
@@ -60,7 +61,7 @@ class LoginScreen extends StatelessWidget {
                       color: AppColors.primary,
                     ),
                   ),
-                  Text("OR",style: AppStyles.reg16primary,),
+                  Text(AppStrings.OR,style: AppStyles.reg16primary,),
                   Expanded(
                     child: Divider(
                       indent: AppResponsive.w(context, 20),
@@ -71,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                   )
                 ],
               ),
-              CustomButton(text: "Login With Google",
+              CustomButton(text: AppStrings.LoginWithGoogle,
                 onPressed: LoginWithGoogle,
                 icon: AppIcons.Google,width:double.infinity,height: AppResponsive.h(context, 56),borderRadius: 16,),
                 LanguageSwitch(isArabic: isArabic),
