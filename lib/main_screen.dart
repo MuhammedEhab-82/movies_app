@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'features/home/HomeScreen.dart';
 import 'core/utils/app_theme.dart';
+import 'features/home/profile_tab/view/screens/edit_profile.dart';
 
 
 class MainScreen extends StatelessWidget {
@@ -10,7 +10,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
+      home: const UpdateProfileScreen(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,

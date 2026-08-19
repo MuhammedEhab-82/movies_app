@@ -8,8 +8,7 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String hintText;
 
-  final IconData prefixIcon;
-
+  final Widget? prefixIcon;
   final bool isPassword;
 
   /// If true, it will be a password field (it will automatically have an eye icon)
@@ -68,7 +67,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         fillColor: widget.fillColor,
         hintText: widget.hintText,
         hintStyle: widget.hintStyle ?? AppStyles.reg16grey,
-        prefixIcon: Icon(widget.prefixIcon, color: AppColors.lightGrey),
+        prefixIcon: widget.prefixIcon,
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: Icon(
