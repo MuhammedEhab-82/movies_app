@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../core/widgets/custom_navbar.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

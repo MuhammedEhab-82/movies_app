@@ -16,7 +16,7 @@ class CustomButton extends StatelessWidget {
 
   final Color textColor;
 
-  final IconData? icon;
+  final String? icon;
 
   final double? width;
 
@@ -52,10 +52,11 @@ class CustomButton extends StatelessWidget {
         Text(text, style: effectiveStyle),
         if (icon != null) ...[
           SizedBox(width: AppResponsive.w(context, 6)),
-          Icon(
-            icon,
+          Image.asset(
+            icon!,
             color: isOutlined ? color : textColor,
-            size: (effectiveStyle.fontSize ?? 20) + 2,
+            width: (effectiveStyle.fontSize ?? 20) + 2,
+            height: (effectiveStyle.fontSize ?? 20) + 2,
           ),
         ],
       ],
@@ -75,7 +76,7 @@ class CustomButton extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(borderRadius),
                 ),
-                padding:  EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: AppResponsive.w(context, 20),
                 ),
               ),
@@ -89,7 +90,7 @@ class CustomButton extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(borderRadius),
                 ),
-                padding:  EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: AppResponsive.w(context, 20),
                 ),
               ),

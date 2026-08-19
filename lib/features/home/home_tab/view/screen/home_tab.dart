@@ -39,7 +39,7 @@ class _HomeTabState extends State<HomeTab> {
       child: Column(
         children: [
           SizedBox(
-            height: AppResponsive.h(context, 645),
+            height: AppResponsive.h(context, 650),
             child: Stack(
               children: [
                 RecommendBg(recommendedMovie: recommendedMovies[pageIndex]),
@@ -98,6 +98,7 @@ class _HomeTabState extends State<HomeTab> {
               ),
             ],
           ),
+
           MovieListView(recommendedMovies: recommendedMovies),
         ],
       ),
