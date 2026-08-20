@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 import 'app_styles.dart';
@@ -24,5 +25,8 @@ class AppStrings {
   static final String next = 'Next';
   static final String finish = 'Finish';
   static final String exploreNow = 'Explore Now';
+
+  static const String action = 'Action';
+  static const String seeMore = 'see more';
 
 }
