@@ -54,7 +54,7 @@ class AppIcons{
   static const String Favourite="assets/icons/Favourite.png";
   static const String Google="assets/icons/Google.png";
   static const String Hide="assets/icons/Hide.png";
-  static const String History="assets/icons/ArrowBack.png";
+  static const String History="assets/icons/History.png";
   static const String Home="assets/icons/Home.png";
   static const String HomeSolid="assets/icons/HomeSolid.png";
   static const String LR="assets/icons/LR.png";
