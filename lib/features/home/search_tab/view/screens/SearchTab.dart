@@ -37,7 +37,7 @@ class _SearchTabState extends State<SearchTab> {
             children: [
               CustomTextField(
                 hintText: AppStrings.search,
-                prefixIcon: Icons.search,
+                prefixIcon:AppIcons.Search,
                 controller: searchController,
                 onChanged: (value) {
                   setState(() {
@@ -62,7 +62,7 @@ class _SearchTabState extends State<SearchTab> {
                     return MovieCard(
                       path: images[index],
                       rating: '8.5',
-                      icon: Icon(Icons.star, color: AppColors.primary,),
+
                     );
                   },
                 ),

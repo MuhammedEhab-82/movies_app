@@ -11,8 +11,8 @@ import 'package:movies_app/core/widgets/custom_text_field.dart';
 import 'package:movies_app/features/auth/Widget/language_switch.dart';
 
 class LoginScreen extends StatelessWidget {
-  bool isArabic=false;
-    LoginScreen({super.key});
+  bool isArabic = false;
+  LoginScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,34 +20,60 @@ class LoginScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
-              vertical: AppResponsive.h(context, 30),
-              horizontal: AppResponsive.w(context, 20)
+            vertical: AppResponsive.h(context, 30),
+            horizontal: AppResponsive.w(context, 20),
           ),
           child: Column(
             spacing: AppResponsive.h(context, 20),
             children: [
-              SizedBox(height: AppResponsive.h(context, 15),),
-              Image.asset("assets/images/2x/AppLogo.png",),
-              SizedBox(height: AppResponsive.h(context, 25),),
-              CustomTextField(hintText: AppStrings.Email, prefixIcon: AppIcons.Email,),
-              CustomTextField(hintText: AppStrings.Password, prefixIcon: AppIcons.Password,isPassword: true,),
+              SizedBox(height: AppResponsive.h(context, 15)),
+              Image.asset(AppImages.AppLogo),
+              SizedBox(height: AppResponsive.h(context, 25)),
+              CustomTextField(
+                hintText: AppStrings.Email,
+                prefixIcon: AppIcons.Email,
+              ),
+              CustomTextField(
+                hintText: AppStrings.Password,
+                prefixIcon: AppIcons.Password,
+                isPassword: true,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(AppStrings.ForgetPassword,style: AppStyles.reg14primary,),
+                  InkWell(
+                    onTap: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.forgotPassword),
+                    child: Text(
+                      AppStrings.ForgetPassword,
+                      style: AppStyles.reg14primary,
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: AppResponsive.h(context, 3 ),),
-              CustomButton(text: AppStrings.Login, onPressed: Login,width: double.infinity,height: AppResponsive.h(context, 56),borderRadius: 16,),
+              SizedBox(height: AppResponsive.h(context, 3)),
+              CustomButton(
+                text: AppStrings.Login,
+                  onPressed: (){
+                    login(context);
+                  },
+                width: double.infinity,
+                height: AppResponsive.h(context, 56),
+                borderRadius: 16,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(AppStrings.DontHaveAccount,style: AppStyles.reg14white,),
+                  Text(AppStrings.DontHaveAccount, style: AppStyles.reg14white),
                   InkWell(
-                    onTap: (){
-                    Navigator.of(context).pushNamed(AppRoutes.signUp);
+                    onTap: () {
+                      Navigator.of(context).pushNamed(AppRoutes.signUp);
                     },
-                      child: Text(AppStrings.CreateOne,style: AppStyles.reg14primary,))
+                    child: Text(
+                      AppStrings.CreateOne,
+                      style: AppStyles.reg14primary,
+                    ),
+                  ),
                 ],
               ),
               Row(
@@ -61,31 +87,45 @@ class LoginScreen extends StatelessWidget {
                       color: AppColors.primary,
                     ),
                   ),
-                  Text(AppStrings.OR,style: AppStyles.reg16primary,),
+                  Text(AppStrings.OR, style: AppStyles.reg16primary),
                   Expanded(
                     child: Divider(
                       indent: AppResponsive.w(context, 20),
                       endIndent: AppResponsive.w(context, 75),
-                        thickness: 1,
+                      thickness: 1,
                       color: AppColors.primary,
-                      ),
-                  )
+                    ),
+                  ),
                 ],
               ),
-              CustomButton(text: AppStrings.LoginWithGoogle,
-                onPressed: LoginWithGoogle,
-                icon: AppIcons.Google,width:double.infinity,height: AppResponsive.h(context, 56),borderRadius: 16,),
-                LanguageSwitch(isArabic: isArabic),
+              CustomButton(
+                text: AppStrings.LoginWithGoogle,
+                onPressed: (){
+                  loginWithGoogle(context);
+                },
+                icon: AppIcons.Google,
+                width: double.infinity,
+                height: AppResponsive.h(context, 56),
+                borderRadius: 16,
+              ),
+              LanguageSwitch(isArabic: isArabic),
             ],
           ),
         ),
       ),
     );
   }
-  void Login(){
 
+  void login(BuildContext context) {
+    // todo FireBase Auth
+
+    // todo validation
+    Navigator.of(context).pushReplacementNamed(AppRoutes.home);
   }
-    void LoginWithGoogle(){
+  void loginWithGoogle(BuildContext context) {
+    // todo Google Auth
 
-    }
+    // todo validation
+    Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+  }
 }

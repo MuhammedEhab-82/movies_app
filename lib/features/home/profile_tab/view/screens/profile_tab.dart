@@ -8,6 +8,7 @@ import 'package:movies_app/features/home/profile_tab/model/user_profile.dart';
 import 'package:movies_app/features/home/profile_tab/view/widgets/tab_details.dart';
 
 import '../../../../../core/utils/app_responsive.dart';
+import '../../../../../core/utils/app_routes.dart';
 import '../widgets/profile_section.dart';
 import '../widgets/tab_widget.dart';
 
@@ -85,7 +86,9 @@ class _ProfileTabState extends State<ProfileTab>
                         borderRadius: 15,
                         text: AppStrings.editProfile,
                         textStyle: AppStyles.reg20white,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(AppRoutes.updateProfile);
+                        },
                       ),
                     ),
                     Expanded(
@@ -93,7 +96,10 @@ class _ProfileTabState extends State<ProfileTab>
                         borderRadius: 15,
                         text: AppStrings.exit,
                         textStyle: AppStyles.reg20white,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushReplacementNamed(AppRoutes.logIn);
+
+                        },
                         color: AppColors.red,
                         textColor: AppColors.white,
                         icon: AppIcons.Exit,

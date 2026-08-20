@@ -65,7 +65,6 @@ class _BrowseTabState extends State<BrowseTab> {
               return MovieCard(
                 path: images[index],
                 rating: '8.5',
-                icon: Icon(Icons.star, color: AppColors.primary),
               );
             },
           ),

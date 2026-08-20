@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/features/home/profile_tab/view/screens/profile_tab.dart';
 
 import '../../core/widgets/custom_navbar.dart';
 import 'Browse_tab/view/screens/BrowseTab.dart';
-import 'home_tab/view/screens/homeTab.dart';
-import 'profile_tab/view/screens/ProfileTab.dart';
+import 'home_tab/view/screen/home_tab.dart';
 import 'search_tab/view/screens/SearchTab.dart';
 
 class HomeScreen extends StatefulWidget {

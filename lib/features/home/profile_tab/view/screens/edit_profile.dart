@@ -238,9 +238,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           CustomTextField(
                             controller: _nameController,
                             hintText: 'Name',
-                            prefixIcon: const ImageIcon(
-                              AssetImage(AppIcons.Profile),
-                            ),
+                            prefixIcon: AppIcons.Profile,
                             textInputAction: TextInputAction.next,
                             validator: _validateName,
                           ),
@@ -249,9 +247,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           CustomTextField(
                             controller: _phoneController,
                             hintText: 'Phone Number',
-                            prefixIcon: const ImageIcon(
-                              AssetImage(AppIcons.Phone),
-                            ),
+                            prefixIcon: AppIcons.Phone,
                             keyboardType: TextInputType.phone,
                             textInputAction: TextInputAction.done,
                             validator: _validatePhone,

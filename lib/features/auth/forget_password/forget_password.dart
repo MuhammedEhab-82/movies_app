@@ -6,6 +6,8 @@ import 'package:movies_app/core/utils/app_styles.dart';
 import 'package:movies_app/core/widgets/custom_button.dart';
 import 'package:movies_app/core/widgets/custom_text_field.dart';
 
+import '../../../core/utils/app_strings.dart';
+
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
 
@@ -39,9 +41,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   void _onVerifyPressed() {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Verification email sent')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Verification email sent')));
     }
   }
 
@@ -65,7 +67,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppResponsive.w(context, 16)),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppResponsive.w(context, 16),
+          ),
           child: Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -87,12 +91,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   CustomTextField(
                     controller: _emailController,
                     borderRadius: 15,
-                    hintText: 'Email',
+                    hintText: AppStrings.Email,
                     hintStyle: AppStyles.reg14white,
-                    prefixImageAsset: AppIcons.Email,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.done,
                     validator: _validateEmail,
+                    prefixIcon: AppIcons.Email,
                   ),
 
                   SizedBox(height: AppResponsive.h(context, 20)),
