@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'features/home/HomeScreen.dart';
 import 'core/utils/app_theme.dart';
+import 'features/login/forget_password.dart';
 
 
 class MainScreen extends StatelessWidget {
@@ -10,7 +11,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
+      home: ForgetPasswordScreen(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,

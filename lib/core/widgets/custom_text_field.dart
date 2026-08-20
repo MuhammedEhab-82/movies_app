@@ -8,7 +8,7 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String hintText;
 
-  final IconData prefixIcon;
+  final String prefixImageAsset;
 
   final bool isPassword;
 
@@ -30,7 +30,7 @@ class CustomTextField extends StatefulWidget {
 
     this.controller,
     required this.hintText,
-    required this.prefixIcon,
+    required this.prefixImageAsset,
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.next,
@@ -68,20 +68,26 @@ class _CustomTextFieldState extends State<CustomTextField> {
         fillColor: widget.fillColor,
         hintText: widget.hintText,
         hintStyle: widget.hintStyle ?? AppStyles.reg16grey,
-        prefixIcon: Icon(widget.prefixIcon, color: AppColors.lightGrey),
+        prefixIcon: Padding(
+          padding: EdgeInsets.all(AppResponsive.w(context, 14)),
+          child: ImageIcon(
+            AssetImage(widget.prefixImageAsset),
+            color: AppColors.lightGrey,
+          ),
+        ),
         suffixIcon: widget.isPassword
             ? IconButton(
-                icon: Icon(
-                  _obscureText
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  color: AppColors.lightGrey,
-                ),
+          icon: Icon(
+            _obscureText
+                ? Icons.visibility_off_outlined
+                : Icons.visibility_outlined,
+            color: AppColors.lightGrey,
+          ),
 
-                onPressed: () {
-                  setState(() => _obscureText = !_obscureText);
-                },
-              )
+          onPressed: () {
+            setState(() => _obscureText = !_obscureText);
+          },
+        )
             : null,
 
         contentPadding: EdgeInsets.symmetric(
