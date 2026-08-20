@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../features/auth/Login/view/login_screen.dart';
+import '../../features/auth/Register/view/register_screen.dart';
+
 class AppRoutes {
 
   static const String onBoarding = '/onBoarding';
@@ -13,8 +16,8 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> routes = {
     // onBoarding: (context) => const OnboardingScreen(),
-    // logIn: (context) => const LoginScreen(),
-    // signUp: (context) => const SignUpScreen(),
+     logIn: (context) => LoginScreen(),
+     signUp: (context) => SignUpScreen(),
     // home: (context) => const HomeScreen(),
     // updateProfile: (context) => const UpdateProfileScreen(),
     // forgotPassword: (context) => const ForgotPasswordScreen(),

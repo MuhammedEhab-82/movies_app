@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/features/on_boarding/view/screens/introduction_screen/introduction_screen.dart';
+import 'package:movies_app/core/utils/app_routes.dart';
+import 'package:movies_app/features/auth/Login/view/login_screen.dart';
+import 'package:movies_app/features/auth/Register/view/register_screen.dart';
 
 import 'core/utils/app_routes.dart';
 import 'features/home/HomeScreen.dart';

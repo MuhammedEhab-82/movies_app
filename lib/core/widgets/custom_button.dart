@@ -13,11 +13,14 @@ class CustomButton extends StatelessWidget {
   /// If it's true, the button will be outlined (with a border only) instead of being full.
   final Color color;
   final Color textColor;
-  final IconData? icon;
+
+  final String? icon;
+
   final double? width;
   final double height;
   final double borderRadius;
   final TextStyle? textStyle;
+  final bool suffixIcon;
 
   const CustomButton({
     super.key,
@@ -31,6 +34,7 @@ class CustomButton extends StatelessWidget {
     this.height = 48,
     this.borderRadius = 15,
     this.textStyle,
+    this.suffixIcon = false,
   });
 
   @override
@@ -43,14 +47,14 @@ class CustomButton extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        if (icon != null&&suffixIcon==false) ...[
+          Image.asset(icon!,),
+          SizedBox(width: AppResponsive.w(context, 10)),
+        ],
         Text(text, style: effectiveStyle),
-        if (icon != null) ...[
-          SizedBox(width: AppResponsive.w(context, 6)),
-          Icon(
-            icon,
-            color: isOutlined ? color : textColor,
-            size: (effectiveStyle.fontSize ?? 20) + 2,
-          ),
+        if (icon != null&&suffixIcon==true) ...[
+          SizedBox(width: AppResponsive.w(context, 10)),
+          Image.asset(icon!),
         ],
       ],
     );
