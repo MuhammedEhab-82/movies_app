@@ -11,18 +11,12 @@ class CustomButton extends StatelessWidget {
   final bool isOutlined;
 
   /// If it's true, the button will be outlined (with a border only) instead of being full.
-
   final Color color;
-
   final Color textColor;
-
   final IconData? icon;
-
   final double? width;
-
   final double height;
   final double borderRadius;
-
   final TextStyle? textStyle;
 
   const CustomButton({
@@ -35,7 +29,7 @@ class CustomButton extends StatelessWidget {
     this.icon,
     this.width,
     this.height = 48,
-    this.borderRadius = 24,
+    this.borderRadius = 15,
     this.textStyle,
   });
 
