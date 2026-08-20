@@ -13,6 +13,7 @@ class MovieCard extends StatelessWidget {
     required this.path,
     this.isRecommended = false,
     required this.rating,
+    required Icon icon,
   });
 
   @override
