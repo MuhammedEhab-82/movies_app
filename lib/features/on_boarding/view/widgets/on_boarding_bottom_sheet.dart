@@ -29,9 +29,8 @@ class _OnBoardingBottomSheetState extends State<OnBoardingBottomSheet> {
         spacing: AppResponsive.designHeight * 0.02,
         mainAxisSize: MainAxisSize.min,
         children: [
-          OnBoardingModel.titleList[selectedIndex],
-          OnBoardingModel.descriptionList[selectedIndex],
-
+          Text(OnBoardingModel.titleList[selectedIndex],style: AppStyles.bold24white),
+          Text(OnBoardingModel.descriptionList[selectedIndex],style: AppStyles.reg20white),
           CustomButton(
             text: selectedIndex == 4 ? AppStrings.finish : AppStrings.next,
             onPressed: () {
