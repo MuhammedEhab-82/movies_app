@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/features/home/profile_tab/view/screens/profile_tab.dart';
 
+import '../../core/utils/app_responsive.dart';
 import '../../core/widgets/custom_navbar.dart';
 import 'Browse_tab/view/screens/BrowseTab.dart';
 import 'home_tab/view/screen/home_tab.dart';
@@ -26,34 +27,42 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: tabs[selectedIndex],
-      bottomNavigationBar: CustomNavBar(
-        selectedIndex: selectedIndex,
+      extendBody: true,
+      body: Stack(
+        children: [
+          tabs[selectedIndex],
 
-        onTap: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-
-        items: [
-          BottomNavigationBarItem(
+          Positioned(
+            left: AppResponsive.w(context, 10),
+            right: AppResponsive.w(context, 10),
+            bottom: AppResponsive.h(context, 20),
+            child: CustomNavBar(
+              selectedIndex: selectedIndex,
+              onTap: (index) {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+              items: [
+                BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+                  label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage('assets/icons/Explore.png'),
+            label: '',
+          ), BottomNavigationBarItem(
+                  icon: ImageIcon(
+                    AssetImage('assets/icons/Explore.png'),
+                  ),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: '',
+                ),
+              ],
             ),
-            label: 'Browse',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
           ),
         ],
       ),
