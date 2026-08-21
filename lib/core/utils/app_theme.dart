@@ -11,6 +11,7 @@ class AppTheme {
       modalBackgroundColor: AppColors.gray,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
       backgroundColor: AppColors.gray,
       unselectedItemColor: AppColors.white,
       selectedItemColor: AppColors.primary,
@@ -29,7 +30,7 @@ class AppTheme {
     tabBarTheme: TabBarThemeData(
       labelStyle:AppStyles.bold20black ,
       unselectedLabelStyle:AppStyles.bold20primary,
-      indicatorColor: Colors.transparent,
+      indicatorColor: AppColors.primary,
       labelPadding: EdgeInsets.symmetric(vertical:2,horizontal: 4),
     ),
   );

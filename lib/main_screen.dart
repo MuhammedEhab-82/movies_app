@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/core/utils/app_theme.dart';
+import 'package:movies_app/core/utils/app_routes.dart';
+
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -7,12 +8,11 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Main Screen')),
-        body: const Center(child: Text('Welcome to the Main Screen!')),
-      ),
-      darkTheme: AppTheme.darkTheme,
+      darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      initialRoute:AppRoutes.introduction,
+      routes: AppRoutes.routes,
 
     );
   }

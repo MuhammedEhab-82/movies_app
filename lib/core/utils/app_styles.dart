@@ -70,12 +70,27 @@ class AppStyles {
   static  TextStyle bold20black = GoogleFonts.inter(
     fontSize:20 ,
     fontWeight: FontWeight.bold ,
-    color:AppColors.black ,
+    color:AppColors.background ,
   );
   static  TextStyle bold20primary = GoogleFonts.inter(
     fontSize:20 ,
     fontWeight: FontWeight.bold ,
     color:AppColors.primary ,
+  );static  TextStyle bold20white = GoogleFonts.inter(
+    fontSize:20 ,
+    fontWeight: FontWeight.bold ,
+    color:AppColors.white ,
   );
+  static  TextStyle reg20black = GoogleFonts.roboto(
+    fontSize:20 ,
+    fontWeight: FontWeight.w400 ,
+    color:AppColors.background ,
+  );
+  static  TextStyle reg16black = GoogleFonts.roboto(
+    fontSize:16 ,
+    fontWeight: FontWeight.w400 ,
+    color:AppColors.background ,
+  );
+
 
 }
