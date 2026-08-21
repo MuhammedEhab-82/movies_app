@@ -26,7 +26,7 @@ class IntroductionScreen extends StatelessWidget {
               horizontal: AppResponsive.w(context, 16)
             ),
             child: Column(
-              spacing: AppResponsive.designHeight * 0.02,
+              spacing: AppResponsive.h(context, 16),
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(

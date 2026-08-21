@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../features/auth/Login/view/login_screen.dart';
 import '../../features/auth/Register/view/register_screen.dart';
 import '../../features/auth/forget_password/forget_password.dart';
-import '../../features/home/HomeScreen.dart';
+import '../../features/home/home_screen.dart';
 import '../../features/home/profile_tab/view/screens/edit_profile.dart';
 import '../../features/on_boarding/view/screens/introduction_screen.dart';
 import '../../features/on_boarding/view/screens/onBoarding.dart';

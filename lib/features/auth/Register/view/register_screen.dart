@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
@@ -56,7 +56,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Image.asset(AppIcons.Back),
         ),
         title: Text(
-          AppStrings.Register,
+          AppStrings.register,
           style: AppStyles.reg16primary,
         ),
       ),
@@ -74,14 +74,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   spacing: AppResponsive.h(context, 16),
                   children: [
                     Text(
-                      AppStrings.Avatar,
+                      AppStrings.avatar,
                       style: AppStyles.reg16white,
                     ),
 
                     // Name
                     CustomTextField(
                       controller: nameController,
-                      hintText: AppStrings.Name,
+                      hintText: AppStrings.name,
                       prefixIcon: AppIcons.Name,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -99,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     // Email
                     CustomTextField(
                       controller: emailController,
-                      hintText: AppStrings.Email,
+                      hintText: AppStrings.email,
                       prefixIcon: AppIcons.Email,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -121,7 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     // Password
                     CustomTextField(
                       controller: passwordController,
-                      hintText: AppStrings.Password,
+                      hintText: AppStrings.password,
                       prefixIcon: AppIcons.Password,
                       isPassword: true,
                       validator: (value) {
@@ -140,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     // Confirm Password
                     CustomTextField(
                       controller: confirmPasswordController,
-                      hintText: AppStrings.ConfirmPassword,
+                      hintText: AppStrings.confirmPassword,
                       prefixIcon: AppIcons.Password,
                       isPassword: true,
                       validator: (value) {
@@ -159,7 +159,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     // Phone Number
                     CustomTextField(
                       controller: phoneController,
-                      hintText: AppStrings.PhoneNumber,
+                      hintText: AppStrings.phoneNumber,
                       prefixIcon: AppIcons.Phone,
                       keyboardType: TextInputType.phone,
                       validator: (value) {
@@ -178,7 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
 
                     CustomButton(
-                      text: AppStrings.CreateAccount,
+                      text: AppStrings.createAccount,
                       onPressed: createAccount,
                       width: double.infinity,
                       height: AppResponsive.h(context, 60),
@@ -189,7 +189,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          AppStrings.AlreadyHaveAccount,
+                          AppStrings.alreadyHaveAccount,
                           style: AppStyles.reg14white,
                         ),
                         InkWell(
@@ -197,7 +197,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            AppStrings.Login,
+                            AppStrings.login,
                             style: AppStyles.reg14primary,
                           ),
                         ),
@@ -215,3 +215,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
+

@@ -16,21 +16,16 @@ class CustomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery(
-      data: MediaQuery.of(
-        context,
-      ).copyWith(viewPadding: EdgeInsets.zero, padding: EdgeInsets.zero),
-      child: SizedBox(
-        height: AppResponsive.h(context, 70),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: BottomNavigationBar(
-            selectedFontSize: 0,
-            unselectedFontSize: 0,
-            currentIndex: selectedIndex,
-            onTap: onTap,
-            items: items,
-          ),
+    return SizedBox(
+      height: AppResponsive.h(context, 70),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: BottomNavigationBar(
+          selectedFontSize: 0,
+          unselectedFontSize: 0,
+          currentIndex: selectedIndex,
+          onTap: onTap,
+          items: items,
         ),
       ),
     );

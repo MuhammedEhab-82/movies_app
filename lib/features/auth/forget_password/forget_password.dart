@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
@@ -91,7 +91,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   CustomTextField(
                     controller: _emailController,
                     borderRadius: 15,
-                    hintText: AppStrings.Email,
+                    hintText: AppStrings.email,
                     hintStyle: AppStyles.reg14white,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.done,
@@ -125,3 +125,4 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     );
   }
 }
+

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   CustomTextField(
                     controller: emailController,
-                    hintText: AppStrings.Email,
+                    hintText: AppStrings.email,
                     prefixIcon: AppIcons.Email,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   CustomTextField(
                     controller: passwordController,
-                    hintText: AppStrings.Password,
+                    hintText: AppStrings.password,
                     prefixIcon: AppIcons.Password,
                     isPassword: true,
                     validator: (value) {
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           context,
                         ).pushNamed(AppRoutes.forgotPassword),
                         child: Text(
-                          AppStrings.ForgetPassword,
+                          AppStrings.forgetPassword,
                           style: AppStyles.reg14primary,
                         ),
                       ),
@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: AppResponsive.h(context, 3)),
 
                   CustomButton(
-                    text: AppStrings.Login,
+                    text: AppStrings.login,
                     onPressed: login,
                     width: double.infinity,
                     height: AppResponsive.h(context, 56),
@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        AppStrings.DontHaveAccount,
+                        AppStrings.dontHaveAccount,
                         style: AppStyles.reg14white,
                       ),
                       InkWell(
@@ -135,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.of(context).pushNamed(AppRoutes.signUp);
                         },
                         child: Text(
-                          AppStrings.CreateOne,
+                          AppStrings.createOne,
                           style: AppStyles.reg14primary,
                         ),
                       ),
@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: AppColors.primary,
                         ),
                       ),
-                      Text(AppStrings.OR, style: AppStyles.reg16primary),
+                      Text(AppStrings.or, style: AppStyles.reg16primary),
                       Expanded(
                         child: Divider(
                           indent: AppResponsive.w(context, 20),
@@ -166,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                   CustomButton(
-                    text: AppStrings.LoginWithGoogle,
+                    text: AppStrings.loginWithGoogle,
                     onPressed: loginWithGoogle,
                     icon: AppIcons.Google,
                     width: double.infinity,
@@ -183,3 +183,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
