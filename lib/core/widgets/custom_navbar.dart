@@ -1,65 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../features/home/Browse_tab/view/screens/BrowseTab.dart';
-import '../../features/home/profile_tab/view/screens/ProfileTab.dart';
-import '../../features/home/search_tab/view/screens/SearchTab.dart';
-import '../../features/home/home_tab/view/screens/homeTab.dart';
-import '../utils/app_assets.dart';
+import '../utils/app_responsive.dart';
 
-class CustomNavBar extends StatefulWidget {
-  const CustomNavBar({super.key});
+class CustomNavBar extends StatelessWidget {
+  const CustomNavBar({
+    super.key,
+    required this.selectedIndex,
+    required this.items,
+    required this.onTap,
+  });
 
-  @override
-  State<CustomNavBar> createState() => _CustomNavBarState();
-}
-
-class _CustomNavBarState extends State<CustomNavBar> {
-  List<Widget> tabs = [HomeTab(), SearchTab(), BrowseTab(), ProfileTab()];
-  int selectedIndex = 0;
+  final List<BottomNavigationBarItem> items;
+  final Function(int) onTap;
+  final int selectedIndex;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: (index) {
-          selectedIndex = index;
-          setState(() {});
-        },
-        items: [
-          buildBottomNavigationBar(
-            icon: Icon(Icons.home),
-            label: 'home',
-            index: 0,
-          ),
-          buildBottomNavigationBar(
-            icon: Icon(Icons.search),
-            label: 'search',
-            index: 1,
-          ),
-          buildBottomNavigationBar(
-            icon: ImageIcon(AssetImage(AppIcons.Explore)),
-            label: 'browse',
-            index: 2,
-          ),
-          buildBottomNavigationBar(
-            icon: Icon(Icons.person),
-            label: 'profile',
-            index: 3,
-          ),
-        ],
-      ),
-      body: tabs[selectedIndex],
-    );
-    ;
-  }
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppResponsive.w(context, 10),
+          vertical: AppResponsive.h(context, 30)),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: BottomNavigationBar(
+          currentIndex: selectedIndex,
+          onTap: onTap,
+          items: items,
 
-  BottomNavigationBarItem buildBottomNavigationBar({
-    required Widget icon,
-    required String label,
-    required int index,
-  }) {
-    return BottomNavigationBarItem(icon: icon, label: label);
+        ),
+      ),
+    );
   }
 }

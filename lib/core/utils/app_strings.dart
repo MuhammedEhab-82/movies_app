@@ -1,5 +1,10 @@
+import 'package:flutter/material.dart';
+
+import 'app_styles.dart';
+
 class AppStrings {
 static const String Email="Email";
+static const String search="Search";
 static const String Password="Password";
 static const String ForgetPassword="Forget Password ?";
 static const String Login="Login";
@@ -15,7 +20,6 @@ static const String PhoneNumber="Phone Number";
 static const String CreateAccount="Create Account";
 static const String AlreadyHaveAccount="Already Have Account ? ";
 
-class AppStrings {
   static final Text moviesPosterTitle =Text('Find Your Next Favorite Movie Here',style: AppStyles.med36white,);
   static final Text moviesPosterDescription = Text ('Get access to a huge library of movies \n to suit all tastes. You will surely like it.',style:  AppStyles.reg20white,);
   static final Text title1 = Text('Discover Movies',style: AppStyles.bold24white,);
@@ -40,5 +44,8 @@ class AppStrings {
 
   static const String action = 'Action';
   static const String seeMore = 'see more';
-
+  static const String watchlist = 'Watch list';
+  static const String history = 'History';
+  static const String editProfile = 'Edit Profile';
+  static const String exit = 'Exit';
 }

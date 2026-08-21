@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../features/auth/Login/view/login_screen.dart';
 import '../../features/auth/Register/view/register_screen.dart';
+import '../../features/home/HomeScreen.dart';
+import '../../features/home/profile_tab/view/screens/edit_profile.dart';
+import '../../features/login/forget_password.dart';
+import '../../features/on_boarding/view/screens/introduction_screen/introduction_screen.dart';
+import '../../features/on_boarding/view/screens/onBoarding_screen/onBoarding.dart';
 
 class AppRoutes {
 
@@ -15,12 +20,13 @@ class AppRoutes {
   static const String movieDetails = '/movieDetails';
 
   static Map<String, WidgetBuilder> routes = {
-    // onBoarding: (context) => const OnboardingScreen(),
+    introduction: (context) => const IntroductionScreen(),
+     onBoarding: (context) => const OnBoarding(),
      logIn: (context) => LoginScreen(),
      signUp: (context) => SignUpScreen(),
-    // home: (context) => const HomeScreen(),
-    // updateProfile: (context) => const UpdateProfileScreen(),
-    // forgotPassword: (context) => const ForgotPasswordScreen(),
-    // movieDetails: (context) => const MovieDetailsScreen(),
+    home: (context) => const HomeScreen(),
+    updateProfile: (context) => const UpdateProfileScreen(),
+    forgotPassword: (context) => const ForgetPasswordScreen(),
+    //movieDetails: (context) => const MovieDetailsScreen(),
   };
 }

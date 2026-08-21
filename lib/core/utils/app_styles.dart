@@ -76,6 +76,10 @@ class AppStyles {
     fontSize:20 ,
     fontWeight: FontWeight.bold ,
     color:AppColors.primary ,
+  );static  TextStyle bold20white = GoogleFonts.inter(
+    fontSize:20 ,
+    fontWeight: FontWeight.bold ,
+    color:AppColors.white ,
   );
   static  TextStyle reg20black = GoogleFonts.roboto(
     fontSize:20 ,
