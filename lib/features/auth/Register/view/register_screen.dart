@@ -8,6 +8,7 @@ import 'package:movies_app/core/widgets/custom_text_field.dart';
 import 'package:movies_app/features/auth/Widget/language_switch.dart';
 import 'package:movies_app/features/auth/Widget/profile_avatar_slider.dart';
 
+import '../../../../core/utils/app_routes.dart';
 import '../../../../core/utils/app_strings.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -39,10 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void createAccount() {
     if (formKey.currentState!.validate()) {
-
-      print("Name: ${nameController.text}");
-      print("Email: ${emailController.text}");
-      print("Phone: ${phoneController.text}");
+      Navigator.of(context).pushReplacementNamed(AppRoutes.home);
     }
   }
 

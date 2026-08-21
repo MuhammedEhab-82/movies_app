@@ -33,13 +33,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void login() {
     if (formKey.currentState!.validate()) {
-      print("Email: ${emailController.text}");
-      print("Password: ${passwordController.text}");
+      Navigator.of(context).pushReplacementNamed(AppRoutes.home);
     }
   }
 
-  void loginWithGoogle() {
-  }
+  void loginWithGoogle() {}
 
   @override
   Widget build(BuildContext context) {
@@ -103,9 +101,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        AppStrings.ForgetPassword,
-                        style: AppStyles.reg14primary,
+                      InkWell(
+                        onTap: () => Navigator.of(
+                          context,
+                        ).pushNamed(AppRoutes.forgotPassword),
+                        child: Text(
+                          AppStrings.ForgetPassword,
+                          style: AppStyles.reg14primary,
+                        ),
                       ),
                     ],
                   ),
@@ -150,10 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: AppColors.primary,
                         ),
                       ),
-                      Text(
-                        AppStrings.OR,
-                        style: AppStyles.reg16primary,
-                      ),
+                      Text(AppStrings.OR, style: AppStyles.reg16primary),
                       Expanded(
                         child: Divider(
                           indent: AppResponsive.w(context, 20),
