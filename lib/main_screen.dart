@@ -3,8 +3,9 @@ import 'package:movies_app/core/utils/app_routes.dart';
 import 'package:movies_app/features/auth/Login/view/login_screen.dart';
 import 'package:movies_app/features/auth/Register/view/register_screen.dart';
 
+import 'core/utils/app_routes.dart';
 import 'features/home/HomeScreen.dart';
-import 'core/utils/app_theme.dart';
+import 'features/on_boarding/view/screens/onBoarding_screen/onBoarding.dart';
 
 
 class MainScreen extends StatelessWidget {
@@ -13,12 +14,16 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: AppRoutes.logIn,
-      routes: AppRoutes.routes,
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
+      initialRoute:AppRoutes.introduction,
+      routes: {
+        AppRoutes.onBoarding: (context) => OnBoarding(),
+        AppRoutes.home:(context) => HomeScreen(),
+        AppRoutes.introduction:(context) => IntroductionScreen(),
 
+      },
 
     );
   }

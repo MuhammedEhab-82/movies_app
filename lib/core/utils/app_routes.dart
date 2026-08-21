@@ -6,6 +6,7 @@ import '../../features/auth/Register/view/register_screen.dart';
 class AppRoutes {
 
   static const String onBoarding = '/onBoarding';
+  static const String introduction = '/introduction';
   static const String logIn = '/logIn';
   static const String forgotPassword = '/forgotPassword';
   static const String signUp = '/signUp';
