@@ -22,7 +22,7 @@
   static final String title2 = 'Explore All Genres';
   static final String title3 = 'Create Watchlists';
   static final String title4 = 'Rate, Review, and Learn';
-  static final String title5 = '';
+  static final String title5 = 'Start Watching Now';
 
   static final String description1 = 'Explore a vast collection of movies in all \n qualities and genres. Find your next \n favorite film with ease.';
   static final String description2 = 'Discover movies from every genre, in all  \n available qualities. Find something new \n and exciting to watch every day.';
