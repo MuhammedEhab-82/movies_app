@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'features/home/HomeScreen.dart';
 import 'core/utils/app_theme.dart';
+import 'features/home/HomeScreen.dart';
 
 
 class MainScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: HomeScreen(),
-      darkTheme: ThemeData.dark(),
+      theme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
 
