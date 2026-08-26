@@ -8,6 +8,7 @@ import 'package:movies_app/core/widgets/custom_text_field.dart';
 import 'package:movies_app/features/auth/Widget/language_switch.dart';
 import 'package:movies_app/features/auth/Widget/profile_avatar_slider.dart';
 
+import '../../../../core/services/auth_service.dart';
 import '../../../../core/utils/app_routes.dart';
 import '../../../../core/utils/app_strings.dart';
 
@@ -28,6 +29,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
+  bool isLoading = false;
+
   @override
   void dispose() {
     nameController.dispose();
@@ -38,9 +41,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  void createAccount() {
-    if (formKey.currentState!.validate()) {
+  Future<void> createAccount() async {
+    if (isLoading) return;
+    if (!formKey.currentState!.validate()) return;
+
+    setState(() => isLoading = true);
+
+    try {
+      await AuthService.instance.registerWithEmail(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        phone: phoneController.text,
+      );
+
+      if (!mounted) return;
       Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+    } on AuthException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message), backgroundColor: AppColors.red),
+      );
+    } finally {
+      if (mounted) setState(() => isLoading = false);
     }
   }
 
@@ -177,12 +200,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                     ),
 
-                    CustomButton(
-                      text: AppStrings.createAccount,
-                      onPressed: createAccount,
-                      width: double.infinity,
-                      height: AppResponsive.h(context, 60),
-                      borderRadius: 16,
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CustomButton(
+                          text: isLoading ? '' : AppStrings.createAccount,
+                          onPressed: createAccount,
+                          width: double.infinity,
+                          height: AppResponsive.h(context, 60),
+                          borderRadius: 16,
+                        ),
+                        if (isLoading)
+                          const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: AppColors.background,
+                            ),
+                          ),
+                      ],
                     ),
 
                     Row(
@@ -215,4 +252,3 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
-
