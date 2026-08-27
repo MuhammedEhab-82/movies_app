@@ -8,6 +8,7 @@ import 'package:movies_app/core/widgets/custom_button.dart';
 import 'package:movies_app/core/widgets/custom_text_field.dart';
 import 'package:movies_app/features/auth/Widget/language_switch.dart';
 import 'package:movies_app/features/auth/Widget/profile_avatar_slider.dart';
+
 import '../../../../core/utils/app_routes.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../cubit/register_cubit.dart';
@@ -88,7 +89,7 @@ class _SignUpViewState extends State<_SignUpView> {
             child: Image.asset(AppIcons.Back),
           ),
           title: Text(
-            AppStrings.Register,
+            AppStrings.register,
             style: AppStyles.reg16primary,
           ),
         ),
@@ -106,13 +107,13 @@ class _SignUpViewState extends State<_SignUpView> {
                     spacing: AppResponsive.h(context, 16),
                     children: [
                       Text(
-                        AppStrings.Avatar,
+                        AppStrings.avatar,
                         style: AppStyles.reg16white,
                       ),
 
                       CustomTextField(
                         controller: nameController,
-                        hintText: AppStrings.Name,
+                        hintText: AppStrings.name,
                         prefixIcon: AppIcons.Name,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -129,7 +130,7 @@ class _SignUpViewState extends State<_SignUpView> {
 
                       CustomTextField(
                         controller: emailController,
-                        hintText: AppStrings.Email,
+                        hintText: AppStrings.email,
                         prefixIcon: AppIcons.Email,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -150,7 +151,7 @@ class _SignUpViewState extends State<_SignUpView> {
 
                       CustomTextField(
                         controller: passwordController,
-                        hintText: AppStrings.Password,
+                        hintText: AppStrings.password,
                         prefixIcon: AppIcons.Password,
                         isPassword: true,
                         validator: (value) {
@@ -168,7 +169,7 @@ class _SignUpViewState extends State<_SignUpView> {
 
                       CustomTextField(
                         controller: confirmPasswordController,
-                        hintText: AppStrings.ConfirmPassword,
+                        hintText: AppStrings.confirmPassword,
                         prefixIcon: AppIcons.Password,
                         isPassword: true,
                         validator: (value) {
@@ -186,7 +187,7 @@ class _SignUpViewState extends State<_SignUpView> {
 
                       CustomTextField(
                         controller: phoneController,
-                        hintText: AppStrings.PhoneNumber,
+                        hintText: AppStrings.phoneNumber,
                         prefixIcon: AppIcons.Phone,
                         keyboardType: TextInputType.phone,
                         validator: (value) {
@@ -212,7 +213,7 @@ class _SignUpViewState extends State<_SignUpView> {
                             alignment: Alignment.center,
                             children: [
                               CustomButton(
-                                text: isLoading ? '' : AppStrings.CreateAccount,
+                                text: isLoading ? '' : AppStrings.createAccount,
                                 onPressed: _onCreateAccountPressed,
                                 width: double.infinity,
                                 height: AppResponsive.h(context, 60),
@@ -235,7 +236,7 @@ class _SignUpViewState extends State<_SignUpView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            AppStrings.AlreadyHaveAccount,
+                            AppStrings.alreadyHaveAccount,
                             style: AppStyles.reg14white,
                           ),
                           InkWell(
@@ -243,7 +244,7 @@ class _SignUpViewState extends State<_SignUpView> {
                               Navigator.pop(context);
                             },
                             child: Text(
-                              AppStrings.Login,
+                              AppStrings.login,
                               style: AppStyles.reg14primary,
                             ),
                           ),

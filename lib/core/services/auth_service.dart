@@ -61,7 +61,6 @@ class AuthService {
     }
   }
 
-
   String _mapGenericError(Object e) {
     final raw = e.toString().toLowerCase();
 
@@ -102,7 +101,6 @@ class AuthService {
     }
   }
 }
-
 
 class AuthException implements Exception {
   final String message;

@@ -16,16 +16,16 @@ class CustomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppResponsive.w(context, 10),
-          vertical: AppResponsive.h(context, 30)),
+    return SizedBox(
+      height: AppResponsive.h(context, 70),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: BottomNavigationBar(
+          selectedFontSize: 0,
+          unselectedFontSize: 0,
           currentIndex: selectedIndex,
           onTap: onTap,
           items: items,
-
         ),
       ),
     );

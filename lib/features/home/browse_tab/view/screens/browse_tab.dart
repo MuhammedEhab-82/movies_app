@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
-import 'package:movies_app/core/widgets/Custom_Tab_Bar.dart';
+import 'package:movies_app/core/widgets/custom_tab_bar.dart';
 
 import '../../../../../core/utils/app_assets.dart';
 import '../../../../../core/utils/app_colors.dart';

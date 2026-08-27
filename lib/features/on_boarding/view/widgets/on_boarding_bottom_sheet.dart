@@ -22,16 +22,23 @@ class _OnBoardingBottomSheetState extends State<OnBoardingBottomSheet> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: AppResponsive.designWidth * 0.1,
-        vertical: AppResponsive.designHeight * 0.02,
+        horizontal: AppResponsive.w(context, 16),
+        vertical: AppResponsive.h(context, 24),
       ),
       child: Column(
         spacing: AppResponsive.designHeight * 0.02,
         mainAxisSize: MainAxisSize.min,
         children: [
-          OnBoardingModel.titleList[selectedIndex],
-          OnBoardingModel.descriptionList[selectedIndex],
+          Text(
+            OnBoardingModel.titleList[selectedIndex],
+            style: AppStyles.bold24white,
+          ),
+          Text(
+            OnBoardingModel.descriptionList[selectedIndex],
+            style: AppStyles.reg16white,
+            textAlign: TextAlign.center,
 
+          ),
           CustomButton(
             text: selectedIndex == 4 ? AppStrings.finish : AppStrings.next,
             onPressed: () {
