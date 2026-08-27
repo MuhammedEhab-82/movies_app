@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/widgets/movie_card.dart';
 
 import '../../../../../core/utils/app_assets.dart';
@@ -62,6 +61,7 @@ class _SearchTabState extends State<SearchTab> {
                     return MovieCard(
                       path: images[index],
                       rating: '8.5',
+
 
                     );
                   },

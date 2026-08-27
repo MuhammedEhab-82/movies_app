@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/features/movie_details/view/screens/movie_details.dart';
 
 import '../../features/auth/Login/view/login_screen.dart';
 import '../../features/auth/Register/view/register_screen.dart';
@@ -27,6 +28,6 @@ class AppRoutes {
     home: (context) => const HomeScreen(),
     updateProfile: (context) => const UpdateProfileScreen(),
     forgotPassword: (context) => const ForgetPasswordScreen(),
-    //movieDetails: (context) => const MovieDetailsScreen(),
+    movieDetails: (context) => const MovieDetails(),
   };
 }

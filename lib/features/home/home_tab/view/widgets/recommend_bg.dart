@@ -9,7 +9,9 @@ class RecommendBg extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Ink.image(
       image: AssetImage(recommendedMovie),
-      fit: BoxFit.cover,
+      width: double.infinity,
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.topCenter,
       child: Ink(
         decoration: BoxDecoration(
           gradient: LinearGradient(
