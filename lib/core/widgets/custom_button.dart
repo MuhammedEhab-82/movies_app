@@ -15,7 +15,6 @@ class CustomButton extends StatelessWidget {
   final Color textColor;
 
   final String? icon;
-
   final double? width;
   final double height;
   final double borderRadius;

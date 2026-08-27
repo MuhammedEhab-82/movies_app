@@ -34,8 +34,21 @@
   static final String next = 'Next';
   static final String finish = 'Finish';
   static final String exploreNow = 'Explore Now';
+  static final String watch = "Watch";
+  static final String screenshots = "Screen shots";
+  static final String similar = "Similar";
+  static final String summery = "Summery";
+  static final String cast = "Cast";
+  static final String castName = "Name: ";
+  static final String characterName = "character: ";
+  static final String genres = "Genres";
 
   static const String action = 'Action';
+  static const String sciFi = 'Sci-Fi';
+  static const String adventure = 'Adventure';
+  static const String fantasy = 'Fantasy';
+  static const String horror = 'Horror';
+
   static const String seeMore = 'see more';
   static const String watchlist = 'Watch list';
   static const String history = 'History';
