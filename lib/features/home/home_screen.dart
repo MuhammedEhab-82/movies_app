@@ -41,18 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
               items: [
-                navigationBarItem(
-                  AppIcons.Home,
-                ),
-                navigationBarItem(
-                  AppIcons.Search,
-                ),
-                navigationBarItem(
-                  AppIcons.Explore,
-                ),
-                navigationBarItem(
-                 AppIcons.Profile,
-                ),
+                navigationBarItem(AppIcons.Home, AppIcons.HomeSolid),
+                navigationBarItem(AppIcons.Search, AppIcons.SearchSolid),
+                navigationBarItem(AppIcons.Explore, AppIcons.ExploreSolid),
+                navigationBarItem(AppIcons.Profile, AppIcons.ProfileSolid),
               ],
             ),
           ),
@@ -61,10 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  BottomNavigationBarItem navigationBarItem(String icon) {
+  BottomNavigationBarItem navigationBarItem(String icon, String activeIcon) {
     return BottomNavigationBarItem(
       icon: Image.asset(icon, color: AppColors.white),
-      activeIcon: Image.asset(AppIcons.Profile, color: AppColors.primary),
+      activeIcon: Image.asset(activeIcon, color: AppColors.primary),
       label: '',
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/core/utils/app_colors.dart';
 
 import '../utils/app_responsive.dart';
 
@@ -21,6 +22,8 @@ class CustomNavBar extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: AppColors.gray,
           selectedFontSize: 0,
           unselectedFontSize: 0,
           currentIndex: selectedIndex,
