@@ -26,7 +26,7 @@ class TabDetails extends StatelessWidget {
           mainAxisExtent: AppResponsive.h(context, 180),
         ),
         itemBuilder: (context, index) {
-          return MovieCard(path: movie![index], rating: '5.0',
+          return MovieCard(path: movie![index], rating: '5.0', movieId: 78168,
           );
         },
       ),

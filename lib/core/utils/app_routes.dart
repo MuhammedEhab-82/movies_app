@@ -28,6 +28,16 @@ class AppRoutes {
     home: (context) => const HomeScreen(),
     updateProfile: (context) => const UpdateProfileScreen(),
     forgotPassword: (context) => const ForgetPasswordScreen(),
-    movieDetails: (context) => const MovieDetails(),
+    movieDetails: (context) {
+      final arguments = ModalRoute
+          .of(context)
+          ?.settings
+          .arguments;
+      final int movieId = arguments is int ? arguments : 0;
+
+      return MovieDetails(
+        movieId: movieId,
+      );
+    },
   };
 }

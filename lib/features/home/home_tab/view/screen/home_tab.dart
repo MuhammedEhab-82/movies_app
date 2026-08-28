@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:movies_app/core/network/api_service.dart';
+import 'package:movies_app/core/network/dio_client.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
@@ -16,8 +18,13 @@ class HomeTab extends StatefulWidget {
   State<HomeTab> createState() => _HomeTabState();
 }
 
+final MovieService movieService = MovieService(
+  DioClient(),
+);
+
 class _HomeTabState extends State<HomeTab> {
   late int pageIndex;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -67,6 +74,7 @@ class _HomeTabState extends State<HomeTab> {
                               path: i,
                               rating: '7.7',
                               isRecommended: true,
+                              movieId: 78168,
                             );
                           },
                         );

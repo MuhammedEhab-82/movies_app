@@ -28,7 +28,7 @@ class ScreenShots extends StatelessWidget {
         itemBuilder: (context, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(borderRadius),
-            child: Image.asset(
+            child: Image.network(
               images[index],
               height: AppResponsive.h(context, 167),
               width: double.infinity,

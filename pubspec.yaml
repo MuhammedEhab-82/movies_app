@@ -38,6 +38,7 @@ dependencies:
   carousel_slider: ^5.1.2
   flutter_native_splash: ^2.4.7
   firebase_core: ^4.13.0
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:

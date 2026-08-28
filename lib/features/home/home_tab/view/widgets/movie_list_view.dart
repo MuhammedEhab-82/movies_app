@@ -13,9 +13,11 @@ class MovieListView extends StatelessWidget {
       child: ListView.separated(
         itemCount: recommendedMovies.length,
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) =>
-            MovieCard(path: recommendedMovies[index], rating: '7.7',
-            ),
+        itemBuilder: (context, index) => MovieCard(
+          path: recommendedMovies[index],
+          rating: '7.7',
+          movieId: 78168,
+        ),
         separatorBuilder: (context, index) =>
             SizedBox(width: AppResponsive.w(context, 16)),
       ),

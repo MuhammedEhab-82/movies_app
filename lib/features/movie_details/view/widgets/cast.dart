@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_strings.dart';
@@ -27,16 +26,23 @@ class CastWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppResponsive.w(context, 20)),
       child: Container(
-        padding: EdgeInsetsGeometry.all(AppResponsive.w(context, 10)),
+        padding: EdgeInsets.all(AppResponsive.w(context, 10)),
         //height: AppResponsive.h(context, 100),
         decoration: BoxDecoration(
-          borderRadius: BorderRadiusGeometry.circular(radius),
+          borderRadius: BorderRadius.circular(radius),
           color: color,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Image.asset(image),
+            Image.network(
+              image,
+              width: AppResponsive.w(context, 80),
+              height: AppResponsive.h(context, 80),
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.person, color: Colors.white),
+            ),
             SizedBox(width: AppResponsive.w(context, 10)),
             Expanded(
               child: Column(

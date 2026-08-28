@@ -9,25 +9,37 @@ class MovieCard extends StatelessWidget {
   final String path;
   final bool isRecommended;
   final String rating;
+  final int movieId;
 
   const MovieCard({
     super.key,
     required this.path,
     this.isRecommended = false,
     required this.rating,
+    required this.movieId,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool isNetworkImage = path.startsWith('http');
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.movieDetails);
+        Navigator.pushNamed(
+          context,
+          AppRoutes.movieDetails,
+          arguments: movieId,
+        );
       },
       child: Container(
         alignment: Alignment.topLeft,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          image: DecorationImage(image: AssetImage(path), fit: BoxFit.cover),
+          image: DecorationImage(
+            image:
+                (isNetworkImage ? NetworkImage(path) : AssetImage(path))
+                    as ImageProvider,
+            fit: BoxFit.cover,
+          ),
         ),
         width: isRecommended
             ? AppResponsive.w(context, 234)

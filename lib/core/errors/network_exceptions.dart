@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+
 import 'api_error.dart';
 
 class NetworkExceptions {
@@ -49,17 +50,21 @@ class NetworkExceptions {
         case DioExceptionType.unknown:
           if (error.error is SocketException) {
             return ApiError(
-              message: 'No internet connection',
+              message: 'No internet connection: ${error.error}',
             );
           }
 
           return ApiError(
-            message: error.message ?? 'Unexpected error occurred',
+            message: error.error?.toString() ??
+                error.message ??
+                'Unknown Dio error',
             statusCode: error.response?.statusCode,
           );
-
-        case DioExceptionType.transformTimeout:
-          throw UnimplementedError();
+        default:
+          return ApiError(
+            message: 'Unexpected error occurred',
+            statusCode: error.response?.statusCode,
+          );
       }
     }
 
@@ -76,7 +81,7 @@ class NetworkExceptions {
     }
 
     return ApiError(
-      message: 'Unexpected error occurred',
+      message: error.toString(),
     );
   }
 

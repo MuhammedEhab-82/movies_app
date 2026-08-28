@@ -37,7 +37,7 @@
   static final String watch = "Watch";
   static final String screenshots = "Screen shots";
   static final String similar = "Similar";
-  static final String summery = "Summery";
+  static final String summary = "Summary";
   static final String cast = "Cast";
   static final String castName = "Name: ";
   static final String characterName = "character: ";
@@ -54,4 +54,6 @@
   static const String history = 'History';
   static const String editProfile = 'Edit Profile';
   static const String exit = 'Exit';
+  static const String noSimilarMoviesFound = "No similar movies found";
+  static const String noMoviesFound = "No movies found";
 }

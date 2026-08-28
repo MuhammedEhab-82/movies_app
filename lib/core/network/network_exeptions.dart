@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+
 import 'api_error.dart';
+
 
 class NetworkExceptions {
   static ApiError getDioException(dynamic error) {
@@ -57,9 +59,11 @@ class NetworkExceptions {
             message: error.message ?? 'Unexpected error occurred',
             statusCode: error.response?.statusCode,
           );
-
-        case DioExceptionType.transformTimeout:
-          throw UnimplementedError();
+        default:
+          return ApiError(
+            message: 'Unexpected error occurred',
+            statusCode: error.response?.statusCode,
+          );
       }
     }
 

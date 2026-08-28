@@ -61,9 +61,8 @@ class _SearchTabState extends State<SearchTab> {
                     return MovieCard(
                       path: images[index],
                       rating: '8.5',
-
-
-                    );
+                            movieId: 78168,
+                          );
                   },
                 ),
               ),
