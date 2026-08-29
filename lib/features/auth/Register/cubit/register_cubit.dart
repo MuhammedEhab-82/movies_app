@@ -13,6 +13,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     required String email,
     required String password,
     required String phone,
+    int avatar = 1,
   }) async {
     emit(const RegisterLoading());
     try {
@@ -21,6 +22,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         email: email,
         password: password,
         phone: phone,
+        avatar: avatar,
       );
       emit(RegisterSuccess(user));
     } on AuthException catch (e) {

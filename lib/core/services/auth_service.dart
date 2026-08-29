@@ -16,6 +16,7 @@ class AuthService {
     required String email,
     required String password,
     required String phone,
+    int avatar = 1,
   }) async {
     try {
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -36,6 +37,7 @@ class AuthService {
         name: name.trim(),
         email: email.trim(),
         phone: phone.trim(),
+        avatar: avatar,
       );
 
       await _firestore
