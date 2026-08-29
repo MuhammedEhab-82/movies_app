@@ -22,9 +22,9 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> routes = {
     introduction: (context) => const IntroductionScreen(),
-     onBoarding: (context) => const OnBoarding(),
-     logIn: (context) => LoginScreen(),
-     signUp: (context) => SignUpScreen(),
+    onBoarding: (context) => const OnBoarding(),
+    logIn: (context) => LoginScreen(),
+    signUp: (context) => SignUpScreen(),
     home: (context) => const HomeScreen(),
     updateProfile: (context) => const UpdateProfileScreen(),
     forgotPassword: (context) => const ForgetPasswordScreen(),
