@@ -3,16 +3,17 @@ import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
-import 'package:movies_app/core/widgets/custom_button.dart';
-import 'package:movies_app/core/widgets/custom_text_field.dart';
 
+import '../widgets/avatar_picker_sheet.dart';
+import '../widgets/delete_account_dialog.dart';
+import '../widgets/profile_action_buttons.dart';
+import '../widgets/profile_avatar.dart';
+import '../widgets/profile_form_fields.dart';
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
-
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
 }
-
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -55,11 +56,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (value == null || value.trim().isEmpty) {
       return 'Please enter your name';
     }
-
     if (value.trim().length < 3) {
       return 'Name must be at least 3 characters';
     }
-
     return null;
   }
 
@@ -67,131 +66,36 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (value == null || value.trim().isEmpty) {
       return 'Please enter your phone number';
     }
-
     final RegExp phoneRegex = RegExp(r'^01[0-2,5][0-9]{8}$');
-
     if (!phoneRegex.hasMatch(value.trim())) {
       return 'Please enter a valid phone number';
     }
-
     return null;
   }
 
   void _onSavePressed() {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Profile updated successfully')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile updated successfully')),
+      );
     }
   }
 
   void _onDeleteAccountPressed() {
-    showDialog(
+    showDeleteAccountDialog(
       context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          backgroundColor: AppColors.gray,
-          title: Text('Delete Account', style: AppStyles.bold20primary),
-          content: Text(
-            'Are you sure you want to delete your account? '
-                'This action cannot be undone.',
-            style: AppStyles.reg16white,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: Text('Cancel', style: AppStyles.reg16white),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(dialogContext);
-              },
-              child: Text(
-                'Delete',
-                style: AppStyles.reg16primary.copyWith(color: AppColors.red),
-              ),
-            ),
-          ],
-        );
+      onConfirm: () {
+        // TODO: hook up actual account-deletion logic here.
       },
     );
   }
 
-  void _showAvatarPicker() {
-    showModalBottomSheet(
+  void _onAvatarTap() {
+    showAvatarPicker(
       context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (BuildContext bottomSheetContext) {
-        return SafeArea(
-          child: Container(
-            margin: EdgeInsets.only(
-              left: AppResponsive.w(context, 10),
-              right: AppResponsive.w(context, 10),
-              bottom: AppResponsive.h(context, 10),
-            ),
-            padding: EdgeInsets.all(AppResponsive.w(context, 12)),
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: GridView.builder(
-              shrinkWrap: true,
-              itemCount: _avatars.length,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemBuilder: (BuildContext gridContext, int index) {
-                final String avatar = _avatars[index];
-                final bool isSelected = avatar == _selectedAvatar;
-
-                return InkWell(
-                  borderRadius: BorderRadius.circular(14),
-                  onTap: () {
-                    setState(() => _selectedAvatar = avatar);
-                    Navigator.pop(bottomSheetContext);
-                  },
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppColors.primary
-                            : AppColors.background,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: AppColors.primary,
-                          width: 1.5,
-                        ),
-                      ),
-                      child: ClipOval(
-                        child: Image.asset(avatar, fit: BoxFit.cover),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildProfileAvatar(BuildContext context) {
-    return GestureDetector(
-      onTap: _showAvatarPicker,
-      child: SizedBox(
-        width: AppResponsive.w(context, 150),
-        height: AppResponsive.w(context, 150),
-        child: ClipOval(
-          child: Image.asset(_selectedAvatar, fit: BoxFit.cover),
-        ),
-      ),
+      avatars: _avatars,
+      selectedAvatar: _selectedAvatar,
+      onSelected: (avatar) => setState(() => _selectedAvatar = avatar),
     );
   }
 
@@ -219,75 +123,35 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           child: Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return SingleChildScrollView(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: constraints.maxHeight,
-                    ),
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
                       child: Column(
                         children: [
                           SizedBox(height: AppResponsive.h(context, 12)),
 
-                          _buildProfileAvatar(context),
+                          ProfileAvatar(
+                            avatarPath: _selectedAvatar,
+                            onTap: _onAvatarTap,
+                          ),
                           SizedBox(height: AppResponsive.h(context, 24)),
 
-                          CustomTextField(
-                            controller: _nameController,
-                            hintText: 'Name',
-                            prefixIcon: AppIcons.Profile,
-                            textInputAction: TextInputAction.next,
-                            validator: _validateName,
-                          ),
-                          SizedBox(height: AppResponsive.h(context, 16)),
-
-                          CustomTextField(
-                            controller: _phoneController,
-                            hintText: 'Phone Number',
-                            prefixIcon: AppIcons.Phone,
-                            keyboardType: TextInputType.phone,
-                            textInputAction: TextInputAction.done,
-                            validator: _validatePhone,
-                          ),
-                          SizedBox(height: AppResponsive.h(context, 16)),
-
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Reset Password',
-                              style: AppStyles.reg14white,
-                            ),
+                          ProfileFormFields(
+                            nameController: _nameController,
+                            phoneController: _phoneController,
+                            nameValidator: _validateName,
+                            phoneValidator: _validatePhone,
                           ),
 
                           const Spacer(),
                           SizedBox(height: AppResponsive.h(context, 24)),
 
-                          SizedBox(
-                            width: double.infinity,
-                            child: CustomButton(
-                              text: 'Delete Account',
-                              borderRadius: 15,
-                              textStyle: AppStyles.reg14white,
-                              onPressed: _onDeleteAccountPressed,
-                              color: AppColors.red,
-                              textColor: AppColors.white,
-                            ),
-                          ),
-                          SizedBox(height: AppResponsive.h(context, 12)),
-
-                          SizedBox(
-                            width: double.infinity,
-                            child: CustomButton(
-                              text: 'Update Data',
-                              borderRadius: 15,
-                              textStyle: AppStyles.reg14white,
-                              onPressed: _onSavePressed,
-                              color: AppColors.primary,
-                              textColor: Colors.black,
-                            ),
+                          ProfileActionButtons(
+                            onDelete: _onDeleteAccountPressed,
+                            onSave: _onSavePressed,
                           ),
                           SizedBox(height: AppResponsive.h(context, 24)),
                         ],
