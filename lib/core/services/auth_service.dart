@@ -53,6 +53,34 @@ class AuthService {
     }
   }
 
+  Future<UserModel> loginWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final credential = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email.trim(),
+        password: password,
+      );
+
+      final user = credential.user;
+      if (user == null) {
+        throw AuthException('Something went wrong. Please try again.');
+      }
+
+      final doc = await _firestore.collection('users').doc(user.uid).get();
+      if (!doc.exists) {
+        throw AuthException('User data not found. Please contact support.');
+      }
+
+      return UserModel.fromMap({...doc.data()!, 'uid': user.uid});
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(_mapFirebaseAuthError(e));
+    } catch (e) {
+      throw AuthException(_mapGenericError(e));
+    }
+  }
+
   Future<void> sendPasswordResetEmail({required String email}) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email.trim());
@@ -94,6 +122,10 @@ class AuthService {
         return 'Email/Password sign-up is not enabled. Contact support.';
       case 'network-request-failed':
         return 'No internet connection. Please check your network.';
+      case 'wrong-password':
+        return 'Incorrect password. Please try again.';
+      case 'invalid-credential':
+        return 'Invalid email or password. Please try again.';
       case 'user-not-found':
         return 'No account found with this email.';
       case 'too-many-requests':
