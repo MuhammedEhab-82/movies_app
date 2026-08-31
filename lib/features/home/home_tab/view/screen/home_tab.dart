@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/network/api_service.dart';
 import 'package:movies_app/core/network/dio_client.dart';
@@ -7,9 +6,15 @@ import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_strings.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
-import 'package:movies_app/core/widgets/movie_card.dart';
+import 'package:movies_app/features/home/home_tab/view/widgets/custom_slider.dart';
+import 'package:movies_app/features/home/home_tab/view/widgets/latest_movies.dart';
 import 'package:movies_app/features/home/home_tab/view/widgets/movie_list_view.dart';
-import 'package:movies_app/features/home/home_tab/view/widgets/recommend_bg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_app/features/home/home_tab/view_model/home_tab_cubit.dart';
+import 'package:movies_app/features/home/home_tab/view_model/home_tab_state.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+
+import '../../../browse_tab/model/movie_model.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -18,18 +23,16 @@ class HomeTab extends StatefulWidget {
   State<HomeTab> createState() => _HomeTabState();
 }
 
-final MovieService movieService = MovieService(
-  DioClient(),
-);
+final MovieService movieService = MovieService(DioClient());
 
 class _HomeTabState extends State<HomeTab> {
-  late int pageIndex;
+  final cubit = HomeTabCubit(MovieService(DioClient()));
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    pageIndex = 0;
+    cubit.getLastMovies();
   }
 
   @override
@@ -47,43 +50,36 @@ class _HomeTabState extends State<HomeTab> {
         children: [
           SizedBox(
             height: AppResponsive.h(context, 650),
-            child: Stack(
-              children: [
-                RecommendBg(recommendedMovie: recommendedMovies[pageIndex]),
-                Column(
-                  children: [
-                    Image.asset(AppImages.AvailableNow),
-                    CarouselSlider(
-                      options: CarouselOptions(
-                        onPageChanged: (index, reason) {
-                          pageIndex = index;
-                          setState(() {});
-                        },
-                        initialPage: pageIndex,
-                        disableCenter: true,
-                        enlargeCenterPage: true,
-                        viewportFraction:
-                            AppResponsive.w(context, 234) /
-                            AppResponsive.designWidth,
-                        height: AppResponsive.h(context, 400),
-                      ),
-                      items: recommendedMovies.map((i) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return MovieCard(
-                              path: i,
-                              rating: '7.7',
-                              isRecommended: true,
-                              movieId: 78168,
-                            );
-                          },
-                        );
-                      }).toList(),
+            child: BlocBuilder<HomeTabCubit, HomeTabState>(
+              bloc: cubit,
+              builder: (context, state) {
+                if (state is HomeSuccessState) {
+                  return LatestMovies(state: state);
+                } else if (state is HomeErrorState) {
+                  return Center(
+                    child: Text(
+                      state.error.message,
+                      style: AppStyles.reg16white,
+                      textAlign: TextAlign.center,
                     ),
-                    Image.asset(AppImages.WatchNow),
-                  ],
-                ),
-              ],
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      Image.asset(AppImages.AvailableNow),
+                      Skeletonizer(
+                        child: CustomSlider(
+                          state: HomeSuccessState(
+                            movies: List.generate(5, (_) => MovieModel.empty()),
+                          ),
+                          pageIndex: 0,
+                        ),
+                      ),
+                      Image.asset(AppImages.WatchNow),
+                    ],
+                  );
+                }
+              },
             ),
           ),
           Row(

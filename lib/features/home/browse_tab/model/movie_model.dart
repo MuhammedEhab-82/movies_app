@@ -1,3 +1,5 @@
+import 'package:movies_app/core/utils/app_assets.dart';
+
 class MovieModel {
   final int id;
   final double rating;
@@ -10,6 +12,14 @@ class MovieModel {
     required this.image,
     required this.genres,
   });
+  factory MovieModel.empty() {
+    return MovieModel(
+      id: -1,
+      rating: 0,
+      image: AppImages.MoviePoster3,
+      genres: [],
+    );
+  }
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {
     return MovieModel(
@@ -20,5 +30,6 @@ class MovieModel {
         json['genres'] ?? [],
       ),
     );
+
   }
 }

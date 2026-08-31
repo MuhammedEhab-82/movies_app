@@ -11,7 +11,7 @@ class MainScreen extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
-      initialRoute:AppRoutes.introduction,
+      initialRoute:AppRoutes.home,
       routes: AppRoutes.routes,
 
     );

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:movies_app/core/network/api_const.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class DioClient {
   final Dio dio;
@@ -14,7 +15,7 @@ class DioClient {
         ),
       ) {
     dio.interceptors.add(
-      LogInterceptor(
+      PrettyDioLogger(
         request: true,
         requestHeader: true,
         requestBody: true,

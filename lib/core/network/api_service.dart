@@ -11,15 +11,20 @@ class MovieService {
 
   MovieService(this.dioClient);
 
-  Future<List<MovieModel>> getAllMovies(
-      {int limit = 20, String genre = "All"}) async {
+  Future<List<MovieModel>> getAllMovies({
+    int limit = 20,
+    String? genre,
+    String sortBy = 'date_added',
+  }) async {
     try {
       final response = await dioClient.dio.get(
-          ApiConst.allMoviesEndPoint,
-          queryParameters: {
-            'limit': limit,
-            'genre': genre,
-          });
+        ApiConst.allMoviesEndPoint,
+        queryParameters: {
+          'limit': limit,
+          'sort_by':sortBy ,
+          'genre': ?genre,
+        },
+      );
 
       if (response.data != null &&
           response.data['data'] != null &&

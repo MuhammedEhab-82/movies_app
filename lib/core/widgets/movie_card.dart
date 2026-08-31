@@ -24,11 +24,12 @@ class MovieCard extends StatelessWidget {
     final bool isNetworkImage = path.startsWith('http');
     return InkWell(
       onTap: () {
+        if (movieId>-1){
         Navigator.pushNamed(
           context,
           AppRoutes.movieDetails,
           arguments: movieId,
-        );
+        );}
       },
       child: Container(
         alignment: Alignment.topLeft,
