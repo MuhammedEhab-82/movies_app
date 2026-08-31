@@ -8,7 +8,7 @@ class BrowseTabCubit extends Cubit<BrowseTabState> {
 
   BrowseTabCubit(this._movieService) : super(BrowseTabInitial());
 
-  final List<String> genres = ["Action", "Drama", "Comedy", "Horror"];
+  final List<String> genres = ["Action", "Drama", "Comedy", "Horror","Sci-Fi","Thriller"];
   int _selectedIndex = 0;
 
   void getMoviesByGenre(int index) async {

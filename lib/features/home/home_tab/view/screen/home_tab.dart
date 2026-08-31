@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/network/api_service.dart';
 import 'package:movies_app/core/network/dio_client.dart';
@@ -8,8 +10,8 @@ import 'package:movies_app/core/utils/app_strings.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
 import 'package:movies_app/features/home/home_tab/view/widgets/custom_slider.dart';
 import 'package:movies_app/features/home/home_tab/view/widgets/latest_movies.dart';
-import 'package:movies_app/features/home/home_tab/view/widgets/movie_list_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_app/features/home/home_tab/view/widgets/movie_list_view.dart';
 import 'package:movies_app/features/home/home_tab/view_model/home_tab_cubit.dart';
 import 'package:movies_app/features/home/home_tab/view_model/home_tab_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -17,8 +19,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../browse_tab/model/movie_model.dart';
 
 class HomeTab extends StatefulWidget {
-  const HomeTab({super.key});
-
+  final void Function(int genreIndex)? onNavigateToBrowse;
+  const HomeTab({super.key, this.onNavigateToBrowse});
   @override
   State<HomeTab> createState() => _HomeTabState();
 }
@@ -26,32 +28,29 @@ class HomeTab extends StatefulWidget {
 final MovieService movieService = MovieService(DioClient());
 
 class _HomeTabState extends State<HomeTab> {
-  final cubit = HomeTabCubit(MovieService(DioClient()));
+  final lastMoviesCubit = HomeTabCubit(MovieService(DioClient()));
+  final listCubit = HomeTabCubit(MovieService(DioClient()));
+  late int randomGenre;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    cubit.getLastMovies();
+    lastMoviesCubit.getLastMovies();
+    Random random = Random();
+    randomGenre = random.nextInt(lastMoviesCubit.genres.length);
+    listCubit.getLastMovies(genreIndex: randomGenre,sorting: "rating");
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> recommendedMovies = [
-      AppImages.MoviePoster1,
-      AppImages.MoviePoster2,
-      AppImages.MoviePoster3,
-      AppImages.MoviePoster4,
-      AppImages.MoviePoster5,
-      AppImages.MoviePoster6,
-    ];
     return SingleChildScrollView(
       child: Column(
         children: [
           SizedBox(
             height: AppResponsive.h(context, 650),
             child: BlocBuilder<HomeTabCubit, HomeTabState>(
-              bloc: cubit,
+              bloc: lastMoviesCubit,
               builder: (context, state) {
                 if (state is HomeSuccessState) {
                   return LatestMovies(state: state);
@@ -73,6 +72,7 @@ class _HomeTabState extends State<HomeTab> {
                             movies: List.generate(5, (_) => MovieModel.empty()),
                           ),
                           pageIndex: 0,
+                          onPageChanged: (int value) {},
                         ),
                       ),
                       Image.asset(AppImages.WatchNow),
@@ -84,11 +84,16 @@ class _HomeTabState extends State<HomeTab> {
           ),
           Row(
             children: [
-              Text(AppStrings.action, style: AppStyles.reg20white),
+              Text(
+                lastMoviesCubit.genres[randomGenre],
+                style: AppStyles.reg20white,
+              ),
               Spacer(),
               TextButton(
                 onPressed: () {
-                  //todo : navigate
+                  if (widget.onNavigateToBrowse != null) {
+                    widget.onNavigateToBrowse!(randomGenre);
+                  }
                 },
                 child: Row(
                   children: [
@@ -102,8 +107,30 @@ class _HomeTabState extends State<HomeTab> {
               ),
             ],
           ),
-
-          MovieListView(recommendedMovies: recommendedMovies),
+          BlocBuilder<HomeTabCubit, HomeTabState>(
+            bloc: listCubit,
+            builder: (context, state) {
+              if (state is HomeSuccessState) {
+                return MovieListView(recommendedMovies: state.movies);
+              } else if (state is HomeErrorState) {
+                return Center(
+                  child: Text(
+                    state.error.message,
+                    style: AppStyles.reg16white,
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              }
+              return Skeletonizer(
+                child: MovieListView(
+                  recommendedMovies: List.generate(
+                    5,
+                    (_) => MovieModel.empty(),
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

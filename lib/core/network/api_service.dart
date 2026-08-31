@@ -14,7 +14,7 @@ class MovieService {
   Future<List<MovieModel>> getAllMovies({
     int limit = 20,
     String? genre,
-    String sortBy = 'date_added',
+    String? sortBy = 'date_added',
   }) async {
     try {
       final response = await dioClient.dio.get(

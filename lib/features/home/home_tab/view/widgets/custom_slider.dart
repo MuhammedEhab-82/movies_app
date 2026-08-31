@@ -6,9 +6,16 @@ import '../../../../../core/widgets/movie_card.dart';
 import '../../view_model/home_tab_state.dart';
 
 class CustomSlider extends StatefulWidget {
-   CustomSlider({super.key, required this.state, required this.pageIndex});
+  const CustomSlider({
+    super.key,
+    required this.state,
+    required this.pageIndex,
+    required this.onPageChanged,
+  });
+
   final HomeSuccessState state;
-   int pageIndex;
+  final int pageIndex;
+  final ValueChanged<int> onPageChanged;
   @override
   State<CustomSlider> createState() => _CustomSliderState();
 }
@@ -19,8 +26,7 @@ class _CustomSliderState extends State<CustomSlider> {
     return CarouselSlider(
       options: CarouselOptions(
         onPageChanged: (index, reason) {
-          widget.pageIndex = index;
-          setState(() {});
+          widget.onPageChanged(index);
         },
         initialPage:widget.pageIndex,
         disableCenter: true,

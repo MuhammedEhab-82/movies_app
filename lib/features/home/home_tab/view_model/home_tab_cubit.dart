@@ -5,13 +5,17 @@ import 'package:movies_app/core/errors/api_error.dart';
 
 class HomeTabCubit extends Cubit<HomeTabState> {
   final MovieService _movieService;
-  HomeTabCubit(this._movieService): super(HomeLoadingState());
+  HomeTabCubit(this._movieService) : super(HomeLoadingState());
+  // some genres
+  final List<String> genres = ["Action", "Drama", "Comedy", "Horror","Sci-Fi","Thriller"];
 
-  void getLastMovies() async {
+  void getLastMovies({int? genreIndex,String? sorting}) async {
     emit(HomeLoadingState());
     try {
       final movies = await _movieService.getAllMovies(
-        limit: 5
+        sortBy: sorting,
+        limit: 5,
+        genre: genreIndex != null ? genres[genreIndex] : null,
       );
       emit(HomeSuccessState(movies: movies));
     } catch (e) {
