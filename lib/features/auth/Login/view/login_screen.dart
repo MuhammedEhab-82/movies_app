@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_app/core/cubit/user_cubit.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
@@ -63,6 +64,9 @@ class _LoginViewState extends State<_LoginView> {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
+          // Link the login result to the app-wide UserCubit so the
+          // Profile tab shows the real logged-in user right away.
+          context.read<UserCubit>().setUser(state.user);
           Navigator.of(context).pushReplacementNamed(AppRoutes.home);
         } else if (state is LoginFailure) {
           ScaffoldMessenger.of(context).showSnackBar(

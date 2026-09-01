@@ -81,6 +81,24 @@ class AuthService {
     }
   }
 
+
+  Future<UserModel?> getCurrentUser() async {
+    final user = _firebaseAuth.currentUser;
+    if (user == null) return null;
+
+    try {
+      final doc = await _firestore.collection('users').doc(user.uid).get();
+      if (!doc.exists) return null;
+      return UserModel.fromMap({...doc.data()!, 'uid': user.uid});
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
+  }
+
   Future<void> sendPasswordResetEmail({required String email}) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email.trim());

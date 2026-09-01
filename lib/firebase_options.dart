@@ -57,7 +57,6 @@ class DefaultFirebaseOptions {
     projectId: 'moviesapp-project-77637',
     storageBucket: 'moviesapp-project-77637.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCwvPv0EW-ZtrXbDFZ0NYaTKGLW4VY-KvA',
     appId: '1:22261468756:ios:28ee221233d770d09ea7c1',
@@ -66,7 +65,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'moviesapp-project-77637.firebasestorage.app',
     iosBundleId: 'com.example.moviesApp',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyCwvPv0EW-ZtrXbDFZ0NYaTKGLW4VY-KvA',
     appId: '1:22261468756:ios:28ee221233d770d09ea7c1',

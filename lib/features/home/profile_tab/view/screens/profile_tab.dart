@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_app/core/cubit/user_cubit.dart';
+import 'package:movies_app/core/cubit/user_state.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_strings.dart';
@@ -24,29 +27,6 @@ class _ProfileTabState extends State<ProfileTab>
   late final TabController tabController;
   int currentIndex = 0;
 
-  final UserProfile testUser = UserProfile(
-    name: 'John Doe',
-    avatarUrl: AppImages.Profile01,
-
-    history: const [
-      AppImages.MoviePoster1,
-      AppImages.MoviePoster2,
-      AppImages.MoviePoster3,
-      AppImages.MoviePoster4,
-      AppImages.MoviePoster5,
-      AppImages.MoviePoster1,
-      AppImages.MoviePoster2,
-      AppImages.MoviePoster3,
-      AppImages.MoviePoster4,
-      AppImages.MoviePoster5,
-      AppImages.MoviePoster1,
-      AppImages.MoviePoster2,
-      AppImages.MoviePoster3,
-      AppImages.MoviePoster4,
-      AppImages.MoviePoster5,
-    ],
-  );
-
   @override
   void initState() {
     super.initState();
@@ -60,84 +40,114 @@ class _ProfileTabState extends State<ProfileTab>
 
   @override
   Widget build(BuildContext context) {
-    final selectedMovies = currentIndex == 0
-        ? testUser.watchlist
-        : testUser.history;
-    return Scaffold(
-      backgroundColor: AppColors.grayBg,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(child: ProfileSection(userProfile: testUser)),
-            SliverToBoxAdapter(
-              child: SizedBox(height: AppResponsive.h(context, 24)),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppResponsive.w(context, 16),
-                ),
-                child: Row(
-                  spacing: AppResponsive.w(context, 10),
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: CustomButton(
-                        borderRadius: 15,
-                        text: AppStrings.editProfile,
-                        textStyle: AppStyles.reg20white,
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(AppRoutes.updateProfile);
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: CustomButton(
-                        borderRadius: 15,
-                        text: AppStrings.exit,
-                        textStyle: AppStyles.reg20white,
-                        onPressed: () {
-                          Navigator.of(context).pushReplacementNamed(AppRoutes.logIn);
+    return BlocBuilder<UserCubit, UserState>(
+      builder: (context, state) {
+        // The logged-in user, linked here straight from UserCubit
+        // (populated by LoginCubit/RegisterCubit on success).
+        final loggedInUser = state is UserAuthenticated ? state.user : null;
 
-                        },
-                        color: AppColors.red,
-                        textColor: AppColors.white,
-                        icon: AppIcons.Exit,
-                      ),
-                    ),
-                  ],
+        final userProfile = UserProfile(
+          name: loggedInUser?.name ?? '',
+          avatarUrl: AppImages.avatarByIndex(loggedInUser?.avatar ?? 1),
+          // TODO: wire these up to Firestore (favorites/history feature).
+          watchlist: const [],
+          history: const [],
+        );
+
+        final selectedMovies = currentIndex == 0
+            ? userProfile.watchlist
+            : userProfile.history;
+
+        return Scaffold(
+          backgroundColor: AppColors.grayBg,
+          body: SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: ProfileSection(userProfile: userProfile),
                 ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: AppResponsive.h(context, 24)),
-            ),
-            SliverToBoxAdapter(
-              child: TabBar(
-                controller: tabController,
-                indicatorColor: AppColors.primary,
-                indicatorSize: TabBarIndicatorSize.tab,
-                tabs: [
-                  TabWidget(
-                    icon: AppIcons.WatchList,
-                    name: AppStrings.watchlist,
-                  ),
-                  TabWidget(icon: AppIcons.History, name: AppStrings.history),
-                ],
-              ),
-            ),
-            selectedMovies!.isEmpty
-                ? SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Container(
-                      color: AppColors.background,
-                      child: Image.asset(AppImages.Empty),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: AppResponsive.h(context, 24)),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppResponsive.w(context, 16),
                     ),
-                  )
-                : SliverToBoxAdapter(child: TabDetails(movie: selectedMovies)),
-          ],
-        ),
-      ),
+                    child: Row(
+                      spacing: AppResponsive.w(context, 10),
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: CustomButton(
+                            borderRadius: 15,
+                            text: AppStrings.editProfile,
+                            textStyle: AppStyles.reg20white,
+                            onPressed: () {
+                              Navigator.of(
+                                context,
+                              ).pushNamed(AppRoutes.updateProfile);
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: CustomButton(
+                            borderRadius: 15,
+                            text: AppStrings.exit,
+                            textStyle: AppStyles.reg20white,
+                            onPressed: () async {
+                              await context.read<UserCubit>().logout();
+                              if (context.mounted) {
+                                Navigator.of(
+                                  context,
+                                ).pushReplacementNamed(AppRoutes.logIn);
+                              }
+                            },
+                            color: AppColors.red,
+                            textColor: AppColors.white,
+                            icon: AppIcons.Exit,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: AppResponsive.h(context, 24)),
+                ),
+                SliverToBoxAdapter(
+                  child: TabBar(
+                    controller: tabController,
+                    indicatorColor: AppColors.primary,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    tabs: [
+                      TabWidget(
+                        icon: AppIcons.WatchList,
+                        name: AppStrings.watchlist,
+                      ),
+                      TabWidget(
+                        icon: AppIcons.History,
+                        name: AppStrings.history,
+                      ),
+                    ],
+                  ),
+                ),
+                selectedMovies!.isEmpty
+                    ? SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Container(
+                          color: AppColors.background,
+                          child: Image.asset(AppImages.Empty),
+                        ),
+                      )
+                    : SliverToBoxAdapter(
+                        child: TabDetails(movie: selectedMovies),
+                      ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
