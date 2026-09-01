@@ -32,4 +32,6 @@ class MovieModel {
     );
 
   }
+
+  String? get mediumCoverImage => null;
 }
