@@ -63,6 +63,64 @@ class _SearchTabState extends State<SearchTab> {
     );
   }
 
+  // Widget _buildBody(SearchStates state) {
+  //   if (state is SearchInitialState) {
+  //     return Center(
+  //       child: Image.asset(AppImages.Empty),
+  //     );
+  //   }
+  //
+  //   if (state is SearchSuccessState) {
+  //     if (state.movies.isEmpty) {
+  //       return Center(
+  //         child: Text('No Movies Found.',style: AppStyles.semi20primary,),
+  //       );
+  //     }if (state is SearchLoadingState) {
+  //       return Center(
+  //           child: Skeletonizer(
+  //             child:  BrowseMoviesGrid(
+  //               movies: [
+  //                 MovieModel.empty(),
+  //                 MovieModel.empty(),
+  //                 MovieModel.empty(),
+  //                 MovieModel.empty(),
+  //               ],
+  //             ),
+  //           )
+  //
+  //       );
+  //     }
+  //
+  //     return GridView.builder(
+  //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //         crossAxisCount: 2,
+  //         crossAxisSpacing: 12,
+  //         mainAxisSpacing: 12,
+  //         childAspectRatio: 0.6,
+  //       ),
+  //       itemCount: state.movies.length,
+  //       itemBuilder: (context, index) {
+  //         final movie = state.movies[index];
+  //
+  //         return MovieCard(
+  //           path: movie.image ?? '',
+  //           rating: movie.rating?.toString() ?? '',
+  //           movieId: movie.id ?? 0,
+  //         );
+  //       },
+  //     );
+  //   }
+  //
+  //   if (state is SearchErrorState) {
+  //     return Center(
+  //       child: Text(
+  //         state.error.message ?? 'Something went wrong',
+  //       ),
+  //     );
+  //   }
+  //
+  //   return const SizedBox();
+  // }
   Widget _buildBody(SearchStates state) {
     if (state is SearchInitialState) {
       return Center(
@@ -70,24 +128,28 @@ class _SearchTabState extends State<SearchTab> {
       );
     }
 
+    if (state is SearchLoadingState) {
+      return Center(
+        child: Skeletonizer(
+          child: BrowseMoviesGrid(
+            movies: [
+              MovieModel.empty(),
+              MovieModel.empty(),
+              MovieModel.empty(),
+              MovieModel.empty(),
+            ],
+          ),
+        ),
+      );
+    }
+
     if (state is SearchSuccessState) {
       if (state.movies.isEmpty) {
         return Center(
-          child: Text('No Movies Found.',style: AppStyles.semi20primary,),
-        );
-      }if (state is SearchErrorState) {
-        return Center(
-            child: Skeletonizer(
-              child:  BrowseMoviesGrid(
-                movies: [
-                  MovieModel.empty(),
-                  MovieModel.empty(),
-                  MovieModel.empty(),
-                  MovieModel.empty(),
-                ],
-              ),
-            )
-
+          child: Text(
+            'No Movies Found.',
+            style: AppStyles.semi20primary,
+          ),
         );
       }
 
@@ -103,7 +165,7 @@ class _SearchTabState extends State<SearchTab> {
           final movie = state.movies[index];
 
           return MovieCard(
-            path: movie.mediumCoverImage ?? '',
+            path: movie.image ?? '',
             rating: movie.rating?.toString() ?? '',
             movieId: movie.id ?? 0,
           );
