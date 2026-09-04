@@ -1,7 +1,6 @@
 import 'package:movies_app/core/network/api_const.dart';
 import 'package:movies_app/core/network/dio_client.dart';
 import 'package:movies_app/features/home/browse_tab/model/movie_model.dart';
-
 import '../../features/movie_details/model/movie_details_model.dart';
 import '../../features/movie_details/model/movie_suggestion_model.dart';
 import '../errors/network_exceptions.dart';
@@ -15,6 +14,7 @@ class MovieService {
     int limit = 20,
     String? genre,
     String? sortBy = 'date_added',
+    String? movieName,
   }) async {
     try {
       final response = await dioClient.dio.get(
@@ -23,6 +23,8 @@ class MovieService {
           'limit': limit,
           'sort_by':sortBy ,
           'genre': ?genre,
+          'query_term':movieName
+
         },
       );
 
@@ -85,4 +87,5 @@ class MovieService {
       throw NetworkExceptions.getDioException(error);
     }
   }
+
 }
