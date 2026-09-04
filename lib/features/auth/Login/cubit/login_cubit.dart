@@ -33,8 +33,8 @@ class LoginCubit extends Cubit<LoginState> {
       emit(LoginSuccess(user));
     } on AuthException catch (e) {
       emit(LoginFailure(e.message));
-    } catch (_) {
-      emit(const LoginFailure('Something went wrong. Please try again.'));
+    } catch (e) {
+      emit(LoginFailure('Something went wrong: $e'));
     }
   }
 }
