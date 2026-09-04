@@ -14,7 +14,7 @@ class SearchTabViewModel extends Cubit<SearchStates> {
   })  : _movieService = movieService,
         super(SearchInitialState());
 
-  void searchMovies(String movieName) {
+  Future<void> searchMovies(String movieName) async {
     // Cancel the previous timer
     _debounce?.cancel();
 
@@ -24,10 +24,7 @@ class SearchTabViewModel extends Cubit<SearchStates> {
       return;
     }
 
-    // Wait 500ms after the user stops typing
-    _debounce = Timer(
-      const Duration(seconds: 5),
-          () async {
+
         try {
           emit(SearchLoadingState());
 
@@ -44,13 +41,7 @@ class SearchTabViewModel extends Cubit<SearchStates> {
             ),
           );
         }
-      },
-    );
+      }
+
   }
 
-  @override
-  Future<void> close() {
-    _debounce?.cancel();
-    return super.close();
-  }
-}
