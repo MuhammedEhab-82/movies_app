@@ -57,7 +57,9 @@ class _LoginViewState extends State<_LoginView> {
     }
   }
 
-  void loginWithGoogle() {}
+  void loginWithGoogle() {
+    context.read<LoginCubit>().loginWithGoogle();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,13 +195,20 @@ class _LoginViewState extends State<_LoginView> {
                       ],
                     ),
 
-                    CustomButton(
-                      text: AppStrings.loginWithGoogle,
-                      onPressed: loginWithGoogle,
-                      icon: AppIcons.Google,
-                      width: double.infinity,
-                      height: AppResponsive.h(context, 56),
-                      borderRadius: 16,
+                    BlocBuilder<LoginCubit, LoginState>(
+                      builder: (context, state) {
+                        if (state is LoginLoading) {
+                          return const SizedBox.shrink();
+                        }
+                        return CustomButton(
+                          text: AppStrings.loginWithGoogle,
+                          onPressed: loginWithGoogle,
+                          icon: AppIcons.Google,
+                          width: double.infinity,
+                          height: AppResponsive.h(context, 56),
+                          borderRadius: 16,
+                        );
+                      },
                     ),
                     LanguageSwitch(isArabic: isArabic),
                   ],
