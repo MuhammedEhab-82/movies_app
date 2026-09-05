@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
+
 class AppStyles {
   static  TextStyle med36white = GoogleFonts.inter(
     fontSize:36 ,

@@ -5,6 +5,7 @@ import '../../features/auth/Login/view/login_screen.dart';
 import '../../features/auth/Register/view/register_screen.dart';
 import '../../features/auth/forget_password/forget_password.dart';
 import '../../features/home/auth_gate.dart';
+import '../../features/home/profile_tab/model/user_profile.dart';
 import '../../features/home/profile_tab/view/screens/edit_profile.dart';
 import '../../features/on_boarding/view/screens/introduction_screen.dart';
 import '../../features/on_boarding/view/screens/onBoarding.dart';
@@ -26,8 +27,15 @@ class AppRoutes {
     logIn: (context) => LoginScreen(),
     signUp: (context) => SignUpScreen(),
     home: (context) => const AuthGate(),
-    updateProfile: (context) => const UpdateProfileScreen(),
-    forgotPassword: (context) => const ForgetPasswordScreen(),
+    updateProfile: (context) {
+      final arguments = ModalRoute.of(context)?.settings.arguments;
+
+      final userProfile = arguments as UserProfile;
+
+      return UpdateProfileScreen(
+        currentUser: userProfile,
+      );
+    },    forgotPassword: (context) => const ForgetPasswordScreen(),
     movieDetails: (context) {
       final arguments = ModalRoute
           .of(context)

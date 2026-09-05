@@ -42,14 +42,16 @@ class _ProfileTabState extends State<ProfileTab>
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
-        // The logged-in user, linked here straight from UserCubit
-        // (populated by LoginCubit/RegisterCubit on success).
-        final loggedInUser = state is UserAuthenticated ? state.user : null;
+        final loggedInUser =
+        state is UserAuthenticated ? state.user : null;
 
         final userProfile = UserProfile(
+          id: loggedInUser?.uid ?? '',
           name: loggedInUser?.name ?? '',
-          avatarUrl: AppImages.avatarByIndex(loggedInUser?.avatar ?? 1),
-          // TODO: wire these up to Firestore (favorites/history feature).
+          email: loggedInUser?.email,
+          phone: loggedInUser?.phone ?? '',
+          avatarUrl:
+          AppImages.avatarByIndex(loggedInUser?.avatar ?? 1),
           watchlist: const [],
           history: const [],
         );
@@ -67,7 +69,9 @@ class _ProfileTabState extends State<ProfileTab>
                   child: ProfileSection(userProfile: userProfile),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(height: AppResponsive.h(context, 24)),
+                  child: SizedBox(
+                    height: AppResponsive.h(context, 24),
+                  ),
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
@@ -84,9 +88,10 @@ class _ProfileTabState extends State<ProfileTab>
                             text: AppStrings.editProfile,
                             textStyle: AppStyles.reg20white,
                             onPressed: () {
-                              Navigator.of(
-                                context,
-                              ).pushNamed(AppRoutes.updateProfile);
+                              Navigator.of(context).pushNamed(
+                                AppRoutes.updateProfile,
+                                arguments: userProfile,
+                              );
                             },
                           ),
                         ),
@@ -97,10 +102,12 @@ class _ProfileTabState extends State<ProfileTab>
                             textStyle: AppStyles.reg20white,
                             onPressed: () async {
                               await context.read<UserCubit>().logout();
+
                               if (context.mounted) {
-                                Navigator.of(
-                                  context,
-                                ).pushReplacementNamed(AppRoutes.logIn);
+                                Navigator.of(context)
+                                    .pushReplacementNamed(
+                                  AppRoutes.logIn,
+                                );
                               }
                             },
                             color: AppColors.red,
@@ -113,7 +120,9 @@ class _ProfileTabState extends State<ProfileTab>
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(height: AppResponsive.h(context, 24)),
+                  child: SizedBox(
+                    height: AppResponsive.h(context, 24),
+                  ),
                 ),
                 SliverToBoxAdapter(
                   child: TabBar(
@@ -134,15 +143,15 @@ class _ProfileTabState extends State<ProfileTab>
                 ),
                 selectedMovies!.isEmpty
                     ? SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Container(
-                          color: AppColors.background,
-                          child: Image.asset(AppImages.Empty),
-                        ),
-                      )
+                  hasScrollBody: false,
+                  child: Container(
+                    color: AppColors.background,
+                    child: Image.asset(AppImages.Empty),
+                  ),
+                )
                     : SliverToBoxAdapter(
-                        child: TabDetails(movie: selectedMovies),
-                      ),
+                  child: TabDetails(movie: selectedMovies),
+                ),
               ],
             ),
           ),

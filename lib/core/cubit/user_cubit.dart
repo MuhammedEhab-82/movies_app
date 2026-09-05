@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../features/auth/model/user_model.dart';
+import '../../features/home/profile_tab/model/user_profile.dart';
 import '../services/auth_service.dart';
+import '../utils/fire_base_utils.dart';
 import 'user_state.dart';
 
 
@@ -18,6 +20,13 @@ class UserCubit extends Cubit<UserState> {
     } else {
       emit(const UserUnauthenticated());
     }
+  }
+
+  Future<void> deleteAccount(UserProfile userProfile) async {
+    await FireBaseUtils.deleteUserInFirestore(userProfile);
+    await _authService.deleteAccount();
+
+    emit(const UserUnauthenticated());
   }
 
   void setUser(UserModel user) {

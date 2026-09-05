@@ -99,6 +99,16 @@ class AuthService {
     await _firebaseAuth.signOut();
   }
 
+  Future<void> deleteAccount() async {
+    try {
+      await _firebaseAuth.currentUser?.delete();
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(_mapFirebaseAuthError(e));
+    } catch (e) {
+      throw AuthException(_mapGenericError(e));
+    }
+  }
+
   Future<void> sendPasswordResetEmail({required String email}) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email.trim());
