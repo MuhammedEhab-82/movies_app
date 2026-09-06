@@ -8,8 +8,9 @@ class UserProfile {
   String phone;
   String avatarUrl;
   String? email;
-  List<String>? watchlist;
-  List<String>? history;
+  List<String> watchlist;
+  List<String> history;
+  bool? isFavourite;
 
   UserProfile({
     required this.id,
@@ -19,6 +20,7 @@ class UserProfile {
     this.watchlist = const [],
     this.history = const [],
     this.email,
+    this.isFavourite
   });
 
   /// json => obj
@@ -31,6 +33,9 @@ class UserProfile {
     avatarUrl: AppImages.avatarByIndex(
       data['avatar'] as int? ?? 1,
     ),
+    watchlist: List<String>.from(data['watchlist'] ?? []),
+    history: List<String>.from(data['history'] ?? []),
+    isFavourite: data['isFavourite']
   );
 
   /// object => json
@@ -41,6 +46,9 @@ class UserProfile {
       'email': email,
       'phone': phone,
       'avatar': AppImages.indexByAvatar(avatarUrl),
+      'watchlist': watchlist,
+      'history': history,
+      'isFavourite' : isFavourite
     };
   }
 }

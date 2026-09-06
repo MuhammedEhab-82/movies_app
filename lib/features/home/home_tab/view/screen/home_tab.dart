@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/network/api_service.dart';
 import 'package:movies_app/core/network/dio_client.dart';
@@ -15,7 +14,6 @@ import 'package:movies_app/features/home/home_tab/view/widgets/movie_list_view.d
 import 'package:movies_app/features/home/home_tab/view_model/home_tab_cubit.dart';
 import 'package:movies_app/features/home/home_tab/view_model/home_tab_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-
 import '../../../browse_tab/model/movie_model.dart';
 
 class HomeTab extends StatefulWidget {

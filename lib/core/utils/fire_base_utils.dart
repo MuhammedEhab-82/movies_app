@@ -11,9 +11,8 @@ class FireBaseUtils {
     );
   }
 
-  static Future<void> updateUserInFirestore(UserProfile userProfile) async {
+  static Future<void> updateUserInFirestore(UserProfile userProfile ) async {
     CollectionReference<UserProfile> collectionRef = getUsersCollection();
-
     DocumentReference<UserProfile> docRef =
     collectionRef.doc(userProfile.id);
 
@@ -21,6 +20,17 @@ class FireBaseUtils {
       'name': userProfile.name,
       'phone': userProfile.phone,
       'avatar': AppImages.indexByAvatar(userProfile.avatarUrl),
+    });
+  }
+
+  static Future<void> addMovieToWatchlist({
+    required String userId,
+    required int movieId,
+  }) async {
+    final collectionRef = getUsersCollection();
+    final docRef = collectionRef.doc(userId);
+    await docRef.update({
+      'watchlist': FieldValue.arrayUnion([movieId.toString()]),
     });
   }
 
@@ -39,5 +49,15 @@ class FireBaseUtils {
     return doc.exists ? doc.data() : null;
   }
 
+  static Future<void> removeMovieFromWatchlist({
+     required int? movieId,
+     required String? userId
+   }) async {
+  final collectionRef = getUsersCollection();
+  final docRef = collectionRef.doc(userId);
+  await docRef.update({
+    'watchlist': FieldValue.arrayRemove([movieId.toString()]),
+  });
+}
 
 }
