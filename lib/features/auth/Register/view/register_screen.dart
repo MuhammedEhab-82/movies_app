@@ -1,64 +1,150 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_app/core/cubit/user_cubit.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
-import 'package:movies_app/core/widgets/custom_button.dart';
-import 'package:movies_app/core/widgets/custom_text_field.dart';
 import 'package:movies_app/features/auth/Widget/language_switch.dart';
 import 'package:movies_app/features/auth/Widget/profile_avatar_slider.dart';
-
+import '../../../../core/utils/app_routes.dart';
 import '../../../../core/utils/app_strings.dart';
+import '../cubit/register_cubit.dart';
+import '../cubit/register_state.dart';
+import 'widgets/register_form_fields.dart';
+import 'widgets/register_submit_button.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: InkWell(
-          onTap: (){
-            Navigator.pop(context);
-          },
-            child: Image.asset(AppIcons.Back)),
-        title: Text(AppStrings.Register,style: AppStyles.reg16primary,),
-      ),
-      backgroundColor: AppColors.background,
-      body: Column(
-        children: [
-          ProfileAvatarSlider(),
-          Padding(
-            padding: EdgeInsets.all(16),
+    return BlocProvider(
+      create: (_) => RegisterCubit(),
+      child: const _SignUpView(),
+    );
+  }
+}
+
+class _SignUpView extends StatefulWidget {
+  const _SignUpView();
+
+  @override
+  State<_SignUpView> createState() => _SignUpViewState();
+}
+
+class _SignUpViewState extends State<_SignUpView> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final phoneController = TextEditingController();
+
+  int selectedAvatar = 1;
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
+  void _onCreateAccountPressed() {
+    if (!formKey.currentState!.validate()) return;
+
+    context.read<RegisterCubit>().register(
+      name: nameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+      phone: phoneController.text,
+      avatar: selectedAvatar,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<RegisterCubit, RegisterState>(
+      listener: (context, state) {
+        if (state is RegisterSuccess) {
+          // Link the new account to the app-wide UserCubit so the
+          // Profile tab shows the real logged-in user right away.
+          context.read<UserCubit>().setUser(state.user);
+          Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+        } else if (state is RegisterFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: AppColors.red),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          leading: InkWell(
+            onTap: () => Navigator.pop(context),
+            child: Image.asset(AppIcons.Back),
+          ),
+          title: Text(AppStrings.register, style: AppStyles.reg16primary),
+        ),
+        backgroundColor: AppColors.background,
+        body: SingleChildScrollView(
+          child: Form(
+            key: formKey,
             child: Column(
-              spacing: AppResponsive.h(context, 16),
               children: [
-                Text(AppStrings.Avatar,style: AppStyles.reg16white,),
-                CustomTextField(hintText: AppStrings.Name, prefixIcon: AppIcons.Name),
-                CustomTextField(hintText: AppStrings.Email, prefixIcon: AppIcons.Email),
-                CustomTextField(hintText: AppStrings.Password, prefixIcon: AppIcons.Password,isPassword: true,),
-                CustomTextField(hintText: AppStrings.ConfirmPassword, prefixIcon: AppIcons.Password,isPassword: true,),
-                CustomTextField(hintText: AppStrings.PhoneNumber, prefixIcon: AppIcons.Phone),
-                CustomButton(text: AppStrings.CreateAccount, onPressed: (){},width: double.infinity,height: AppResponsive.h(context, 60),borderRadius: 16,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(AppStrings.AlreadyHaveAccount,style: AppStyles.reg14white,),
-                    InkWell(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                        child: Text(AppStrings.Login,style: AppStyles.reg14primary,))
-                  ],
+                ProfileAvatarSlider(
+                  initialAvatar: selectedAvatar,
+                  onAvatarSelected: (avatar) {
+                    setState(() => selectedAvatar = avatar);
+                  },
                 ),
-                LanguageSwitch(isArabic: false),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    spacing: AppResponsive.h(context, 16),
+                    children: [
+                      Text(AppStrings.avatar, style: AppStyles.reg16white),
+
+                      RegisterFormFields(
+                        nameController: nameController,
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        confirmPasswordController: confirmPasswordController,
+                        phoneController: phoneController,
+                      ),
+
+                      BlocBuilder<RegisterCubit, RegisterState>(
+                        builder: (context, state) {
+                          return RegisterSubmitButton(
+                            isLoading: state is RegisterLoading,
+                            onPressed: _onCreateAccountPressed,
+                          );
+                        },
+                      ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(AppStrings.alreadyHaveAccount, style: AppStyles.reg14white),
+                          InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Text(AppStrings.login, style: AppStyles.reg14primary),
+                          ),
+                        ],
+                      ),
+
+                      LanguageSwitch(isArabic: false),
+                    ],
+                  ),
+                ),
               ],
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

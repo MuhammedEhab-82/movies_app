@@ -23,6 +23,18 @@ static const String Profile07="assets/images/ProfileAvatars/Profile07.png";
 static const String Profile08="assets/images/ProfileAvatars/Profile08.png";
 static const String Profile09="assets/images/ProfileAvatars/Profile09.png";
 //########################################################################
+static const List<String> ProfileAvatars = [
+  Profile01, Profile02, Profile03,
+  Profile04, Profile05, Profile06,
+  Profile07, Profile08, Profile09,
+];
+
+/// Maps the 1-based `avatar` index stored on UserModel/Firestore to its asset path.
+static String avatarByIndex(int index) {
+  if (index < 1 || index > ProfileAvatars.length) return Profile01;
+  return ProfileAvatars[index - 1];
+}
+//########################################################################
 static const String MoviesPosters="assets/images/OnBoarding/MoviesPosters.png";
 static const String OnBoarding1="assets/images/OnBoarding/OnBoarding1.png";
 static const String OnBoarding2="assets/images/OnBoarding/OnBoarding2.png";

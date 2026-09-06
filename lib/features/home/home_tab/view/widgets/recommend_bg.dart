@@ -8,8 +8,11 @@ class RecommendBg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Ink.image(
-      image: AssetImage(recommendedMovie),
+      image: NetworkImage(recommendedMovie),
+      width: double.infinity,
+      height: double.infinity,
       fit: BoxFit.cover,
+      alignment: Alignment.topCenter,
       child: Ink(
         decoration: BoxDecoration(
           gradient: LinearGradient(
