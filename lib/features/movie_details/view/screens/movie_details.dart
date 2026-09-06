@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/core/network/dio_client.dart';
@@ -5,8 +6,8 @@ import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_strings.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
-
 import '../../../../core/network/api_service.dart';
+import '../../../home/profile_tab/model/cubit/profile_view_model.dart';
 import '../../view_model/movie_details_cubit.dart';
 import '../../view_model/movie_details_state.dart';
 import '../widgets/cast.dart';
@@ -22,11 +23,18 @@ class MovieDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-      MovieDetailsCubit(MovieService(DioClient()))
-        ..getMovieDetails(movieId),
-      child: Scaffold(
+    return MultiBlocProvider(
+    providers: [
+    BlocProvider(
+    create: (context) =>
+    MovieDetailsCubit(MovieService(DioClient()))
+      ..getMovieDetails(movieId),
+    ),
+    BlocProvider(
+    create: (context) => ProfileViewModel(),
+    ),
+    ],
+    child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -40,8 +48,22 @@ class MovieDetails extends StatelessWidget {
               size: 30,
             ),
           ),
-          actions: const [
-            Icon(Icons.bookmark, color: AppColors.white, size: 30)
+          actions: [
+            IconButton(
+              onPressed: () {
+                final userId = FirebaseAuth.instance.currentUser!.uid;
+
+                context.read<ProfileViewModel>().toggleMovie(
+                  userId,
+                  movieId,
+                );
+              },
+              icon: const Icon(
+                Icons.bookmark,
+                color: AppColors.white,
+                size: 30,
+              ),
+            ),
           ],
           elevation: 0,
         ),
@@ -71,7 +93,7 @@ class MovieDetails extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     MovieDetailsHeader(movie: movie),
-                    MovieActionsRow(movie: movie),
+                    MovieActionsRow(movie: movie, onWatchlistPressed: () {},),
 
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
