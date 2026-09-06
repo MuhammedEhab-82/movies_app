@@ -13,6 +13,8 @@ import 'package:movies_app/features/auth/Login/cubit/login_cubit.dart';
 import 'package:movies_app/features/auth/Login/cubit/login_state.dart';
 import 'package:movies_app/features/auth/Login/utils/validators.dart';
 
+import '../../../../core/cubit/user_cubit.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -63,6 +65,7 @@ class _LoginViewState extends State<_LoginView> {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
+          context.read<UserCubit>().setUser(state.user);
           Navigator.of(context).pushReplacementNamed(AppRoutes.home);
         } else if (state is LoginFailure) {
           ScaffoldMessenger.of(context).showSnackBar(

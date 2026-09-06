@@ -5,9 +5,22 @@ import 'package:movies_app/core/utils/app_routes.dart';
 import 'package:movies_app/core/utils/app_strings.dart';
 import 'package:movies_app/core/widgets/custom_button.dart';
 import '../../../../core/utils/app_styles.dart';
+import '../../../../core/services/local_storage_service.dart';
 
-class IntroductionScreen extends StatelessWidget {
+class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen({super.key});
+
+  @override
+  State<IntroductionScreen> createState() => _IntroductionScreenState();
+}
+
+class _IntroductionScreenState extends State<IntroductionScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    LocalStorageService.markIntroSeen();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +35,8 @@ class IntroductionScreen extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsetsGeometry.symmetric(
-              vertical: AppResponsive.h(context, 32),
-              horizontal: AppResponsive.w(context, 16)
+                vertical: AppResponsive.h(context, 32),
+                horizontal: AppResponsive.w(context, 16)
             ),
             child: Column(
               spacing: AppResponsive.h(context, 16),
@@ -43,7 +56,6 @@ class IntroductionScreen extends StatelessWidget {
                   text: AppStrings.exploreNow,
                   width: double.infinity,
                   onPressed: () {
-                    // TODO : NAVIGATE TO ONBOARDING
                     Navigator.of(context).pushNamed(AppRoutes.onBoarding);
                   },
                 ),

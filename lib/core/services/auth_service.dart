@@ -81,6 +81,32 @@ class AuthService {
     }
   }
 
+
+  Future<UserModel> getCurrentUser() async {
+    final firebaseUser = _firebaseAuth.currentUser;
+    if (firebaseUser == null) {
+      throw AuthException('No user is currently signed in.');
+    }
+
+    try {
+      final doc =
+      await _firestore.collection('users').doc(firebaseUser.uid).get();
+      if (!doc.exists) {
+        throw AuthException('User data not found. Please contact support.');
+      }
+      return UserModel.fromMap({...doc.data()!, 'uid': firebaseUser.uid});
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(_mapFirebaseAuthError(e));
+    } catch (e) {
+      throw AuthException(_mapGenericError(e));
+    }
+  }
+
+
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
+  }
+
   Future<void> sendPasswordResetEmail({required String email}) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email.trim());

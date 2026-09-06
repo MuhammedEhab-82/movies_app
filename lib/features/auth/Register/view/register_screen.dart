@@ -12,7 +12,7 @@ import '../cubit/register_cubit.dart';
 import '../cubit/register_state.dart';
 import 'widgets/register_form_fields.dart';
 import 'widgets/register_submit_button.dart';
-
+import '../../../../core/cubit/user_cubit.dart';
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
@@ -70,6 +70,7 @@ class _SignUpViewState extends State<_SignUpView> {
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if (state is RegisterSuccess) {
+          context.read<UserCubit>().setUser(state.user);
           Navigator.of(context).pushReplacementNamed(AppRoutes.home);
         } else if (state is RegisterFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
