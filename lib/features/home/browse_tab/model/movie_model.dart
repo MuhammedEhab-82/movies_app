@@ -5,12 +5,14 @@ class MovieModel {
   final double rating;
   final String image;
   final List<String> genres;
+  final String title;
 
   MovieModel({
     required this.id,
     required this.rating,
     required this.image,
     required this.genres,
+    this.title = '',
   });
 
   factory MovieModel.empty() {
@@ -19,6 +21,7 @@ class MovieModel {
       rating: 0,
       image: AppImages.MoviePoster3,
       genres: [],
+      title: 'Movie',
     );
   }
 
@@ -30,6 +33,7 @@ class MovieModel {
       genres: List<String>.from(
         json['genres'] ?? [],
       ),
+      title: json['title'] ?? json['title_long'] ?? '',
     );
 
   }

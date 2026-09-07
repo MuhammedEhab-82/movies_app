@@ -7,7 +7,10 @@ import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_strings.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
 import '../../../../core/network/api_service.dart';
-import '../../../home/profile_tab/model/cubit/profile_view_model.dart';
+import 'package:movies_app/core/utils/fire_base_utils.dart';
+import 'package:movies_app/core/cubit/user_cubit.dart';
+import '../../../home/profile_tab/cubit/profile_view_model.dart';
+import '../../../home/profile_tab/cubit/profile_states.dart';
 import '../../view_model/movie_details_cubit.dart';
 import '../../view_model/movie_details_state.dart';
 import '../widgets/cast.dart';
@@ -31,7 +34,8 @@ class MovieDetails extends StatelessWidget {
       ..getMovieDetails(movieId),
     ),
     BlocProvider(
-    create: (context) => ProfileViewModel(),
+    create: (context) => ProfileViewModel()
+      ..loadUser(FirebaseAuth.instance.currentUser!.uid),
     ),
     ],
     child: Scaffold(
@@ -49,20 +53,39 @@ class MovieDetails extends StatelessWidget {
             ),
           ),
           actions: [
-            IconButton(
-              onPressed: () {
-                final userId = FirebaseAuth.instance.currentUser!.uid;
+            BlocBuilder<ProfileViewModel, ProfileStates>(
+              builder: (context, state) {
+                bool isInWatchlist = false;
+                if (state is ProfileUserLoadedState) {
+                  isInWatchlist = state.user.watchlist.contains(movieId.toString());
+                }
+                return IconButton(
+                  onPressed: () async {
+                    final userId = FirebaseAuth.instance.currentUser!.uid;
 
-                context.read<ProfileViewModel>().toggleMovie(
-                  userId,
-                  movieId,
+                    await context.read<ProfileViewModel>().toggleMovie(
+                      userId,
+                      movieId,
+                    );
+
+                    // Update global UserCubit so profile tab/listeners refresh immediately
+                    try {
+                      final updatedUser = await FireBaseUtils.getUserFromFirestore(userId);
+                      if (updatedUser != null) {
+                        // Safely update UserCubit if available
+                        try {
+                          context.read<UserCubit>().updateUser(updatedUser);
+                        } catch (_) {}
+                      }
+                    } catch (_) {}
+                  },
+                  icon: Icon(
+                    Icons.bookmark,
+                    color: isInWatchlist ? AppColors.primary : AppColors.white,
+                    size: 30,
+                  ),
                 );
               },
-              icon: const Icon(
-                Icons.bookmark,
-                color: AppColors.white,
-                size: 30,
-              ),
             ),
           ],
           elevation: 0,
@@ -86,6 +109,12 @@ class MovieDetails extends StatelessWidget {
             if (state is MovieDetailsSuccess) {
               final movie = state.movieDetails;
               final suggestions = state.suggestions;
+
+              final uid = FirebaseAuth.instance.currentUser?.uid;
+              if (uid != null) {
+                // record history for opened movie
+                context.read<ProfileViewModel>().addToHistory(uid, movieId);
+              }
 
               return SingleChildScrollView(
                 child: Column(

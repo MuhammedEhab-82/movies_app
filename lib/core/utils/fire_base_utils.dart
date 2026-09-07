@@ -1,63 +1,71 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:movies_app/features/home/profile_tab/model/user_profile.dart';
+import 'package:movies_app/features/auth/model/user_model.dart';
+
 import 'app_assets.dart';
 
 class FireBaseUtils {
-  static CollectionReference<UserProfile> getUsersCollection (){
-    return FirebaseFirestore.instance.collection(UserProfile.collectionName)
-        .withConverter<UserProfile>(
-        fromFirestore: (snapshot, options) => UserProfile.fromFireStore(snapshot.data()!),
-        toFirestore: (userProfile, options) => userProfile.toFireStore(),
-    );
-  }
+ static CollectionReference<UserModel> getUsersCollection() {
+   return FirebaseFirestore.instance.collection(UserModel.collectionName)
+       .withConverter<UserModel>(
+         fromFirestore: (snapshot, options) =>
+             UserModel.fromFireStore(snapshot.data() ?? {}),
+         toFirestore: (userModel, options) => userModel.toFireStore(),
+       );
+ }
 
-  static Future<void> updateUserInFirestore(UserProfile userProfile ) async {
-    CollectionReference<UserProfile> collectionRef = getUsersCollection();
-    DocumentReference<UserProfile> docRef =
-    collectionRef.doc(userProfile.id);
+ static Future<void> updateUserInFirestore(UserModel userModel) async {
+   final collectionRef = getUsersCollection();
+   final docRef = collectionRef.doc(userModel.id);
 
-    await docRef.update({
-      'name': userProfile.name,
-      'phone': userProfile.phone,
-      'avatar': AppImages.indexByAvatar(userProfile.avatarUrl),
-    });
-  }
+   await docRef.update({
+     'name': userModel.name,
+     'phone': userModel.phone,
+     'avatar': AppImages.indexByAvatar(userModel.avatarUrl),
+   });
+ }
 
-  static Future<void> addMovieToWatchlist({
-    required String userId,
-    required int movieId,
-  }) async {
-    final collectionRef = getUsersCollection();
-    final docRef = collectionRef.doc(userId);
-    await docRef.update({
-      'watchlist': FieldValue.arrayUnion([movieId.toString()]),
-    });
-  }
+ static Future<void> addMovieToWatchlist({
+   required String userId,
+   required int movieId,
+ }) async {
+   final collectionRef = getUsersCollection();
+   final docRef = collectionRef.doc(userId);
+   await docRef.update({
+     'watchlist': FieldValue.arrayUnion([movieId.toString()]),
+   });
+ }
 
-  static Future <void> deleteUserInFirestore (UserProfile userProfile) async{
-    //todo: 1- collection
-    CollectionReference<UserProfile> collectionRef= getUsersCollection();
-    // todo: 2-document
-    DocumentReference<UserProfile> docRef = collectionRef.doc(userProfile.id);
-    //todo : 3-update user
-    await docRef.delete();
-  }
+ static Future<void> addMovieToHistory({
+   required String userId,
+   required int movieId,
+ }) async {
+   final collectionRef = getUsersCollection();
+   final docRef = collectionRef.doc(userId);
+   await docRef.update({
+     'history': FieldValue.arrayUnion([movieId.toString()]),
+   });
+ }
 
-  static Future<UserProfile?> getUserFromFirestore(String uid) async {
-    final collectionRef = getUsersCollection();
-    final doc = await collectionRef.doc(uid).get();
-    return doc.exists ? doc.data() : null;
-  }
+ static Future<void> deleteUserInFirestore(UserModel userModel) async {
+   final collectionRef = getUsersCollection();
+   final docRef = collectionRef.doc(userModel.id);
+   await docRef.delete();
+ }
 
-  static Future<void> removeMovieFromWatchlist({
-     required int? movieId,
-     required String? userId
-   }) async {
-  final collectionRef = getUsersCollection();
-  final docRef = collectionRef.doc(userId);
-  await docRef.update({
-    'watchlist': FieldValue.arrayRemove([movieId.toString()]),
-  });
-}
+ static Future<UserModel?> getUserFromFirestore(String uid) async {
+   final collectionRef = getUsersCollection();
+   final doc = await collectionRef.doc(uid).get();
+   return doc.exists ? doc.data() : null;
+ }
 
+ static Future<void> removeMovieFromWatchlist({
+   required int? movieId,
+   required String? userId,
+ }) async {
+   final collectionRef = getUsersCollection();
+   final docRef = collectionRef.doc(userId);
+   await docRef.update({
+     'watchlist': FieldValue.arrayRemove([movieId.toString()]),
+   });
+ }
 }

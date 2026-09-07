@@ -88,4 +88,6 @@ class AppIcons{
   static const String Star="assets/icons/Star.png";
   static const String Watch="assets/icons/Watch.png";
   static const String WatchList="assets/icons/WatchList.png";
+  static const String imagePlaceholder="assets/images/image placeholder.jpg";
+
 }

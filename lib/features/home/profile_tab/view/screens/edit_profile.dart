@@ -6,8 +6,8 @@ import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
 import 'package:movies_app/core/utils/fire_base_utils.dart';
 import '../../../../../core/cubit/user_cubit.dart';
-import '../../model/cubit/update_profile_view_model.dart';
-import '../../model/user_profile.dart';
+import '../../../../auth/model/user_model.dart';
+import '../../cubit/update_profile_view_model.dart';
 import '../widgets/avatar_picker_sheet.dart';
 import '../widgets/delete_account_dialog.dart';
 import '../widgets/profile_action_buttons.dart';
@@ -15,16 +15,14 @@ import '../widgets/profile_avatar.dart';
 import '../widgets/profile_form_fields.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
-  final UserProfile currentUser;
+  final UserModel currentUser;
 
-  const UpdateProfileScreen({
-    super.key,
-    required this.currentUser,
-  });
+  const UpdateProfileScreen({super.key, required this.currentUser});
 
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
 }
+
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final UpdateProfileViewModel viewModel = UpdateProfileViewModel();
@@ -115,7 +113,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   Future<void> _onSavePressed() async {
     if (_formKey.currentState!.validate()) {
       await viewModel.updateData(
-        UserProfile(
+        UserModel(
           id: widget.currentUser.id,
           name: _nameController.text,
           email: widget.currentUser.email,
@@ -124,16 +122,25 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         ),
       );
 
+      if (!mounted) return;
+
       final currentUser = context.read<UserCubit>().currentUser;
 
       if (currentUser != null) {
-        context.read<UserCubit>().updateUser(
-          currentUser.copyWith(
-            name: _nameController.text,
-            phone: _phoneController.text,
-          ),
+        final updatedUser = UserModel(
+          id: currentUser.id,
+          name: _nameController.text,
+          email: currentUser.email,
+          phone: _phoneController.text,
+          avatarUrl: _selectedAvatar,
+          watchlist: currentUser.watchlist,
+          history: currentUser.history,
         );
+
+        context.read<UserCubit>().updateUser(updatedUser);
       }
+
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -151,9 +158,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
         await userCubit.deleteAccount(widget.currentUser);
 
-        if (mounted) {
-          Navigator.of(context).pop();
-        }
+        if (!mounted) return;
+
+        Navigator.of(context).pop();
       },
     );
   }

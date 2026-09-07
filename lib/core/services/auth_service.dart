@@ -153,7 +153,7 @@ class AuthService {
         return userModel;
       }
 
-      return UserModel.fromMap({
+      return UserModel.fromFireStore({
         ...doc.data()!,
         'uid': user.uid,
       });

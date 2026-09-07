@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:movies_app/core/services/offline_movie_cache.dart';
 import 'firebase_options.dart';
 import 'main_screen.dart';
 
@@ -8,5 +9,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await OfflineMovieCache.init();
   runApp(MainScreen());
 }
