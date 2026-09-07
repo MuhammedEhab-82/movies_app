@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../features/auth/model/user_model.dart';
 
@@ -156,10 +157,12 @@ class AuthService {
         'uid': user.uid,
       });
     } on FirebaseAuthException catch (e) {
+      debugPrint('FirebaseAuthException in signInWithGoogle: ${e.code} - ${e.message}');
       throw AuthException(_mapFirebaseAuthError(e));
     } on AuthException {
       rethrow;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      debugPrint('Error in signInWithGoogle: $e\n$stackTrace');
       throw AuthException(_mapGenericError(e));
     }
   }
@@ -233,11 +236,20 @@ class AuthService {
     if (raw.contains('weak-password') || raw.contains('weak password')) {
       return 'Password is too weak. Use at least 6 characters.';
     }
-    if (raw.contains('network')) {
+    if (raw.contains('network') || raw.contains('socketexception') || raw.contains('connection failed')) {
       return 'No internet connection. Please check your network.';
     }
+    if (raw.contains('apiexception: 10') || raw.contains('developer_error')) {
+      return 'Google Sign-In configuration error (ApiException: 10). Make sure SHA-1 fingerprint is added in Firebase Console and google-services.json is updated.';
+    }
+    if (raw.contains('apiexception: 12500') || raw.contains('sign_in_failed')) {
+      return 'Google Sign-In failed (ApiException: 12500). Please check your Firebase Google provider settings and support email.';
+    }
+    if (raw.contains('sign_in_canceled') || raw.contains('cancelled')) {
+      return 'Google sign-in was cancelled.';
+    }
 
-    return 'Something went wrong. Please try again.';
+    return 'Something went wrong: ${e.toString()}';
   }
 
   String _mapFirebaseAuthError(FirebaseAuthException e) {
@@ -249,13 +261,17 @@ class AuthService {
       case 'weak-password':
         return 'Password is too weak. Use at least 6 characters.';
       case 'operation-not-allowed':
-        return 'Email/Password sign-up is not enabled. Contact support.';
+        return 'Google/Email sign-in is not enabled in Firebase Console.';
       case 'network-request-failed':
         return 'No internet connection. Please check your network.';
       case 'wrong-password':
         return 'Incorrect password. Please try again.';
       case 'invalid-credential':
-        return 'Invalid email or password. Please try again.';
+        return 'Invalid credentials. Please try again.';
+      case 'account-exists-with-different-credential':
+        return 'An account already exists with the same email using a different sign-in method.';
+      case 'user-disabled':
+        return 'This user account has been disabled.';
       case 'user-not-found':
         return 'No account found with this email.';
       case 'too-many-requests':
