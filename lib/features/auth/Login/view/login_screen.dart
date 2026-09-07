@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_app/core/cubit/user_cubit.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
@@ -13,6 +12,8 @@ import 'package:movies_app/features/auth/Widget/language_switch.dart';
 import 'package:movies_app/features/auth/Login/cubit/login_cubit.dart';
 import 'package:movies_app/features/auth/Login/cubit/login_state.dart';
 import 'package:movies_app/features/auth/Login/utils/validators.dart';
+
+import '../../../../core/cubit/user_cubit.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -57,24 +58,20 @@ class _LoginViewState extends State<_LoginView> {
     }
   }
 
-  void loginWithGoogle() {
-    context.read<LoginCubit>().loginWithGoogle();
-  }
+  void loginWithGoogle() {}
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
-          // Link the login result to the app-wide UserCubit so the
-          // Profile tab shows the real logged-in user right away.
           context.read<UserCubit>().setUser(state.user);
           Navigator.of(context).pushReplacementNamed(AppRoutes.home);
         } else if (state is LoginFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
-              backgroundColor: Colors.red,
+              backgroundColor: AppColors.red
             ),
           );
         }
@@ -195,20 +192,13 @@ class _LoginViewState extends State<_LoginView> {
                       ],
                     ),
 
-                    BlocBuilder<LoginCubit, LoginState>(
-                      builder: (context, state) {
-                        if (state is LoginLoading) {
-                          return const SizedBox.shrink();
-                        }
-                        return CustomButton(
-                          text: AppStrings.loginWithGoogle,
-                          onPressed: loginWithGoogle,
-                          icon: AppIcons.Google,
-                          width: double.infinity,
-                          height: AppResponsive.h(context, 56),
-                          borderRadius: 16,
-                        );
-                      },
+                    CustomButton(
+                      text: AppStrings.loginWithGoogle,
+                      onPressed: loginWithGoogle,
+                      icon: AppIcons.Google,
+                      width: double.infinity,
+                      height: AppResponsive.h(context, 56),
+                      borderRadius: 16,
                     ),
                     LanguageSwitch(isArabic: isArabic),
                   ],

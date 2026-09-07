@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_app/core/cubit/user_cubit.dart';
-import 'package:movies_app/core/cubit/user_state.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_strings.dart';
@@ -10,6 +7,7 @@ import 'package:movies_app/core/widgets/custom_button.dart';
 import 'package:movies_app/features/home/profile_tab/model/user_profile.dart';
 import 'package:movies_app/features/home/profile_tab/view/widgets/tab_details.dart';
 
+import '../../../../../core/cubit/user_cubit.dart';
 import '../../../../../core/utils/app_responsive.dart';
 import '../../../../../core/utils/app_routes.dart';
 import '../widgets/profile_section.dart';

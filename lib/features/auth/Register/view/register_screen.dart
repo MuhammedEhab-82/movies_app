@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_app/core/cubit/user_cubit.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
@@ -13,7 +12,7 @@ import '../cubit/register_cubit.dart';
 import '../cubit/register_state.dart';
 import 'widgets/register_form_fields.dart';
 import 'widgets/register_submit_button.dart';
-
+import '../../../../core/cubit/user_cubit.dart';
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
@@ -71,8 +70,6 @@ class _SignUpViewState extends State<_SignUpView> {
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if (state is RegisterSuccess) {
-          // Link the new account to the app-wide UserCubit so the
-          // Profile tab shows the real logged-in user right away.
           context.read<UserCubit>().setUser(state.user);
           Navigator.of(context).pushReplacementNamed(AppRoutes.home);
         } else if (state is RegisterFailure) {
