@@ -12,6 +12,7 @@ class MovieModel {
     required this.image,
     required this.genres,
   });
+
   factory MovieModel.empty() {
     return MovieModel(
       id: -1,
@@ -30,8 +31,5 @@ class MovieModel {
         json['genres'] ?? [],
       ),
     );
-
   }
-
-  String? get mediumCoverImage => null;
 }

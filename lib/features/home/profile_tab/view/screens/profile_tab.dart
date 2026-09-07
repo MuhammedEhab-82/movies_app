@@ -9,6 +9,7 @@ import 'package:movies_app/core/utils/app_styles.dart';
 import 'package:movies_app/core/widgets/custom_button.dart';
 import 'package:movies_app/features/home/profile_tab/model/user_profile.dart';
 import 'package:movies_app/features/home/profile_tab/view/widgets/tab_details.dart';
+import 'package:smart_empty_state/smart_empty_state.dart';
 
 import '../../../../../core/utils/app_responsive.dart';
 import '../../../../../core/utils/app_routes.dart';
@@ -27,15 +28,40 @@ class _ProfileTabState extends State<ProfileTab>
   late final TabController tabController;
   int currentIndex = 0;
 
+  final SmartEmptyStateTheme emptyStateTheme =
+  SmartEmptyStateTheme(
+    iconColor: AppColors.primary,
+    titleStyle: AppStyles.transparent,
+    messageStyle: AppStyles.semi20primary,
+  );
+
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 2, vsync: this);
+
+    tabController = TabController(
+      length: 2,
+      vsync: this,
+    );
+
     tabController.addListener(() {
       if (tabController.index != currentIndex) {
         setState(() => currentIndex = tabController.index);
       }
     });
+  }
+
+  Widget _buildEmptyState() {
+    return SmartEmptyState(
+      type: EmptyStateType.noData,
+      theme: emptyStateTheme,
+      options: EmptyStateOptions(
+        title: 'No Movies',
+        message: currentIndex == 0
+            ? 'Your watch list is empty.'
+            : 'Your history is empty.',
+      ),
+    );
   }
 
   @override
@@ -44,11 +70,15 @@ class _ProfileTabState extends State<ProfileTab>
       builder: (context, state) {
         // The logged-in user, linked here straight from UserCubit
         // (populated by LoginCubit/RegisterCubit on success).
-        final loggedInUser = state is UserAuthenticated ? state.user : null;
+        final loggedInUser =
+        state is UserAuthenticated ? state.user : null;
 
         final userProfile = UserProfile(
           name: loggedInUser?.name ?? '',
-          avatarUrl: AppImages.avatarByIndex(loggedInUser?.avatar ?? 1),
+          avatarUrl: AppImages.avatarByIndex(
+            loggedInUser?.avatar ?? 1,
+          ),
+
           // TODO: wire these up to Firestore (favorites/history feature).
           watchlist: const [],
           history: const [],
@@ -64,11 +94,17 @@ class _ProfileTabState extends State<ProfileTab>
             child: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
-                  child: ProfileSection(userProfile: userProfile),
+                  child: ProfileSection(
+                    userProfile: userProfile,
+                  ),
                 ),
+
                 SliverToBoxAdapter(
-                  child: SizedBox(height: AppResponsive.h(context, 24)),
+                  child: SizedBox(
+                    height: AppResponsive.h(context, 24),
+                  ),
                 ),
+
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
@@ -84,9 +120,9 @@ class _ProfileTabState extends State<ProfileTab>
                             text: AppStrings.editProfile,
                             textStyle: AppStyles.reg20white,
                             onPressed: () {
-                              Navigator.of(
-                                context,
-                              ).pushNamed(AppRoutes.updateProfile);
+                              Navigator.of(context).pushNamed(
+                                AppRoutes.updateProfile,
+                              );
                             },
                           ),
                         ),
@@ -96,11 +132,15 @@ class _ProfileTabState extends State<ProfileTab>
                             text: AppStrings.exit,
                             textStyle: AppStyles.reg20white,
                             onPressed: () async {
-                              await context.read<UserCubit>().logout();
+                              await context
+                                  .read<UserCubit>()
+                                  .logout();
+
                               if (context.mounted) {
-                                Navigator.of(
-                                  context,
-                                ).pushReplacementNamed(AppRoutes.logIn);
+                                Navigator.of(context)
+                                    .pushReplacementNamed(
+                                  AppRoutes.logIn,
+                                );
                               }
                             },
                             color: AppColors.red,
@@ -112,9 +152,13 @@ class _ProfileTabState extends State<ProfileTab>
                     ),
                   ),
                 ),
+
                 SliverToBoxAdapter(
-                  child: SizedBox(height: AppResponsive.h(context, 24)),
+                  child: SizedBox(
+                    height: AppResponsive.h(context, 24),
+                  ),
                 ),
+
                 SliverToBoxAdapter(
                   child: TabBar(
                     controller: tabController,
@@ -132,22 +176,31 @@ class _ProfileTabState extends State<ProfileTab>
                     ],
                   ),
                 ),
+
                 selectedMovies!.isEmpty
                     ? SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Container(
-                          color: AppColors.background,
-                          child: Image.asset(AppImages.Empty),
-                        ),
-                      )
+                  hasScrollBody: false,
+                  child: Container(
+                    color: AppColors.background,
+                    child: _buildEmptyState(),
+                  ),
+                )
                     : SliverToBoxAdapter(
-                        child: TabDetails(movie: selectedMovies),
-                      ),
+                  child: TabDetails(
+                    movie: selectedMovies,
+                  ),
+                ),
               ],
             ),
           ),
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 }

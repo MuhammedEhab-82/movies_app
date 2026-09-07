@@ -19,7 +19,11 @@ class HomeTabCubit extends Cubit<HomeTabState> {
       );
       emit(HomeSuccessState(movies: movies));
     } catch (e) {
-      emit(HomeErrorState(error: ApiError(message: e.toString())));
+      if (e is ApiError){
+        emit(HomeErrorState(error: e));
+      }else{
+        emit(HomeErrorState(error: ApiError(message: e.toString())));
+      }
     }
   }
 }

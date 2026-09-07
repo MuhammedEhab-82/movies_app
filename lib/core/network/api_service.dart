@@ -21,22 +21,23 @@ class MovieService {
         ApiConst.allMoviesEndPoint,
         queryParameters: {
           'limit': limit,
-          'sort_by':sortBy ,
-          'genre': ?genre,
-          'query_term':movieName
-
+          'sort_by': sortBy,
+          'genre': genre,
+          'query_term': movieName,
         },
       );
 
-      if (response.data != null &&
-          response.data['data'] != null &&
-          response.data['data']['movies'] != null) {
-        final List moviesList = response.data['data']['movies'];
+      final data = response.data?['data'];
+      final movies = data?['movies'];
 
-        return moviesList.map((movie) => MovieModel.fromJson(movie)).toList();
-      } else {
-        throw Exception('Movie data not found');
+      // Request succeeded but there are no movies
+      if (movies == null) {
+        return [];
       }
+
+      return (movies as List)
+          .map((movie) => MovieModel.fromJson(movie))
+          .toList();
     } catch (error) {
       throw NetworkExceptions.getDioException(error);
     }
@@ -56,7 +57,9 @@ class MovieService {
       if (response.data != null &&
           response.data['data'] != null &&
           response.data['data']['movie'] != null) {
-        return MovieDetailsModel.fromJson(response.data['data']['movie']);
+        return MovieDetailsModel.fromJson(
+          response.data['data']['movie'],
+        );
       } else {
         throw Exception('Movie data not found');
       }
@@ -65,11 +68,15 @@ class MovieService {
     }
   }
 
-  Future<List<MovieSuggestionModel>> getMovieSuggestions(int movieId) async {
+  Future<List<MovieSuggestionModel>> getMovieSuggestions(
+      int movieId,
+      ) async {
     try {
       final response = await dioClient.dio.get(
         ApiConst.sugEndPoint,
-        queryParameters: {'movie_id': movieId},
+        queryParameters: {
+          'movie_id': movieId,
+        },
       );
 
       if (response.data != null &&
@@ -78,7 +85,9 @@ class MovieService {
         final List movies = response.data['data']['movies'];
 
         return movies
-            .map((movie) => MovieSuggestionModel.fromJson(movie))
+            .map(
+              (movie) => MovieSuggestionModel.fromJson(movie),
+        )
             .toList();
       } else {
         return [];
@@ -87,5 +96,4 @@ class MovieService {
       throw NetworkExceptions.getDioException(error);
     }
   }
-
 }
