@@ -8,7 +8,6 @@ import 'package:movies_app/features/home/browse_tab/view/widgets/genre_tab_bar.d
 import 'package:movies_app/features/home/browse_tab/view_model/browse_tab_cubit.dart';
 import 'package:movies_app/features/home/browse_tab/view_model/browse_tab_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-
 import 'package:movies_app/features/home/browse_tab/model/movie_model.dart';
 class BrowseTab extends StatelessWidget {
   final int initialGenreIndex;
