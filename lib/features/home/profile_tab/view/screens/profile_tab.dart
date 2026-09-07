@@ -79,6 +79,16 @@ class _ProfileTabState extends State<ProfileTab>
               ProfileViewModel()..loadUser(uid ?? fallbackUser.id),
           child: BlocBuilder<ProfileViewModel, ProfileStates>(
             builder: (context, profileState) {
+              if (loggedInUser != null &&
+                  profileState is ProfileUserLoadedState &&
+                  profileState.user.avatarUrl != loggedInUser.avatarUrl) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    context.read<ProfileViewModel>().loadUser(loggedInUser.id);
+                  }
+                });
+              }
+
               final displayedUser = profileState is ProfileUserLoadedState
                   ? profileState.user
                   : fallbackUser;

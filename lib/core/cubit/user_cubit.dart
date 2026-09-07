@@ -2,41 +2,58 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../features/auth/model/user_model.dart';
 import '../services/auth_service.dart';
-import '../services/local_storage_service.dart';
 import '../utils/fire_base_utils.dart';
 import 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
-  UserCubit() : super(const UserInitial()) {
-    checkAuthStatus();
-  }
+  UserCubit() : super(const UserInitial());
 
   final AuthService _authService = AuthService.instance;
 
-  Future<void> checkAuthStatus() async {
+  Future<void> checkAuthState() async {
+    if (isClosed) return;
+
     emit(const UserLoading());
-    try {
-      final user = await _authService.getCurrentUser();
-      emit(UserAuthenticated(user));
-    } catch (_) {
-      final hasSeenIntro = await LocalStorageService.hasSeenIntro();
-      emit(hasSeenIntro ? const UserLoggedOut() : const UserNewVisitor());
+    final user = await _authService.getCurrentUser();
+
+    if (isClosed) return;
+
+    emit(user != null ? UserAuthenticated(user) : const UserUnauthenticated());
+  }
+
+  Future<void> deleteAccount(UserModel userProfile) async {
+    await FireBaseUtils.deleteUserInFirestore(userProfile);
+    await _authService.deleteAccount();
+
+    if (!isClosed) {
+      emit(const UserUnauthenticated());
     }
   }
 
-  Future<void> deleteAccount(UserModel userModel) async {
-    await FireBaseUtils.deleteUserInFirestore(userModel);
-    await _authService.deleteAccount();
-
-    emit(const UserUnauthenticated());
-  }
-
   void setUser(UserModel user) {
-    emit(UserAuthenticated(user));
+    if (!isClosed) {
+      emit(UserAuthenticated(user));
+    }
   }
 
-  Future<void> signOut() async {
-    await _authService.signOut();
-    emit(const UserLoggedOut());
+  void updateUser(UserModel user) {
+    if (!isClosed) {
+      emit(UserAuthenticated(user));
+    }
   }
+
+  Future<void> logout() async {
+    await _authService.signOut();
+
+    if (!isClosed) {
+      emit(const UserUnauthenticated());
+    }
+  }
+
+  UserModel? get currentUser {
+    final currentState = state;
+    return currentState is UserAuthenticated ? currentState.user : null;
+  }
+
+  bool get isAuthenticated => state is UserAuthenticated;
 }

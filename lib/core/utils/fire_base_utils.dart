@@ -21,6 +21,7 @@ class FireBaseUtils {
      'name': userModel.name,
      'phone': userModel.phone,
      'avatar': AppImages.indexByAvatar(userModel.avatarUrl),
+     'avatarUrl': userModel.avatarUrl,
    });
  }
 
