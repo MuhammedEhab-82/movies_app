@@ -34,6 +34,13 @@ static String avatarByIndex(int index) {
   if (index < 1 || index > ProfileAvatars.length) return Profile01;
   return ProfileAvatars[index - 1];
 }
+  static int indexByAvatar(String avatarPath) {
+    final index = ProfileAvatars.indexOf(avatarPath);
+
+    if (index == -1) return 1;
+
+    return index + 1;
+  }
 //########################################################################
 static const String MoviesPosters="assets/images/OnBoarding/MoviesPosters.png";
 static const String OnBoarding1="assets/images/OnBoarding/OnBoarding1.png";
@@ -81,4 +88,6 @@ class AppIcons{
   static const String Star="assets/icons/Star.png";
   static const String Watch="assets/icons/Watch.png";
   static const String WatchList="assets/icons/WatchList.png";
+  static const String imagePlaceholder="assets/images/image placeholder.jpg";
+
 }

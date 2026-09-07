@@ -42,7 +42,7 @@ class _CustomSliderState extends State<CustomSlider> {
               path: i.image,
               rating: i.rating.toString(),
               isRecommended: true,
-              movieId: 78168,
+              movieId: i.id,
             );
           },
         );

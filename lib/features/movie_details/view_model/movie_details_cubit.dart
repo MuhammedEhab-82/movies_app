@@ -14,7 +14,7 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
     emit(MovieDetailsLoading());
     try {
       final results = await Future.wait([
-        _movieService.getMovieDetails(movieId),
+        _movieService.getMovieById(movieId),
         _movieService.getMovieSuggestions(movieId),
       ]);
 

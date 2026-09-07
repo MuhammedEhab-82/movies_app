@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/auth/model/user_model.dart';
 import '../services/auth_service.dart';
 import '../services/local_storage_service.dart';
+import '../utils/fire_base_utils.dart';
 import 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
@@ -21,6 +22,13 @@ class UserCubit extends Cubit<UserState> {
       final hasSeenIntro = await LocalStorageService.hasSeenIntro();
       emit(hasSeenIntro ? const UserLoggedOut() : const UserNewVisitor());
     }
+  }
+
+  Future<void> deleteAccount(UserModel userModel) async {
+    await FireBaseUtils.deleteUserInFirestore(userModel);
+    await _authService.deleteAccount();
+
+    emit(const UserUnauthenticated());
   }
 
   void setUser(UserModel user) {

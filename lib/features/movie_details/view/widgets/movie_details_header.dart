@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/features/home/home_tab/view/widgets/recommend_bg.dart';
 
 import '../../../../core/utils/app_assets.dart';
 import '../../../../core/utils/app_colors.dart';
@@ -22,25 +23,26 @@ class MovieDetailsHeader extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           height: AppResponsive.h(context, 600),
-          child: isNetworkImage
-              ? Image.network(movie.backgroundImage, fit: BoxFit.cover)
-              : Image.asset(movie.backgroundImage, fit: BoxFit.cover),
-        ),
-        Container(
-          width: double.infinity,
-          height: AppResponsive.h(context, 600),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                AppColors.transparent,
-                AppColors.background.withOpacity(0.5),
-                AppColors.background,
-              ],
-            ),
-          ),
-        ),
+           child:RecommendBg(recommendedMovie:  isNetworkImage
+                     ? movie.backgroundImage
+                     : AppIcons.imagePlaceholder,),),
+      //
+        // ),
+        // Container(
+        //   width: double.infinity,
+        //   height: AppResponsive.h(context, 600),
+        //   decoration: BoxDecoration(
+        //     gradient: LinearGradient(
+        //       begin: Alignment.topCenter,
+        //       end: Alignment.bottomCenter,
+        //       colors: [
+        //         AppColors.transparent,
+        //         AppColors.background.withOpacity(0.5),
+        //         AppColors.background,
+        //       ],
+        //     ),
+        //   ),
+        // ),
         Positioned(
           bottom: AppResponsive.h(context, 250),
           top: AppResponsive.h(context, 150),

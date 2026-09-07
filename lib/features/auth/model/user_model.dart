@@ -1,51 +1,69 @@
+import 'package:movies_app/core/utils/app_assets.dart';
+
 class UserModel {
-  final String uid;
-  final String name;
-  final String email;
-  final String phone;
-  final int avatar;
+  static const String collectionName = 'users';
 
-  const UserModel({
-    required this.uid,
-    required this.name,
-    required this.email,
-    required this.phone,
-    this.avatar = 1,
-  });
+  String id;
+  String name;
+  String phone;
+  String avatarUrl;
+  String? email;
+  List<String> watchlist;
+  List<String> history;
 
-  UserModel copyWith({
+  UserModel({
+    String? id,
     String? uid,
-    String? name,
-    String? email,
-    String? phone,
+    required this.phone,
+    required this.name,
+    String? avatarUrl,
     int? avatar,
-  }) {
-    return UserModel(
-      uid: uid ?? this.uid,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      phone: phone ?? this.phone,
-      avatar: avatar ?? this.avatar,
-    );
-  }
+    this.watchlist = const [],
+    this.history = const [],
+    this.email,
+  })  : id = id ?? uid ?? '',
+        avatarUrl = avatarUrl ?? AppImages.avatarByIndex(avatar ?? 1);
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      uid: map['uid'] ?? '',
-      name: map['name'] ?? '',
-      email: map['email'] ?? '',
-      phone: map['phone'] ?? '',
-      avatar: map['avatar'] ?? 1,
-    );
-  }
+  UserModel.fromMap(Map<String, dynamic> data)
+      : this(
+          id: data['id'] ?? data['uid'],
+          uid: data['uid'],
+          name: (data['name'] ?? '') as String,
+          email: data['email'] as String?,
+          phone: (data['phone'] ?? '') as String,
+          avatarUrl: data['avatarUrl'] as String?,
+          avatar: data['avatar'] as int?,
+          watchlist: List<String>.from(data['watchlist'] ?? []),
+          history: List<String>.from(data['history'] ?? []),
+        );
+
+  UserModel.fromFireStore(Map<String, dynamic> data)
+      : this(
+          id: data['uid'] as String? ?? data['id'] as String? ?? '',
+          uid: data['uid'] as String?,
+          name: data['name'] as String? ?? '',
+          email: data['email'] as String?,
+          phone: data['phone'] as String? ?? '',
+          avatarUrl: data['avatarUrl'] as String?,
+          avatar: data['avatar'] as int?,
+          watchlist: List<String>.from(data['watchlist'] ?? []),
+          history: List<String>.from(data['history'] ?? []),
+        );
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
+      'uid': id,
       'name': name,
       'email': email,
       'phone': phone,
-      'avatar': avatar,
+      'avatar': AppImages.indexByAvatar(avatarUrl),
+      'avatarUrl': avatarUrl,
+      'watchlist': watchlist,
+      'history': history,
     };
+  }
+
+  Map<String, dynamic> toFireStore() {
+    return toMap();
   }
 }

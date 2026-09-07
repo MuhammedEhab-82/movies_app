@@ -42,7 +42,7 @@ class MovieService {
     }
   }
 
-  Future<MovieDetailsModel> getMovieDetails(int movieId) async {
+  Future<MovieDetailsModel> getMovieById(int movieId) async {
     try {
       final response = await dioClient.dio.get(
         ApiConst.movieDetailsEndPoint,

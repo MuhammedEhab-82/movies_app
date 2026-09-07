@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../features/auth/model/user_model.dart';
 
 class AuthService {
@@ -10,6 +10,12 @@ class AuthService {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+
+  // Google Sign-In must be initialized once before using it.
+  final Future<void> _googleSignInInitialization =
+  GoogleSignIn.instance.initialize();
 
   Future<UserModel> registerWithEmail({
     required String name,
@@ -26,7 +32,9 @@ class AuthService {
 
       final user = credential.user;
       if (user == null) {
-        throw AuthException('Something went wrong. Please try again.');
+        throw AuthException(
+          'Something went wrong. Please try again.',
+        );
       }
 
       await user.updateDisplayName(name.trim());
@@ -43,7 +51,10 @@ class AuthService {
       await _firestore
           .collection('users')
           .doc(user.uid)
-          .set({...userModel.toMap(), 'createdAt': FieldValue.serverTimestamp()});
+          .set({
+        ...userModel.toMap(),
+        'createdAt': FieldValue.serverTimestamp(),
+      });
 
       return userModel;
     } on FirebaseAuthException catch (e) {
@@ -68,12 +79,21 @@ class AuthService {
         throw AuthException('Something went wrong. Please try again.');
       }
 
-      final doc = await _firestore.collection('users').doc(user.uid).get();
+      final doc = await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
       if (!doc.exists) {
-        throw AuthException('User data not found. Please contact support.');
+        throw AuthException(
+          'User data not found. Please contact support.',
+        );
       }
 
-      return UserModel.fromMap({...doc.data()!, 'uid': user.uid});
+      return UserModel.fromMap({
+        ...doc.data()!,
+        'uid': user.uid,
+      });
     } on FirebaseAuthException catch (e) {
       throw AuthException(_mapFirebaseAuthError(e));
     } catch (e) {
@@ -82,34 +102,118 @@ class AuthService {
   }
 
 
-  Future<UserModel> getCurrentUser() async {
-    final firebaseUser = _firebaseAuth.currentUser;
-    if (firebaseUser == null) {
-      throw AuthException('No user is currently signed in.');
+
+  Future<UserModel> signInWithGoogle() async {
+    try {
+      // Make sure Google Sign-In is initialized.
+      await _googleSignInInitialization;
+
+      // New google_sign_in API.
+      final googleUser = await _googleSignIn.authenticate();
+
+      final googleAuth = googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential =
+      await _firebaseAuth.signInWithCredential(credential);
+
+      final user = userCredential.user;
+
+      if (user == null) {
+        throw AuthException(
+          'Something went wrong. Please try again.',
+        );
+      }
+
+      final docRef = _firestore
+          .collection('users')
+          .doc(user.uid);
+
+      final doc = await docRef.get();
+
+      if (!doc.exists) {
+        final userModel = UserModel(
+          uid: user.uid,
+          name: user.displayName ?? googleUser.displayName ?? '',
+          email: user.email ?? googleUser.email,
+          phone: '',
+          avatar: 1,
+        );
+
+        await docRef.set({
+          ...userModel.toMap(),
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+
+        return userModel;
+      }
+
+      return UserModel.fromFireStore({
+        ...doc.data()!,
+        'uid': user.uid,
+      });
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(_mapFirebaseAuthError(e));
+    } on AuthException {
+      rethrow;
+    } catch (e) {
+      throw AuthException(_mapGenericError(e));
+    }
+  }
+
+  Future<UserModel?> getCurrentUser() async {
+    final user = _firebaseAuth.currentUser;
+
+    if (user == null) {
+      return null;
     }
 
     try {
-      final doc =
-      await _firestore.collection('users').doc(firebaseUser.uid).get();
+      final doc = await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
       if (!doc.exists) {
-        throw AuthException('User data not found. Please contact support.');
+        return null;
       }
-      return UserModel.fromMap({...doc.data()!, 'uid': firebaseUser.uid});
-    } on FirebaseAuthException catch (e) {
-      throw AuthException(_mapFirebaseAuthError(e));
-    } catch (e) {
-      throw AuthException(_mapGenericError(e));
+
+      return UserModel.fromMap({
+        ...doc.data()!,
+        'uid': user.uid,
+      });
+    } catch (_) {
+      return null;
     }
   }
-
 
   Future<void> signOut() async {
-    await _firebaseAuth.signOut();
+    await Future.wait([
+      _firebaseAuth.signOut(),
+      _googleSignIn.signOut(),
+    ]);
   }
 
-  Future<void> sendPasswordResetEmail({required String email}) async {
+  Future<void> deleteAccount() async {
     try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email.trim());
+      await _firebaseAuth.currentUser?.delete();
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(_mapFirebaseAuthError(e));
+    } catch (e) {
+      throw AuthException(_mapGenericError(e));
+    }
+  }
+
+  Future<void> sendPasswordResetEmail({
+    required String email,
+  }) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(
+        email: email.trim(),
+      );
     } on FirebaseAuthException catch (e) {
       throw AuthException(_mapFirebaseAuthError(e));
     } catch (e) {

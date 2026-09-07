@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
+import 'package:movies_app/features/auth/model/user_model.dart';
 
 import '../../../../../core/utils/app_strings.dart';
-import '../../model/user_profile.dart';
 
 class ProfileSection extends StatelessWidget {
-  const ProfileSection({super.key, required this.userProfile});
+  const ProfileSection({super.key, required this.userModel});
 
-  final UserProfile userProfile;
+  final UserModel userModel;
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +19,18 @@ class ProfileSection extends StatelessWidget {
           spacing: AppResponsive.h(context, 15),
           children: [
             Image.asset(
-              userProfile.avatarUrl,
+              userModel.avatarUrl,
               fit: BoxFit.cover,
               width: AppResponsive.w(context, 118),
             ),
-            Text(userProfile.name, style: AppStyles.bold20white),
+            Text(userModel.name, style: AppStyles.bold20white),
           ],
         ),
         Column(
           spacing: AppResponsive.h(context, 20),
           children: [
             Text(
-              '${userProfile.watchlist!.length}',
+              '${userModel.watchlist.length}',
               style: AppStyles.bold36white,
             ),
             Text(AppStrings.watchlist, style: AppStyles.bold24white),
@@ -41,7 +41,7 @@ class ProfileSection extends StatelessWidget {
 
           children: [
             Text(
-              '${userProfile.history!.length}',
+              '${userModel.history.length}',
               style: AppStyles.bold36white,
             ),
             Text(AppStrings.history, style: AppStyles.bold24white),

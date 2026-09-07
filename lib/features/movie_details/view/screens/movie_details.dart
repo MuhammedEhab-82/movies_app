@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/core/network/dio_client.dart';
@@ -5,8 +6,11 @@ import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_strings.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
-
 import '../../../../core/network/api_service.dart';
+import 'package:movies_app/core/utils/fire_base_utils.dart';
+import 'package:movies_app/core/cubit/user_cubit.dart';
+import '../../../home/profile_tab/cubit/profile_view_model.dart';
+import '../../../home/profile_tab/cubit/profile_states.dart';
 import '../../view_model/movie_details_cubit.dart';
 import '../../view_model/movie_details_state.dart';
 import '../widgets/cast.dart';
@@ -22,11 +26,19 @@ class MovieDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-      MovieDetailsCubit(MovieService(DioClient()))
-        ..getMovieDetails(movieId),
-      child: Scaffold(
+    return MultiBlocProvider(
+    providers: [
+    BlocProvider(
+    create: (context) =>
+    MovieDetailsCubit(MovieService(DioClient()))
+      ..getMovieDetails(movieId),
+    ),
+    BlocProvider(
+    create: (context) => ProfileViewModel()
+      ..loadUser(FirebaseAuth.instance.currentUser!.uid),
+    ),
+    ],
+    child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -40,8 +52,41 @@ class MovieDetails extends StatelessWidget {
               size: 30,
             ),
           ),
-          actions: const [
-            Icon(Icons.bookmark, color: AppColors.white, size: 30)
+          actions: [
+            BlocBuilder<ProfileViewModel, ProfileStates>(
+              builder: (context, state) {
+                bool isInWatchlist = false;
+                if (state is ProfileUserLoadedState) {
+                  isInWatchlist = state.user.watchlist.contains(movieId.toString());
+                }
+                return IconButton(
+                  onPressed: () async {
+                    final userId = FirebaseAuth.instance.currentUser!.uid;
+
+                    await context.read<ProfileViewModel>().toggleMovie(
+                      userId,
+                      movieId,
+                    );
+
+                    // Update global UserCubit so profile tab/listeners refresh immediately
+                    try {
+                      final updatedUser = await FireBaseUtils.getUserFromFirestore(userId);
+                      if (updatedUser != null) {
+                        // Safely update UserCubit if available
+                        try {
+                          context.read<UserCubit>().updateUser(updatedUser);
+                        } catch (_) {}
+                      }
+                    } catch (_) {}
+                  },
+                  icon: Icon(
+                    Icons.bookmark,
+                    color: isInWatchlist ? AppColors.primary : AppColors.white,
+                    size: 30,
+                  ),
+                );
+              },
+            ),
           ],
           elevation: 0,
         ),
@@ -65,13 +110,19 @@ class MovieDetails extends StatelessWidget {
               final movie = state.movieDetails;
               final suggestions = state.suggestions;
 
+              final uid = FirebaseAuth.instance.currentUser?.uid;
+              if (uid != null) {
+                // record history for opened movie
+                context.read<ProfileViewModel>().addToHistory(uid, movieId);
+              }
+
               return SingleChildScrollView(
                 child: Column(
                   spacing: AppResponsive.h(context, 20),
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     MovieDetailsHeader(movie: movie),
-                    MovieActionsRow(movie: movie),
+                    MovieActionsRow(movie: movie, onWatchlistPressed: () {},),
 
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
