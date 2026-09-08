@@ -7,6 +7,7 @@ import 'package:movies_app/core/utils/app_styles.dart';
 import 'package:movies_app/core/utils/validators.dart';
 import 'package:movies_app/core/utils/fire_base_utils.dart';
 import '../../../../../core/cubit/user_cubit.dart';
+import '../../../../../core/utils/app_strings.dart';
 import '../../../../auth/model/user_model.dart';
 import '../../cubit/update_profile_view_model.dart';
 import '../widgets/avatar_picker_sheet.dart';
@@ -24,27 +25,26 @@ class UpdateProfileScreen extends StatefulWidget {
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
 }
 
-
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final UpdateProfileViewModel viewModel = UpdateProfileViewModel();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nameController =
-  TextEditingController(text: '');
+  final TextEditingController _nameController = TextEditingController(text: '');
 
-  final TextEditingController _phoneController =
-  TextEditingController(text: '');
+  final TextEditingController _phoneController = TextEditingController(
+    text: '',
+  );
 
   final List<String> _avatars = [
-      AppImages.profile01,
-      AppImages.profile02,
-      AppImages.profile03,
-      AppImages.profile04,
-      AppImages.profile05,
-      AppImages.profile06,
-      AppImages.profile07,
-      AppImages.profile08,
-      AppImages.profile09,
+    AppImages.profile01,
+    AppImages.profile02,
+    AppImages.profile03,
+    AppImages.profile04,
+    AppImages.profile05,
+    AppImages.profile06,
+    AppImages.profile07,
+    AppImages.profile08,
+    AppImages.profile09,
   ];
 
   late String _selectedAvatar;
@@ -113,15 +113,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         );
 
         context.read<UserCubit>().updateUser(updatedUser);
+
+        // return the updated user so the caller can update its ProfileViewModel immediately
+        if (mounted) {
+          Navigator.of(context).pop(updatedUser);
+          return;
+        }
       }
 
       if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(AppStrings.profileUpdated),
-        ),
-      );
     }
   }
 
@@ -162,15 +162,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: ImageIcon(
-                      const AssetImage(AppIcons.back),
+            const AssetImage(AppIcons.back),
             color: AppColors.primary,
             size: AppResponsive.w(context, 21),
           ),
         ),
-        title: Text(
-                  AppStrings.pickAvatar,
-          style: AppStyles.reg16primary,
-        ),
+        title: Text(AppStrings.pickAvatar, style: AppStyles.reg16primary),
       ),
       body: SafeArea(
         child: Padding(
@@ -190,40 +187,32 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     child: IntrinsicHeight(
                       child: Column(
                         children: [
-                          SizedBox(
-                            height: AppResponsive.h(context, 12),
-                          ),
+                          SizedBox(height: AppResponsive.h(context, 12)),
 
                           ProfileAvatar(
                             avatarPath: _selectedAvatar,
                             onTap: _onAvatarTap,
                           ),
 
-                          SizedBox(
-                            height: AppResponsive.h(context, 24),
-                          ),
+                          SizedBox(height: AppResponsive.h(context, 24)),
 
                           ProfileFormFields(
                             nameController: _nameController,
                             phoneController: _phoneController,
-                                                      nameValidator: Validators.name,
-                                                      phoneValidator: Validators.phone,
+                            nameValidator: Validators.name,
+                            phoneValidator: Validators.phone,
                           ),
 
                           const Spacer(),
 
-                          SizedBox(
-                            height: AppResponsive.h(context, 24),
-                          ),
+                          SizedBox(height: AppResponsive.h(context, 24)),
 
                           ProfileActionButtons(
                             onDelete: _onDeleteAccountPressed,
                             onSave: _onSavePressed,
                           ),
 
-                          SizedBox(
-                            height: AppResponsive.h(context, 24),
-                          ),
+                          SizedBox(height: AppResponsive.h(context, 24)),
                         ],
                       ),
                     ),

@@ -4,7 +4,8 @@ class AppImages {
   static const String availableNow = "assets/images/AvailableNow.png";
   static const String cast = "assets/images/Cast.png";
   static const String empty = "assets/images/Empty.png";
-  static const String forgetPasswordVector = "assets/images/ForgetPasswordVector.png";
+  static const String forgetPasswordVector =
+      "assets/images/ForgetPasswordVector.png";
   static const String movieCard = "assets/images/MovieCard.png";
   static const String playButton = "assets/images/PlayButton.png";
   static const String routeLogo = "assets/images/RouteLogo.png";
@@ -24,9 +25,15 @@ class AppImages {
   static const String profile09 = "assets/images/ProfileAvatars/Profile09.png";
   //########################################################################
   static const List<String> profileAvatars = [
-    profile01, profile02, profile03,
-    profile04, profile05, profile06,
-    profile07, profile08, profile09,
+    profile01,
+    profile02,
+    profile03,
+    profile04,
+    profile05,
+    profile06,
+    profile07,
+    profile08,
+    profile09,
   ];
 
   /// Maps the 1-based vatar index stored on UserModel/Firestore to its asset path.
@@ -42,27 +49,32 @@ class AppImages {
 
     return index + 1;
   }
+
   //########################################################################
-  static const String moviesPosters = "assets/images/OnBoarding/MoviesPosters.png";
+  static const String moviesPosters =
+      "assets/images/OnBoarding/MoviesPosters.png";
   static const String onBoarding1 = "assets/images/OnBoarding/OnBoarding1.png";
   static const String onBoarding2 = "assets/images/OnBoarding/OnBoarding2.png";
   static const String onBoarding3 = "assets/images/OnBoarding/OnBoarding3.png";
   static const String onBoarding4 = "assets/images/OnBoarding/OnBoarding4.png";
   static const String onBoarding5 = "assets/images/OnBoarding/OnBoarding5.png";
   //########################################################################
-  static const String moviePoster1 = "assets/images/MoviePosters/MoviePoster1.png";
-  static const String moviePoster2 = "assets/images/MoviePosters/MoviePoster2.png";
-  static const String moviePoster3 = "assets/images/MoviePosters/MoviePoster3.png";
-  static const String moviePoster4 = "assets/images/MoviePosters/MoviePoster4.png";
-  static const String moviePoster5 = "assets/images/MoviePosters/MoviePoster5.png";
-  static const String moviePoster6 = "assets/images/MoviePosters/MoviePoster6.png";
+  static const String moviePoster1 =
+      "assets/images/MoviePosters/MoviePoster1.png";
+  static const String moviePoster2 =
+      "assets/images/MoviePosters/MoviePoster2.png";
+  static const String moviePoster3 =
+      "assets/images/MoviePosters/MoviePoster3.png";
+  static const String moviePoster4 =
+      "assets/images/MoviePosters/MoviePoster4.png";
+  static const String moviePoster5 =
+      "assets/images/MoviePosters/MoviePoster5.png";
+  static const String moviePoster6 =
+      "assets/images/MoviePosters/MoviePoster6.png";
   //################################################################################
 }
 
-
-
-
-class AppIcons{
+class AppIcons {
   static const String arrowBack = "assets/icons/ArrowBack.png";
   static const String back = "assets/icons/Back.png";
   static const String bookmark = "assets/icons/Bookmark.png";
@@ -90,5 +102,4 @@ class AppIcons{
   static const String watch = "assets/icons/Watch.png";
   static const String watchList = "assets/icons/WatchList.png";
   static const String imagePlaceholder = "assets/images/image placeholder.jpg";
-
 }

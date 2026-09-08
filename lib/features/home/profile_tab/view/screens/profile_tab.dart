@@ -133,12 +133,25 @@ class _ProfileTabState extends State<ProfileTab>
                                   borderRadius: 15,
                                   text: AppStrings.editProfile,
                                   textStyle: AppStyles.reg20white,
-                                  onPressed: () {
-                                    Navigator.of(context).pushNamed(
+                                  onPressed: () async {
+                                                                      final result = await Navigator.of(context).pushNamed(
                                       AppRoutes.updateProfile,
                                       arguments: displayedUser,
                                     );
-                                  },
+
+                                                                      if (result is UserModel) {
+                                                                        // update the ProfileViewModel so profile tab reflects changes immediately
+                                                                        final profileVm = context.read<ProfileViewModel>();
+                                                                        profileVm.currentUser = result;
+                                                                        profileVm.emit(ProfileUserLoadedState(user: result));
+
+                                                                        if (context.mounted) {
+                                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                                            const SnackBar(content: Text(AppStrings.profileUpdated)),
+                                                                          );
+                                                                        }
+                                                                      }
+                                                                    },
                                 ),
                               ),
                               Expanded(
