@@ -4,6 +4,7 @@ import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
 
+import '../../../../../core/utils/app_strings.dart';
 import '../widgets/avatar_picker_sheet.dart';
 import '../widgets/delete_account_dialog.dart';
 import '../widgets/profile_action_buttons.dart';
@@ -76,7 +77,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   void _onSavePressed() {
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile updated successfully')),
+         SnackBar(content: Text(AppStrings.profileUpdated)),
       );
     }
   }

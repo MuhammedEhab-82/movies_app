@@ -19,16 +19,13 @@ import 'package:movies_app/features/home/home_tab/view/widgets/movie_list_view.d
 import 'package:movies_app/features/home/home_tab/view_model/home_tab_cubit.dart';
 import 'package:movies_app/features/home/home_tab/view_model/home_tab_state.dart';
 
-import '../../../../../core/errors/api_error.dart';
+import '../../../../../core/utils/empty_state_utils.dart';
 import '../../../browse_tab/model/movie_model.dart';
 
 class HomeTab extends StatefulWidget {
   final void Function(int genreIndex)? onNavigateToBrowse;
 
-  const HomeTab({
-    super.key,
-    this.onNavigateToBrowse,
-  });
+  const HomeTab({super.key, this.onNavigateToBrowse});
 
   @override
   State<HomeTab> createState() => _HomeTabState();
@@ -40,13 +37,6 @@ class _HomeTabState extends State<HomeTab> {
 
   late int randomGenre;
 
-  // نفس الـ style لكل الـ Empty States
-  final SmartEmptyStateTheme emptyStateTheme = SmartEmptyStateTheme(
-    iconColor: AppColors.primary,
-    titleStyle: AppStyles.transparent,
-    messageStyle: AppStyles.semi20primary,
-  );
-
   @override
   void initState() {
     super.initState();
@@ -56,41 +46,7 @@ class _HomeTabState extends State<HomeTab> {
 
     lastMoviesCubit.getLastMovies();
 
-    listCubit.getLastMovies(
-      genreIndex: randomGenre,
-      sorting: "rating",
-    );
-  }
-
-  EmptyStateType _getEmptyStateType(String message) {
-    final errorMessage = message.toLowerCase();
-
-    if (errorMessage.contains('internet') ||
-        errorMessage.contains('network') ||
-        errorMessage.contains('connection')) {
-      return EmptyStateType.noInternet;
-    }
-
-    if (errorMessage.contains('unauthorized')) {
-      return EmptyStateType.permissionDenied;
-    }
-
-    return EmptyStateType.error;
-  }
-
-  Widget _buildErrorState({
-    required ApiError error,
-    required VoidCallback onRetry,
-  }) {
-    return SmartEmptyState(
-      type: _getEmptyStateType(error.message),
-      theme: emptyStateTheme,
-      options: EmptyStateOptions(
-        message: error.message,
-        actionText: 'Try Again',
-      ),
-      onAction: onRetry,
-    );
+    listCubit.getLastMovies(genreIndex: randomGenre, sorting: "rating");
   }
 
   Widget _buildNoDataState({
@@ -99,11 +55,11 @@ class _HomeTabState extends State<HomeTab> {
   }) {
     return SmartEmptyState(
       type: EmptyStateType.noData,
-      theme: emptyStateTheme,
+      theme: EmptyStateUtils.emptyStateTheme,
       options: EmptyStateOptions(
-        title: 'No Movies',
+        title: AppStrings.noMoviesFound,
         message: message,
-        actionText: 'Try Again',
+        actionText: AppStrings.tryAgain,
       ),
       onAction: onRetry,
     );
@@ -115,7 +71,7 @@ class _HomeTabState extends State<HomeTab> {
       bloc: lastMoviesCubit,
       builder: (context, state) {
         if (state is HomeErrorState) {
-          return _buildErrorState(
+          return EmptyStateUtils.buildErrorState(
             error: state.error,
             onRetry: () {
               lastMoviesCubit.getLastMovies();
@@ -125,7 +81,7 @@ class _HomeTabState extends State<HomeTab> {
 
         if (state is HomeSuccessState && state.movies.isEmpty) {
           return _buildNoDataState(
-            message: 'No movies available right now.',
+            message: AppStrings.noMoviesAvailable,
             onRetry: () {
               lastMoviesCubit.getLastMovies();
             },
@@ -152,9 +108,7 @@ class _HomeTabState extends State<HomeTab> {
           children: [
             SizedBox(
               height: AppResponsive.h(context, 650),
-              child: LatestMovies(
-                state: latestMoviesState,
-              ),
+              child: LatestMovies(state: latestMoviesState),
             ),
 
             Row(
@@ -172,10 +126,7 @@ class _HomeTabState extends State<HomeTab> {
                   },
                   child: Row(
                     children: [
-                      Text(
-                        AppStrings.seeMore,
-                        style: AppStyles.reg16primary,
-                      ),
+                      Text(AppStrings.seeMore, style: AppStyles.reg16primary),
                       Icon(
                         Icons.arrow_forward_outlined,
                         color: AppColors.primary,
@@ -193,7 +144,7 @@ class _HomeTabState extends State<HomeTab> {
                   if (state.movies.isEmpty) {
                     return _buildNoDataState(
                       message:
-                      'No movies found in ${listCubit.genres[randomGenre]}.',
+                          'No movies found in ${listCubit.genres[randomGenre]}.',
                       onRetry: () {
                         listCubit.getLastMovies(
                           genreIndex: randomGenre,
@@ -203,13 +154,11 @@ class _HomeTabState extends State<HomeTab> {
                     );
                   }
 
-                  return MovieListView(
-                    recommendedMovies: state.movies,
-                  );
+                  return MovieListView(recommendedMovies: state.movies);
                 }
 
                 if (state is HomeErrorState) {
-                  return _buildErrorState(
+                  return EmptyStateUtils.buildErrorState(
                     error: state.error,
                     onRetry: () {
                       listCubit.getLastMovies(
@@ -224,7 +173,7 @@ class _HomeTabState extends State<HomeTab> {
                   child: MovieListView(
                     recommendedMovies: List.generate(
                       5,
-                          (_) => MovieModel.empty(),
+                      (_) => MovieModel.empty(),
                     ),
                   ),
                 );
@@ -249,10 +198,7 @@ class _HomeTabState extends State<HomeTab> {
                 Skeletonizer(
                   child: CustomSlider(
                     state: HomeSuccessState(
-                      movies: List.generate(
-                        5,
-                            (_) => MovieModel.empty(),
-                      ),
+                      movies: List.generate(5, (_) => MovieModel.empty()),
                     ),
                     pageIndex: 0,
                     onPageChanged: (int value) {},
@@ -279,10 +225,7 @@ class _HomeTabState extends State<HomeTab> {
                 },
                 child: Row(
                   children: [
-                    Text(
-                      AppStrings.seeMore,
-                      style: AppStyles.reg16primary,
-                    ),
+                    Text(AppStrings.seeMore, style: AppStyles.reg16primary),
                     Icon(
                       Icons.arrow_forward_outlined,
                       color: AppColors.primary,
@@ -295,10 +238,7 @@ class _HomeTabState extends State<HomeTab> {
 
           Skeletonizer(
             child: MovieListView(
-              recommendedMovies: List.generate(
-                5,
-                    (_) => MovieModel.empty(),
-              ),
+              recommendedMovies: List.generate(5, (_) => MovieModel.empty()),
             ),
           ),
         ],

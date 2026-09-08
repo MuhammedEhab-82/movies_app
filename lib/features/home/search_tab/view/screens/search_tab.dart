@@ -9,10 +9,9 @@ import 'package:smart_empty_state/smart_empty_state.dart';
 import '../../../../../core/network/api_service.dart';
 import '../../../../../core/network/dio_client.dart';
 import '../../../../../core/utils/app_assets.dart';
-import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_responsive.dart';
 import '../../../../../core/utils/app_strings.dart';
-import '../../../../../core/utils/app_styles.dart';
+import '../../../../../core/utils/empty_state_utils.dart';
 import '../../../../../core/widgets/custom_text_field.dart';
 import '../../../browse_tab/model/movie_model.dart';
 import '../../../browse_tab/view/widgets/browse_movies_grid.dart';
@@ -32,23 +31,8 @@ class _SearchTabState extends State<SearchTab> {
 
   final TextEditingController searchController = TextEditingController();
 
-  final SmartEmptyStateTheme emptyStateTheme = SmartEmptyStateTheme(
-    iconColor: AppColors.primary,
-    titleStyle: AppStyles.transparent,
-    messageStyle: AppStyles.semi20primary,
-  );
 
-  EmptyStateType _getEmptyStateType(String message) {
-    final errorMessage = message.toLowerCase();
 
-    if (errorMessage.contains('internet') ||
-        errorMessage.contains('network') ||
-        errorMessage.contains('connection')) {
-      return EmptyStateType.noInternet;
-    }
-
-    return EmptyStateType.error;
-  }
 
   Widget _buildBody(SearchStates state) {
     if (state is SearchInitialState) {
@@ -76,11 +60,11 @@ class _SearchTabState extends State<SearchTab> {
       if (state.movies.isEmpty) {
         return SmartEmptyState(
           type: EmptyStateType.searchNotFound,
-          theme: emptyStateTheme,
+          theme: EmptyStateUtils.emptyStateTheme,
           options: EmptyStateOptions(
-            title: 'No Movies Found',
-            message: 'No movies found for your search.',
-            actionText: 'Try Again',
+            title: AppStrings.noMoviesFound,
+            message: AppStrings.noMoviesFoundMessage,
+            actionText: AppStrings.tryAgain,
           ),
           onAction: () {
             if (searchController.text.trim().isNotEmpty) {
@@ -104,9 +88,9 @@ class _SearchTabState extends State<SearchTab> {
           final movie = state.movies[index];
 
           return MovieCard(
-            path: movie.image ?? '',
-            rating: movie.rating?.toString() ?? '',
-            movieId: movie.id ?? 0,
+            path: movie.image,
+            rating: movie.rating.toString(),
+            movieId: movie.id,
           );
         },
       );
@@ -115,14 +99,14 @@ class _SearchTabState extends State<SearchTab> {
     // Error
     if (state is SearchErrorState) {
       return SmartEmptyState(
-        type: _getEmptyStateType(
-          state.error.message ?? 'Something went wrong',
+        type: EmptyStateUtils.getEmptyStateType(
+          state.error.message,
         ),
-        theme: emptyStateTheme,
+        theme: EmptyStateUtils.emptyStateTheme,
         options: EmptyStateOptions(
-          title: 'Something Went Wrong',
-          message: state.error.message ?? 'Something went wrong',
-          actionText: 'Try Again',
+          title: AppStrings.error,
+          message: state.error.message ,
+          actionText: AppStrings.tryAgain,
         ),
         onAction: () {
           if (searchController.text.trim().isNotEmpty) {

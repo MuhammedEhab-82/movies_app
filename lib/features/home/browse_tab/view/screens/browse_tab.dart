@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/core/errors/api_error.dart';
 import 'package:movies_app/core/network/api_service.dart';
 import 'package:movies_app/core/network/dio_client.dart';
-import 'package:movies_app/core/utils/app_colors.dart';
-import 'package:movies_app/core/utils/app_styles.dart';
+import 'package:movies_app/core/utils/app_strings.dart';
+import 'package:movies_app/core/utils/empty_state_utils.dart';
 import 'package:movies_app/features/home/browse_tab/model/movie_model.dart';
 import 'package:movies_app/features/home/browse_tab/view/widgets/browse_movies_grid.dart';
 import 'package:movies_app/features/home/browse_tab/view/widgets/genre_tab_bar.dart';
@@ -16,62 +16,26 @@ import 'package:smart_empty_state/smart_empty_state.dart';
 class BrowseTab extends StatelessWidget {
   final int initialGenreIndex;
 
-   BrowseTab({
+  const BrowseTab({
     super.key,
     this.initialGenreIndex = 0,
   });
-
-  final SmartEmptyStateTheme emptyStateTheme = SmartEmptyStateTheme(
-    iconColor: AppColors.primary,
-    titleStyle: AppStyles.transparent,
-    messageStyle: AppStyles.semi20primary,
-  );
-
-  EmptyStateType _getEmptyStateType(String message) {
-    final errorMessage = message.toLowerCase();
-
-    if (errorMessage.contains('internet') ||
-        errorMessage.contains('network') ||
-        errorMessage.contains('connection')) {
-      return EmptyStateType.noInternet;
-    }
-
-    if (errorMessage.contains('unauthorized')) {
-      return EmptyStateType.permissionDenied;
-    }
-
-    return EmptyStateType.error;
-  }
 
   Widget _buildErrorState({
     required ApiError error,
     required VoidCallback onRetry,
   }) {
     return SmartEmptyState(
-      type: _getEmptyStateType(error.message),
-      theme: emptyStateTheme,
+      type: EmptyStateUtils.getEmptyStateType(error.message),
+      theme: EmptyStateUtils.emptyStateTheme,
       options: EmptyStateOptions(
         message: error.message,
-        actionText: 'Try Again',
+        actionText:AppStrings.tryAgain,
       ),
       onAction: onRetry,
     );
   }
 
-  Widget _buildNoDataState({
-    required VoidCallback onRetry,
-  }) {
-    return SmartEmptyState(
-      type: EmptyStateType.noData,
-      theme: emptyStateTheme,
-      options: const EmptyStateOptions(
-        title: 'No Movies',
-        message: 'No movie data found.',
-        actionText: 'Try Again',
-      ),
-      onAction: onRetry,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +97,7 @@ class BrowseTab extends StatelessWidget {
 
     if (state is BrowseTabSuccess) {
       if (state.movies.isEmpty) {
-        return _buildNoDataState(
+        return EmptyStateUtils.buildNoDataState(
           onRetry: () {
             cubit.getMoviesByGenre(initialGenreIndex);
           },
