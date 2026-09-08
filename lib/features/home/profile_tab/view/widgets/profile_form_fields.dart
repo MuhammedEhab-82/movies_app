@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
-import 'package:movies_app/core/utils/app_styles.dart';
 import 'package:movies_app/core/widgets/custom_text_field.dart';
 
 import '../../../../../core/utils/app_strings.dart';
