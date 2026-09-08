@@ -108,6 +108,10 @@ class AppStyles {
     fontWeight: FontWeight.w400 ,
     color:AppColors.background ,
   );
-
+  static  TextStyle transparent = GoogleFonts.roboto(
+    fontSize:16 ,
+    fontWeight: FontWeight.w400 ,
+    color:Colors.transparent ,
+  );
 
 }

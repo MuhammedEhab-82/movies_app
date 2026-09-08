@@ -8,15 +8,15 @@ class SearchInitialState extends SearchStates {}
 class SearchLoadingState extends SearchStates {}
 
 class SearchSuccessState extends SearchStates {
-final List<MovieModel> movies;
+  final List<MovieModel> movies;
 
-SearchSuccessState({required this.movies});
+  SearchSuccessState({required this.movies});
 }
 
 class SearchErrorState extends SearchStates {
-final ApiError error;
+  final ApiError error;
 
-SearchErrorState({
-required this.error});
+  SearchErrorState({
+    required this.error});
 }
 

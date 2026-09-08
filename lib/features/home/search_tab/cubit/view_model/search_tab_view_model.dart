@@ -34,14 +34,23 @@ class SearchTabViewModel extends Cubit<SearchStates> {
 
           emit(SearchSuccessState(movies: movies));
         } catch (e) {
-
-          emit(
-            SearchErrorState(
-              error: ApiError(message: e.toString()),
-            ),
-          );
+          if (e is ApiError) {
+            emit(
+              SearchErrorState(
+                error: e,
+              ),
+            );
+          } else {
+            emit(
+              SearchErrorState(
+                error: ApiError(
+                  message: e.toString(),
+                ),
+              ),
+            );
+          }
         }
-      }
-
   }
+
+}
 

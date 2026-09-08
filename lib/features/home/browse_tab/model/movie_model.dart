@@ -35,8 +35,5 @@ class MovieModel {
       ),
       title: json['title'] ?? json['title_long'] ?? '',
     );
-
   }
-
-  String? get mediumCoverImage => null;
 }

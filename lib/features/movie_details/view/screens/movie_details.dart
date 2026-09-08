@@ -1,45 +1,78 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_app/core/errors/api_error.dart';
 import 'package:movies_app/core/network/dio_client.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_strings.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
+import 'package:movies_app/features/movie_details/view/widgets/cast.dart';
+import 'package:movies_app/features/movie_details/view/widgets/movie_actions_row.dart';
+import 'package:movies_app/features/movie_details/view/widgets/movie_details_header.dart';
+import 'package:movies_app/features/movie_details/view/widgets/screenShots.dart';
+import 'package:movies_app/features/movie_details/view/widgets/similar_movies_section.dart';
+import 'package:smart_empty_state/smart_empty_state.dart';
+
 import '../../../../core/network/api_service.dart';
-import 'package:movies_app/core/utils/fire_base_utils.dart';
-import 'package:movies_app/core/cubit/user_cubit.dart';
-import '../../../home/profile_tab/cubit/profile_view_model.dart';
-import '../../../home/profile_tab/cubit/profile_states.dart';
 import '../../view_model/movie_details_cubit.dart';
 import '../../view_model/movie_details_state.dart';
-import '../widgets/cast.dart';
-import '../widgets/movie_actions_row.dart';
-import '../widgets/movie_details_header.dart';
-import '../widgets/screenShots.dart';
-import '../widgets/similar_movies_section.dart';
 
 class MovieDetails extends StatelessWidget {
-  const MovieDetails({super.key, required this.movieId});
+   MovieDetails({
+    super.key,
+    required this.movieId,
+  });
 
   final int movieId;
 
+  final SmartEmptyStateTheme emptyStateTheme =
+  SmartEmptyStateTheme(
+    iconColor: AppColors.primary,
+    titleStyle: AppStyles.transparent,
+    messageStyle: AppStyles.semi20primary,
+  );
+
+  EmptyStateType _getEmptyStateType(String message) {
+    final errorMessage = message.toLowerCase();
+
+    if (errorMessage.contains('internet') ||
+        errorMessage.contains('network') ||
+        errorMessage.contains('connection')) {
+      return EmptyStateType.noInternet;
+    }
+
+    if (errorMessage.contains('unauthorized')) {
+      return EmptyStateType.permissionDenied;
+    }
+
+    return EmptyStateType.error;
+  }
+
+  Widget _buildErrorState({
+    required ApiError error,
+    required VoidCallback onRetry,
+  }) {
+    return SmartEmptyState(
+      type: _getEmptyStateType(error.message),
+      theme: emptyStateTheme,
+      options: EmptyStateOptions(
+        message: error.message,
+        actionText: 'Try Again',
+      ),
+      onAction: onRetry,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-    providers: [
-    BlocProvider(
-    create: (context) =>
-    MovieDetailsCubit(MovieService(DioClient()))
-      ..getMovieDetails(movieId),
-    ),
-    BlocProvider(
-    create: (context) => ProfileViewModel()
-      ..loadUser(FirebaseAuth.instance.currentUser!.uid),
-    ),
-    ],
-    child: Scaffold(
+    return BlocProvider(
+      create: (context) =>
+      MovieDetailsCubit(
+        MovieService(DioClient()),
+      )..getMovieDetails(movieId),
+      child: Scaffold(
         extendBodyBehindAppBar: true,
+
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           leading: IconButton(
@@ -52,57 +85,32 @@ class MovieDetails extends StatelessWidget {
               size: 30,
             ),
           ),
-          actions: [
-            BlocBuilder<ProfileViewModel, ProfileStates>(
-              builder: (context, state) {
-                bool isInWatchlist = false;
-                if (state is ProfileUserLoadedState) {
-                  isInWatchlist = state.user.watchlist.contains(movieId.toString());
-                }
-                return IconButton(
-                  onPressed: () async {
-                    final userId = FirebaseAuth.instance.currentUser!.uid;
-
-                    await context.read<ProfileViewModel>().toggleMovie(
-                      userId,
-                      movieId,
-                    );
-
-                    // Update global UserCubit so profile tab/listeners refresh immediately
-                    try {
-                      final updatedUser = await FireBaseUtils.getUserFromFirestore(userId);
-                      if (updatedUser != null) {
-                        // Safely update UserCubit if available
-                        try {
-                          context.read<UserCubit>().updateUser(updatedUser);
-                        } catch (_) {}
-                      }
-                    } catch (_) {}
-                  },
-                  icon: Icon(
-                    Icons.bookmark,
-                    color: isInWatchlist ? AppColors.primary : AppColors.white,
-                    size: 30,
-                  ),
-                );
-              },
+          actions: const [
+            Icon(
+              Icons.bookmark,
+              color: AppColors.white,
+              size: 30,
             ),
           ],
           elevation: 0,
         ),
+
         body: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
           builder: (context, state) {
+            final cubit = context.read<MovieDetailsCubit>();
+
             if (state is MovieDetailsLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
 
             if (state is MovieDetailsError) {
-              return Center(
-                child: Text(
-                  state.error.message,
-                  style: AppStyles.reg16white,
-                  textAlign: TextAlign.center,
-                ),
+              return _buildErrorState(
+                error: state.error,
+                onRetry: () {
+                  cubit.getMovieDetails(movieId);
+                },
               );
             }
 
@@ -110,19 +118,18 @@ class MovieDetails extends StatelessWidget {
               final movie = state.movieDetails;
               final suggestions = state.suggestions;
 
-              final uid = FirebaseAuth.instance.currentUser?.uid;
-              if (uid != null) {
-                // record history for opened movie
-                context.read<ProfileViewModel>().addToHistory(uid, movieId);
-              }
-
               return SingleChildScrollView(
                 child: Column(
                   spacing: AppResponsive.h(context, 20),
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    MovieDetailsHeader(movie: movie),
-                    MovieActionsRow(movie: movie, onWatchlistPressed: () {},),
+                    MovieDetailsHeader(
+                      movie: movie,
+                    ),
+
+                    MovieActionsRow(
+                      movie: movie,
+                    ),
 
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +155,9 @@ class MovieDetails extends StatelessWidget {
                       ],
                     ),
 
-                    SimilarMoviesSection(suggestions: suggestions),
+                    SimilarMoviesSection(
+                      suggestions: suggestions,
+                    ),
 
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,16 +167,19 @@ class MovieDetails extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                             horizontal: AppResponsive.w(context, 20),
                           ),
-                          child:
-                          Text(AppStrings.summary,
-                              style: AppStyles.bold20white),
+                          child: Text(
+                            AppStrings.summary,
+                            style: AppStyles.bold20white,
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: AppResponsive.w(context, 20),
                           ),
-                          child: Text(movie.description,
-                              style: AppStyles.reg16white),
+                          child: Text(
+                            movie.description,
+                            style: AppStyles.reg16white,
+                          ),
                         ),
                       ],
                     ),
@@ -180,8 +192,10 @@ class MovieDetails extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                             horizontal: AppResponsive.w(context, 20),
                           ),
-                          child: Text(AppStrings.cast,
-                              style: AppStyles.bold20white),
+                          child: Text(
+                            AppStrings.cast,
+                            style: AppStyles.bold20white,
+                          ),
                         ),
                         Column(
                           spacing: AppResponsive.h(context, 10),
@@ -204,8 +218,10 @@ class MovieDetails extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                             horizontal: AppResponsive.w(context, 20),
                           ),
-                          child:
-                          Text(AppStrings.genres, style: AppStyles.bold20white),
+                          child: Text(
+                            AppStrings.genres,
+                            style: AppStyles.bold20white,
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(
@@ -220,11 +236,14 @@ class MovieDetails extends StatelessWidget {
                                   backgroundColor: AppColors.gray,
                                   foregroundColor: AppColors.white,
                                   padding: EdgeInsets.symmetric(
-                                    horizontal: AppResponsive.w(context, 15),
-                                    vertical: AppResponsive.h(context, 10),
+                                    horizontal:
+                                    AppResponsive.w(context, 15),
+                                    vertical:
+                                    AppResponsive.h(context, 10),
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius:
+                                    BorderRadius.circular(10),
                                   ),
                                 ),
                                 onPressed: () {},
@@ -235,7 +254,10 @@ class MovieDetails extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: AppResponsive.h(context, 50)),
+
+                    SizedBox(
+                      height: AppResponsive.h(context, 50),
+                    ),
                   ],
                 ),
               );

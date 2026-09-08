@@ -56,4 +56,9 @@
   static const String exit = 'Exit';
   static const String noSimilarMoviesFound = "No similar movies found";
   static const String noMoviesFound = "No movies found";
+  static const String noMoviesFoundMessage = "No movies found for your search.";
+  static const String tryAgain = "Try Again";
+  static const String error = "Error";
+  static const String noMoviesAvailable = "No movies available";
+  static const String profileUpdated = "Profile updated successfully";
 }

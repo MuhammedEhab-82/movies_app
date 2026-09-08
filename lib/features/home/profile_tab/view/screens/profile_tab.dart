@@ -17,6 +17,7 @@ import '../../../../../core/network/api_service.dart';
 import '../../../../../core/network/dio_client.dart';
 import '../../../../../core/utils/app_responsive.dart';
 import '../../../../../core/utils/app_routes.dart';
+import '../../../../../core/utils/empty_state_utils.dart';
 import '../../cubit/profile_tab_movies_cubit.dart';
 import '../widgets/profile_section.dart';
 import '../widgets/tab_widget.dart';
@@ -61,6 +62,8 @@ class _ProfileTabState extends State<ProfileTab>
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
+        // The logged-in user, linked here straight from UserCubit
+        // (populated by LoginCubit/RegisterCubit on success).
         final loggedInUser = state is UserAuthenticated ? state.user : null;
 
         final fallbackUser =
@@ -196,23 +199,15 @@ class _ProfileTabState extends State<ProfileTab>
                       ),
                       selectedMovies.isEmpty
                           ? SliverFillRemaining(
-                              hasScrollBody: false,
-                              child: Container(
-                                color: AppColors.background,
-                                child: Image.asset(AppImages.Empty),
-                              ),
-                            )
+                        hasScrollBody: false,
+                        child: Container(
+                          color: AppColors.background,
+                          child: EmptyStateUtils.buildEmptyState(currentIndex),
+                        ),
+                      )
                           : SliverToBoxAdapter(
-                              child: BlocProvider.value(
-                                value: selectedCubit,
-                                child: TabDetails(
-                                  key: ValueKey(
-                                    currentIndex == 0 ? 'watchlist' : 'history',
-                                  ),
-                                  movie: selectedMovies,
-                                ),
-                              ),
-                            ),
+                        child: TabDetails(movie: selectedMovies),
+                      ),
                     ],
                   ),
                 ),
