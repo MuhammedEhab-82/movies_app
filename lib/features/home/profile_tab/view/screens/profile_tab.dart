@@ -52,6 +52,7 @@ class _ProfileTabState extends State<ProfileTab>
 
   @override
   void dispose() {
+    tabController.dispose();
     watchlistCubit?.close();
     historyCubit?.close();
     super.dispose();
@@ -65,18 +66,18 @@ class _ProfileTabState extends State<ProfileTab>
 
         final fallbackUser =
             loggedInUser ??
-                UserModel(
-                  id: '',
-                  name: '',
-                  phone: '',
-                  avatarUrl: AppImages.avatarByIndex(1),
-                );
+            UserModel(
+              id: '',
+              name: '',
+              phone: '',
+              avatarUrl: AppImages.avatarByIndex(1),
+            );
 
         final uid = FirebaseAuth.instance.currentUser?.uid;
 
         return BlocProvider(
           create: (context) =>
-          ProfileViewModel()..loadUser(uid ?? fallbackUser.id),
+              ProfileViewModel()..loadUser(uid ?? fallbackUser.id),
           child: BlocBuilder<ProfileViewModel, ProfileStates>(
             builder: (context, profileState) {
               final displayedUser = profileState is ProfileUserLoadedState
@@ -134,24 +135,30 @@ class _ProfileTabState extends State<ProfileTab>
                                   text: AppStrings.editProfile,
                                   textStyle: AppStyles.reg20white,
                                   onPressed: () async {
-                                                                      final result = await Navigator.of(context).pushNamed(
-                                      AppRoutes.updateProfile,
-                                      arguments: displayedUser,
-                                    );
+                                    final profileViewModel =
+                                        context.read<ProfileViewModel>();
+                                    final scaffoldMessenger =
+                                        ScaffoldMessenger.maybeOf(context);
 
-                                                                      if (result is UserModel) {
-                                                                        // update the ProfileViewModel so profile tab reflects changes immediately
-                                                                        final profileVm = context.read<ProfileViewModel>();
-                                                                        profileVm.currentUser = result;
-                                                                        profileVm.emit(ProfileUserLoadedState(user: result));
+                                    final result = await Navigator.of(context)
+                                        .pushNamed(
+                                          AppRoutes.updateProfile,
+                                          arguments: displayedUser,
+                                        );
 
-                                                                        if (context.mounted) {
-                                                                          ScaffoldMessenger.of(context).showSnackBar(
-                                                                            const SnackBar(content: Text(AppStrings.profileUpdated)),
-                                                                          );
-                                                                        }
-                                                                      }
-                                                                    },
+                                    if (!mounted) return;
+
+                                    if (result is UserModel) {
+                                      profileViewModel.updateUser(result);
+                                      scaffoldMessenger?.showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            AppStrings.profileUpdated,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
                               Expanded(
@@ -199,23 +206,23 @@ class _ProfileTabState extends State<ProfileTab>
                       ),
                       selectedMovies.isEmpty
                           ? SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Container(
-                          color: AppColors.background,
-                          child: Image.asset(AppImages.empty),
-                        ),
-                      )
+                              hasScrollBody: false,
+                              child: Container(
+                                color: AppColors.background,
+                                child: Image.asset(AppImages.empty),
+                              ),
+                            )
                           : SliverToBoxAdapter(
-                        child: BlocProvider.value(
-                          value: selectedCubit,
-                          child: TabDetails(
-                            key: ValueKey(
-                              currentIndex == 0 ? 'watchlist' : 'history',
+                              child: BlocProvider.value(
+                                value: selectedCubit,
+                                child: TabDetails(
+                                  key: ValueKey(
+                                    currentIndex == 0 ? 'watchlist' : 'history',
+                                  ),
+                                  movie: selectedMovies.reversed.toList(),
+                                ),
+                              ),
                             ),
-                            movie: selectedMovies,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),

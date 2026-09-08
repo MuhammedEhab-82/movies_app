@@ -44,7 +44,7 @@ class _HomeTabState extends State<HomeTab> {
     final random = Random();
     randomGenre = random.nextInt(lastMoviesCubit.genres.length);
 
-    lastMoviesCubit.getLastMovies();
+    lastMoviesCubit.getLastMovies( sorting: 'years');
 
     listCubit.getLastMovies(genreIndex: randomGenre, sorting: "rating");
   }

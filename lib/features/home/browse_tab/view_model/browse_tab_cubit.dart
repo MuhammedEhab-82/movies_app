@@ -8,50 +8,30 @@ class BrowseTabCubit extends Cubit<BrowseTabState> {
 
   BrowseTabCubit(this._movieService) : super(BrowseTabInitial());
 
-  final List<String> genres = ["Action", "Drama", "Comedy", "Horror","Sci-Fi","Thriller"];
+  final List<String> genres = [
+    "Action",
+    "Drama",
+    "Comedy",
+    "Horror",
+    "Sci-Fi",
+    "Thriller",
+  ];
   int _selectedIndex = 0;
 
   void getMoviesByGenre(int index) async {
     _selectedIndex = index;
     emit(BrowseTabLoading());
-    try
-    {
-      final
-      movies
-      =
-      await
-      _movieService
-          .
-      getAllMovies
-        (
-          genre
-              :
-          genres
-          [
-          index
-          ]
-      );
-      emit
-        (
-          BrowseTabSuccess
-            (
-              movies
-                  :
-              movies
-              ,
-              selectedIndex
-                  :
-              _selectedIndex
-          )
-      );
-
-    }catch(e){
-      if(e is ApiError){
+    try {
+      final movies = await _movieService.getAllMovies(genre: genres[index],sortBy: 'rating');
+      emit(BrowseTabSuccess(movies: movies, selectedIndex: _selectedIndex));
+    } catch (e) {
+      if (e is ApiError) {
         emit(BrowseTabError(e));
-      }else{
+      } else {
         emit(BrowseTabError(ApiError(message: e.toString())));
       }
     }
   }
+
   int get selectedIndex => _selectedIndex;
 }

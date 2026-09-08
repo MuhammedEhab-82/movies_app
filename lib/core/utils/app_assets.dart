@@ -85,8 +85,7 @@ class AppIcons {
   static const String exploreSolid = "assets/icons/ExploreSolid.png";
   static const String favourite = "assets/icons/Favourite.png";
   static const String google = "assets/icons/Google.png";
-  static const String hide = "assets/icons/Hide.png";
-  static const String password = "assets/icons/Hide.png";
+  static const String password = "assets/icons/Password.png";
   static const String history = "assets/icons/History.png";
   static const String home = "assets/icons/Home.png";
   static const String homeSolid = "assets/icons/HomeSolid.png";

@@ -7,9 +7,16 @@ class HomeTabCubit extends Cubit<HomeTabState> {
   final MovieService _movieService;
   HomeTabCubit(this._movieService) : super(HomeLoadingState());
   // some genres
-  final List<String> genres = ["Action", "Drama", "Comedy", "Horror","Sci-Fi","Thriller"];
+  final List<String> genres = [
+    "Action",
+    "Drama",
+    "Comedy",
+    "Horror",
+    "Sci-Fi",
+    "Thriller",
+  ];
 
-  void getLastMovies({int? genreIndex,String? sorting}) async {
+  void getLastMovies({int? genreIndex, String? sorting}) async {
     emit(HomeLoadingState());
     try {
       final movies = await _movieService.getAllMovies(
@@ -19,9 +26,9 @@ class HomeTabCubit extends Cubit<HomeTabState> {
       );
       emit(HomeSuccessState(movies: movies));
     } catch (e) {
-      if (e is ApiError){
+      if (e is ApiError) {
         emit(HomeErrorState(error: e));
-      }else{
+      } else {
         emit(HomeErrorState(error: ApiError(message: e.toString())));
       }
     }
