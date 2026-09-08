@@ -48,7 +48,7 @@ class MovieDetailsHeader extends StatelessWidget {
           top: AppResponsive.h(context, 150),
           right: AppResponsive.w(context, 100),
           left: AppResponsive.w(context, 100),
-          child: Image.asset(AppImages.PlayButton),
+          child: Image.asset(AppImages.playButton),
         ),
         Positioned(
           bottom: AppResponsive.h(context, 100),

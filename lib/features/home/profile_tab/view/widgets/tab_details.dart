@@ -71,7 +71,7 @@ class TabDetails extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                   horizontal: AppResponsive.w(context, 16),
                 ),
-                child: Image.asset(AppImages.Empty),
+                            child: Image.asset(AppImages.empty),
               );
             }
 
@@ -125,7 +125,7 @@ class TabDetails extends StatelessWidget {
             padding: EdgeInsets.symmetric(
               horizontal: AppResponsive.w(context, 16),
             ),
-            child: Image.asset(AppImages.Empty),
+                      child: Image.asset(AppImages.empty),
           );
         },
       ),

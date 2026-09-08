@@ -37,7 +37,7 @@ class _SearchTabState extends State<SearchTab> {
   Widget _buildBody(SearchStates state) {
     if (state is SearchInitialState) {
       return Center(
-        child: Image.asset(AppImages.Empty),
+        child: Image.asset(AppImages.empty),
       );
     }
 
@@ -138,7 +138,7 @@ class _SearchTabState extends State<SearchTab> {
                   children: [
                     CustomTextField(
                       hintText: AppStrings.search,
-                      prefixIcon: AppIcons.Search,
+                      prefixIcon: AppIcons.search,
                       controller: searchController,
                       onChanged: (value) {
                         viewModel.searchMovies(value);

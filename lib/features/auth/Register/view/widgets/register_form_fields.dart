@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/widgets/custom_text_field.dart';
 import '../../../../../core/utils/app_strings.dart';
-import '../../utils/validators.dart';
+import 'package:movies_app/core/utils/validators.dart';
 
 class RegisterFormFields extends StatelessWidget {
   final TextEditingController nameController;
@@ -28,28 +28,28 @@ class RegisterFormFields extends StatelessWidget {
         CustomTextField(
           controller: nameController,
           hintText: AppStrings.name,
-          prefixIcon: AppIcons.Name,
-          validator: RegisterValidators.name,
+          prefixIcon: AppIcons.name,
+          validator: Validators.name,
         ),
         CustomTextField(
           controller: emailController,
           hintText: AppStrings.email,
-          prefixIcon: AppIcons.Email,
-          validator: RegisterValidators.email,
+          prefixIcon: AppIcons.email,
+          validator: Validators.email,
         ),
         CustomTextField(
           controller: passwordController,
           hintText: AppStrings.password,
-          prefixIcon: AppIcons.Password,
+          prefixIcon: AppIcons.password,
           isPassword: true,
-          validator: RegisterValidators.password,
+          validator: Validators.password,
         ),
         CustomTextField(
           controller: confirmPasswordController,
           hintText: AppStrings.confirmPassword,
-          prefixIcon: AppIcons.Password,
+          prefixIcon: AppIcons.password,
           isPassword: true,
-          validator: (value) => RegisterValidators.confirmPassword(
+          validator: (value) => Validators.confirmPassword(
             value,
             passwordController.text,
           ),
@@ -57,9 +57,9 @@ class RegisterFormFields extends StatelessWidget {
         CustomTextField(
           controller: phoneController,
           hintText: AppStrings.phoneNumber,
-          prefixIcon: AppIcons.Phone,
+          prefixIcon: AppIcons.phone,
           keyboardType: TextInputType.phone,
-          validator: RegisterValidators.phone,
+          validator: Validators.phone,
         ),
       ],
     );

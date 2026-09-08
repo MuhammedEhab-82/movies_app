@@ -31,7 +31,7 @@ class _LatestMoviesState extends State<LatestMovies> {
 
         Column(
           children: [
-            Image.asset(AppImages.AvailableNow),
+            Image.asset(AppImages.availableNow),
 
             CustomSlider(
               state: widget.state,
@@ -43,7 +43,7 @@ class _LatestMoviesState extends State<LatestMovies> {
               },
             ),
 
-            Image.asset(AppImages.WatchNow),
+            Image.asset(AppImages.watchNow),
           ],
         ),
       ],

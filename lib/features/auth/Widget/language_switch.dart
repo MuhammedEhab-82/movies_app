@@ -28,7 +28,7 @@ class LanguageSwitch extends StatelessWidget {
               child: Container(
                   decoration: BoxDecoration(border:Border.all(color: isArabic?AppColors.transparentBlack:AppColors.primary,
                       width: 5),borderRadius: BorderRadius.circular(20)),
-                  child: Image.asset(AppIcons.LR,)),
+                  child: Image.asset(AppIcons.lr,)),
             ),
             InkWell(
               onTap: (){
@@ -37,7 +37,7 @@ class LanguageSwitch extends StatelessWidget {
               child: Container(
                   decoration: BoxDecoration(border:Border.all(color: isArabic?AppColors.primary:AppColors.transparentBlack,
                       width: 5),borderRadius: BorderRadius.circular(20)),
-                  child: Image.asset(AppIcons.EG)),
+                  child: Image.asset(AppIcons.eg)),
             ),
           ],
         ),

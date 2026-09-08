@@ -157,7 +157,7 @@ class _ProfileTabState extends State<ProfileTab>
                                   },
                                   color: AppColors.red,
                                   textColor: AppColors.white,
-                                  icon: AppIcons.Exit,
+                                  icon: AppIcons.exit,
                                 ),
                               ),
                             ],
@@ -174,11 +174,11 @@ class _ProfileTabState extends State<ProfileTab>
                           indicatorSize: TabBarIndicatorSize.tab,
                           tabs: [
                             TabWidget(
-                              icon: AppIcons.WatchList,
+                              icon: AppIcons.watchList,
                               name: AppStrings.watchlist,
                             ),
                             TabWidget(
-                              icon: AppIcons.History,
+                              icon: AppIcons.history,
                               name: AppStrings.history,
                             ),
                           ],
@@ -189,7 +189,7 @@ class _ProfileTabState extends State<ProfileTab>
                         hasScrollBody: false,
                         child: Container(
                           color: AppColors.background,
-                          child: Image.asset(AppImages.Empty),
+                          child: Image.asset(AppImages.empty),
                         ),
                       )
                           : SliverToBoxAdapter(

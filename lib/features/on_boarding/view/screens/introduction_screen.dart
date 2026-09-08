@@ -28,7 +28,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
       body: Stack(
         children: [
           Image.asset(
-            AppImages.MoviesPosters,
+            AppImages.moviesPosters,
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,

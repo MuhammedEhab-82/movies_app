@@ -11,7 +11,7 @@ import 'package:movies_app/core/widgets/custom_text_field.dart';
 import 'package:movies_app/features/auth/Widget/language_switch.dart';
 import 'package:movies_app/features/auth/Login/cubit/login_cubit.dart';
 import 'package:movies_app/features/auth/Login/cubit/login_state.dart';
-import 'package:movies_app/features/auth/Login/utils/validators.dart';
+import 'package:movies_app/core/utils/validators.dart';
 
 import '../../../../core/cubit/user_cubit.dart';
 
@@ -99,16 +99,16 @@ class _LoginViewState extends State<_LoginView> {
                     CustomTextField(
                       controller: emailController,
                       hintText: AppStrings.email,
-                      prefixIcon: AppIcons.Email,
-                      validator: LoginValidators.email,
+                      prefixIcon: AppIcons.email,
+                      validator: Validators.email,
                     ),
 
                     CustomTextField(
                       controller: passwordController,
                       hintText: AppStrings.password,
-                      prefixIcon: AppIcons.Password,
+                      prefixIcon: AppIcons.password,
                       isPassword: true,
-                      validator: LoginValidators.password,
+                      validator: Validators.password,
                     ),
 
                     Row(
@@ -195,7 +195,7 @@ class _LoginViewState extends State<_LoginView> {
                     CustomButton(
                       text: AppStrings.loginWithGoogle,
                       onPressed: loginWithGoogle,
-                      icon: AppIcons.Google,
+                      icon: AppIcons.google,
                       width: double.infinity,
                       height: AppResponsive.h(context, 56),
                       borderRadius: 16,

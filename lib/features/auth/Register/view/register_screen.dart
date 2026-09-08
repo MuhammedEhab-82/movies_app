@@ -83,7 +83,7 @@ class _SignUpViewState extends State<_SignUpView> {
           centerTitle: true,
           leading: InkWell(
             onTap: () => Navigator.pop(context),
-            child: Image.asset(AppIcons.Back),
+            child: Image.asset(AppIcons.back),
           ),
           title: Text(AppStrings.register, style: AppStyles.reg16primary),
         ),

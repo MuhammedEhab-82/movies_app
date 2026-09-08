@@ -19,7 +19,7 @@ class MovieModel {
     return MovieModel(
       id: -1,
       rating: 0,
-      image: AppImages.MoviePoster3,
+      image: AppImages.moviePoster3,
       genres: [],
       title: 'Movie',
     );

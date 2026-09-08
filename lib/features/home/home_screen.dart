@@ -53,10 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
               items: [
-                navigationBarItem(AppIcons.Home, AppIcons.HomeSolid),
-                navigationBarItem(AppIcons.Search, AppIcons.SearchSolid),
-                navigationBarItem(AppIcons.Explore, AppIcons.ExploreSolid),
-                navigationBarItem(AppIcons.Profile, AppIcons.ProfileSolid),
+                navigationBarItem(AppIcons.home, AppIcons.homeSolid),
+                                navigationBarItem(AppIcons.search, AppIcons.searchSolid),
+                                navigationBarItem(AppIcons.explore, AppIcons.exploreSolid),
+                                navigationBarItem(AppIcons.profile, AppIcons.profileSolid),
               ],
             ),
           ),

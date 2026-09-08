@@ -4,6 +4,7 @@ import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_responsive.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
+import 'package:movies_app/core/utils/validators.dart';
 import 'package:movies_app/core/utils/fire_base_utils.dart';
 import '../../../../../core/cubit/user_cubit.dart';
 import '../../../../auth/model/user_model.dart';
@@ -35,15 +36,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   TextEditingController(text: '');
 
   final List<String> _avatars = [
-    AppImages.Profile01,
-    AppImages.Profile02,
-    AppImages.Profile03,
-    AppImages.Profile04,
-    AppImages.Profile05,
-    AppImages.Profile06,
-    AppImages.Profile07,
-    AppImages.Profile08,
-    AppImages.Profile09,
+      AppImages.profile01,
+      AppImages.profile02,
+      AppImages.profile03,
+      AppImages.profile04,
+      AppImages.profile05,
+      AppImages.profile06,
+      AppImages.profile07,
+      AppImages.profile08,
+      AppImages.profile09,
   ];
 
   late String _selectedAvatar;
@@ -84,32 +85,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     super.dispose();
   }
 
-  String? _validateName(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your name';
-    }
-
-    if (value.trim().length < 3) {
-      return 'Name must be at least 3 characters';
-    }
-
-    return null;
-  }
-
-  String? _validatePhone(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your phone number';
-    }
-
-    final RegExp phoneRegex = RegExp(r'^01[0-2,5][0-9]{8}$');
-
-    if (!phoneRegex.hasMatch(value.trim())) {
-      return 'Please enter a valid phone number';
-    }
-
-    return null;
-  }
-
   Future<void> _onSavePressed() async {
     if (_formKey.currentState!.validate()) {
       await viewModel.updateData(
@@ -144,7 +119,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Profile updated successfully'),
+          content: Text(AppStrings.profileUpdated),
         ),
       );
     }
@@ -187,13 +162,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: ImageIcon(
-            const AssetImage(AppIcons.Back),
+                      const AssetImage(AppIcons.back),
             color: AppColors.primary,
             size: AppResponsive.w(context, 21),
           ),
         ),
         title: Text(
-          'Pick Avatar',
+                  AppStrings.pickAvatar,
           style: AppStyles.reg16primary,
         ),
       ),
@@ -231,8 +206,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           ProfileFormFields(
                             nameController: _nameController,
                             phoneController: _phoneController,
-                            nameValidator: _validateName,
-                            phoneValidator: _validatePhone,
+                                                      nameValidator: Validators.name,
+                                                      phoneValidator: Validators.phone,
                           ),
 
                           const Spacer(),

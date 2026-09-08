@@ -194,7 +194,7 @@ class _HomeTabState extends State<HomeTab> {
             height: AppResponsive.h(context, 650),
             child: Column(
               children: [
-                Image.asset(AppImages.AvailableNow),
+                Image.asset(AppImages.availableNow),
 
                 Skeletonizer(
                   child: CustomSlider(
@@ -206,7 +206,7 @@ class _HomeTabState extends State<HomeTab> {
                   ),
                 ),
 
-                Image.asset(AppImages.WatchNow),
+                Image.asset(AppImages.watchNow),
               ],
             ),
           ),

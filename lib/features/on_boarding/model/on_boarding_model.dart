@@ -3,11 +3,11 @@ import 'package:movies_app/core/utils/app_strings.dart';
 
 class OnBoardingModel {
    static List<String>imgList=[
-    AppImages.OnBoarding1,
-    AppImages.OnBoarding2,
-    AppImages.OnBoarding3,
-    AppImages.OnBoarding4,
-    AppImages.OnBoarding5,
+    AppImages.onBoarding1,
+    AppImages.onBoarding2,
+    AppImages.onBoarding3,
+    AppImages.onBoarding4,
+    AppImages.onBoarding5,
   ];
    static List<String>titleList=[
     AppStrings.title1,

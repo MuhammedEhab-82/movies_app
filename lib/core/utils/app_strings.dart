@@ -61,4 +61,6 @@
   static const String error = "Error";
   static const String noMoviesAvailable = "No movies available";
   static const String profileUpdated = "Profile updated successfully";
+  static const String pickAvatar = 'Pick Avatar';
+  static const String resetPassword = 'Reset Password';
 }

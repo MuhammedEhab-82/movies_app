@@ -25,8 +25,8 @@ class ProfileFormFields extends StatelessWidget {
       children: [
         CustomTextField(
           controller: nameController,
-          hintText: 'Name',
-          prefixIcon: AppIcons.Profile,
+          hintText: AppStrings.name,
+          prefixIcon: AppIcons.profile,
           textInputAction: TextInputAction.next,
           validator: nameValidator,
         ),
@@ -34,8 +34,8 @@ class ProfileFormFields extends StatelessWidget {
 
         CustomTextField(
           controller: phoneController,
-          hintText: 'Phone Number',
-          prefixIcon: AppIcons.Phone,
+          hintText: AppStrings.phoneNumber,
+          prefixIcon: AppIcons.phone,
           keyboardType: TextInputType.phone,
           textInputAction: TextInputAction.done,
           validator: phoneValidator,
@@ -44,7 +44,7 @@ class ProfileFormFields extends StatelessWidget {
 
         Align(
           alignment: Alignment.centerLeft,
-          child: Text('Reset Password', style: AppStyles.reg14white),
+          child: Text(AppStrings.resetPassword, style: AppStyles.reg14white),
         ),
       ],
     );

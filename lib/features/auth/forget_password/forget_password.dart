@@ -88,7 +88,7 @@ class _ForgetPasswordViewState extends State<_ForgetPasswordView> {
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: ImageIcon(
-              const AssetImage(AppIcons.Back),
+              const AssetImage(AppIcons.back),
               color: AppColors.primary,
               size: AppResponsive.w(context, 21),
             ),
@@ -126,7 +126,7 @@ class _ForgetPasswordViewState extends State<_ForgetPasswordView> {
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,
                       validator: _validateEmail,
-                      prefixIcon: AppIcons.Email,
+                      prefixIcon: AppIcons.email,
                     ),
 
                     SizedBox(height: AppResponsive.h(context, 20)),
