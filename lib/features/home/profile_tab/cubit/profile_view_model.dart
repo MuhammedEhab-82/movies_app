@@ -11,6 +11,11 @@ class ProfileViewModel extends Cubit<ProfileStates>{
 
   UserModel? currentUser;
 
+  void updateUser(UserModel user) {
+    currentUser = user;
+    emit(ProfileUserLoadedState(user: user));
+  }
+
   Future<void> loadUser(String userId) async {
     emit(ProfileLoadingState());
     try{
