@@ -8,8 +8,6 @@ import 'package:movies_app/core/utils/fire_base_utils.dart';
 import '../../../../../core/cubit/user_cubit.dart';
 import '../../../../auth/model/user_model.dart';
 import '../../cubit/update_profile_view_model.dart';
-
-import '../../../../../core/utils/app_strings.dart';
 import '../widgets/avatar_picker_sheet.dart';
 import '../widgets/delete_account_dialog.dart';
 import '../widgets/profile_action_buttons.dart';
@@ -90,9 +88,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (value == null || value.trim().isEmpty) {
       return 'Please enter your name';
     }
+
     if (value.trim().length < 3) {
       return 'Name must be at least 3 characters';
     }
+
     return null;
   }
 
@@ -100,17 +100,52 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (value == null || value.trim().isEmpty) {
       return 'Please enter your phone number';
     }
+
     final RegExp phoneRegex = RegExp(r'^01[0-2,5][0-9]{8}$');
+
     if (!phoneRegex.hasMatch(value.trim())) {
       return 'Please enter a valid phone number';
     }
+
     return null;
   }
 
-  void _onSavePressed() {
+  Future<void> _onSavePressed() async {
     if (_formKey.currentState!.validate()) {
+      await viewModel.updateData(
+        UserModel(
+          id: widget.currentUser.id,
+          name: _nameController.text,
+          email: widget.currentUser.email,
+          phone: _phoneController.text,
+          avatarUrl: _selectedAvatar,
+        ),
+      );
+
+      if (!mounted) return;
+
+      final currentUser = context.read<UserCubit>().currentUser;
+
+      if (currentUser != null) {
+        final updatedUser = UserModel(
+          id: currentUser.id,
+          name: _nameController.text,
+          email: currentUser.email,
+          phone: _phoneController.text,
+          avatarUrl: _selectedAvatar,
+          watchlist: currentUser.watchlist,
+          history: currentUser.history,
+        );
+
+        context.read<UserCubit>().updateUser(updatedUser);
+      }
+
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content: Text(AppStrings.profileUpdated)),
+        const SnackBar(
+          content: Text('Profile updated successfully'),
+        ),
       );
     }
   }
@@ -118,8 +153,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   void _onDeleteAccountPressed() {
     showDeleteAccountDialog(
       context: context,
-      onConfirm: () {
-        // TODO: hook up actual account-deletion logic here.
+      onConfirm: () async {
+        final userCubit = context.read<UserCubit>();
+
+        await userCubit.deleteAccount(widget.currentUser);
+
+        if (!mounted) return;
+
+        Navigator.of(context).pop();
       },
     );
   }
@@ -129,7 +170,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       context: context,
       avatars: _avatars,
       selectedAvatar: _selectedAvatar,
-      onSelected: (avatar) => setState(() => _selectedAvatar = avatar),
+      onSelected: (avatar) {
+        setState(() => _selectedAvatar = avatar);
+      },
     );
   }
 
@@ -149,11 +192,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             size: AppResponsive.w(context, 21),
           ),
         ),
-        title: Text('Pick Avatar', style: AppStyles.reg16primary),
+        title: Text(
+          'Pick Avatar',
+          style: AppStyles.reg16primary,
+        ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppResponsive.w(context, 16)),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppResponsive.w(context, 16),
+          ),
           child: Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -161,17 +209,24 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               builder: (context, constraints) {
                 return SingleChildScrollView(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
                     child: IntrinsicHeight(
                       child: Column(
                         children: [
-                          SizedBox(height: AppResponsive.h(context, 12)),
+                          SizedBox(
+                            height: AppResponsive.h(context, 12),
+                          ),
 
                           ProfileAvatar(
                             avatarPath: _selectedAvatar,
                             onTap: _onAvatarTap,
                           ),
-                          SizedBox(height: AppResponsive.h(context, 24)),
+
+                          SizedBox(
+                            height: AppResponsive.h(context, 24),
+                          ),
 
                           ProfileFormFields(
                             nameController: _nameController,
@@ -181,13 +236,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           ),
 
                           const Spacer(),
-                          SizedBox(height: AppResponsive.h(context, 24)),
+
+                          SizedBox(
+                            height: AppResponsive.h(context, 24),
+                          ),
 
                           ProfileActionButtons(
                             onDelete: _onDeleteAccountPressed,
                             onSave: _onSavePressed,
                           ),
-                          SizedBox(height: AppResponsive.h(context, 24)),
+
+                          SizedBox(
+                            height: AppResponsive.h(context, 24),
+                          ),
                         ],
                       ),
                     ),

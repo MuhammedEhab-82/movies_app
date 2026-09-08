@@ -179,6 +179,7 @@ class _HomeTabState extends State<HomeTab> {
                 );
               },
             ),
+            SizedBox(height: AppResponsive.h(context, 30))
           ],
         ),
       ),

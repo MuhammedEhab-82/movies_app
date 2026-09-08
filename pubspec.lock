@@ -324,10 +324,10 @@ packages:
     dependency: transitive
     description:
       name: google_sign_in_android
-      sha256: df5c15533814ed20b7d9e1c5a40a73f174e5d5017bd2669b1c72fb6596fde812
+      sha256: c403315d87aba1f815a0a401093f97808cab6cb2bdd11ca431ff8587fd7f1c00
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.11"
+    version: "7.2.17"
   google_sign_in_ios:
     dependency: transitive
     description:
@@ -725,6 +725,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  smart_empty_state:
+    dependency: "direct main"
+    description:
+      name: smart_empty_state
+      sha256: a6f92b8f77f23f5f44ca7c005afd8264e38f707cc98da5a983abbfbe900d255a
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   source_span:
     dependency: transitive
     description:
@@ -838,5 +846,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.11.0-0 <4.0.0"
-  flutter: ">=3.38.4"
+  dart: ">=3.13.2 <4.0.0"
+  flutter: ">=3.44.0"

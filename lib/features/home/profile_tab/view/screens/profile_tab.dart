@@ -17,7 +17,6 @@ import '../../../../../core/network/api_service.dart';
 import '../../../../../core/network/dio_client.dart';
 import '../../../../../core/utils/app_responsive.dart';
 import '../../../../../core/utils/app_routes.dart';
-import '../../../../../core/utils/empty_state_utils.dart';
 import '../../cubit/profile_tab_movies_cubit.dart';
 import '../widgets/profile_section.dart';
 import '../widgets/tab_widget.dart';
@@ -62,36 +61,24 @@ class _ProfileTabState extends State<ProfileTab>
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
-        // The logged-in user, linked here straight from UserCubit
-        // (populated by LoginCubit/RegisterCubit on success).
         final loggedInUser = state is UserAuthenticated ? state.user : null;
 
         final fallbackUser =
             loggedInUser ??
-            UserModel(
-              id: '',
-              name: '',
-              phone: '',
-              avatarUrl: AppImages.avatarByIndex(1),
-            );
+                UserModel(
+                  id: '',
+                  name: '',
+                  phone: '',
+                  avatarUrl: AppImages.avatarByIndex(1),
+                );
 
         final uid = FirebaseAuth.instance.currentUser?.uid;
 
         return BlocProvider(
           create: (context) =>
-              ProfileViewModel()..loadUser(uid ?? fallbackUser.id),
+          ProfileViewModel()..loadUser(uid ?? fallbackUser.id),
           child: BlocBuilder<ProfileViewModel, ProfileStates>(
             builder: (context, profileState) {
-              if (loggedInUser != null &&
-                  profileState is ProfileUserLoadedState &&
-                  profileState.user.avatarUrl != loggedInUser.avatarUrl) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) {
-                    context.read<ProfileViewModel>().loadUser(loggedInUser.id);
-                  }
-                });
-              }
-
               final displayedUser = profileState is ProfileUserLoadedState
                   ? profileState.user
                   : fallbackUser;
@@ -202,11 +189,19 @@ class _ProfileTabState extends State<ProfileTab>
                         hasScrollBody: false,
                         child: Container(
                           color: AppColors.background,
-                          child: EmptyStateUtils.buildEmptyState(currentIndex),
+                          child: Image.asset(AppImages.Empty),
                         ),
                       )
                           : SliverToBoxAdapter(
-                        child: TabDetails(movie: selectedMovies),
+                        child: BlocProvider.value(
+                          value: selectedCubit,
+                          child: TabDetails(
+                            key: ValueKey(
+                              currentIndex == 0 ? 'watchlist' : 'history',
+                            ),
+                            movie: selectedMovies,
+                          ),
+                        ),
                       ),
                     ],
                   ),
