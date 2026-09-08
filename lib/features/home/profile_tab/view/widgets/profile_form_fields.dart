@@ -44,10 +44,6 @@ class ProfileFormFields extends StatelessWidget {
         ),
         SizedBox(height: AppResponsive.h(context, 16)),
 
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(AppStrings.resetPassword, style: AppStyles.reg14white),
-        ),
       ],
     );
   }
